@@ -20,6 +20,10 @@ python app.py
 
 ### Prerequisites
 - Ensure you have `NPM` installed on your machine.
+- Install the packages used from NPM:
+```bash
+npm install
+```
 - Have the Angular CLI installed: 
 ```bash
 npm install -g @angular/cli
