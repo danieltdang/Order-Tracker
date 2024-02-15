@@ -24,10 +24,6 @@ python app.py
 ```bash
 npm install
 ```
-- Have the Angular CLI installed: 
-```bash
-npm install -g @angular/cli
-```
 
 ### Adding new features
 
