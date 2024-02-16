@@ -1,0 +1,20 @@
+<div *ngFor="let order of orders; trackBy: getOrderId">
+    <p-card header="{{ order.name }}" subheader="ID: {{ order.id }}" class="card">
+        <!--<ng-template pTemplate="header">
+            <img alt="Card" src="https://primefaces.org/cdn/primeng/images/usercard.png" />
+        </ng-template>-->
+        <p>
+            carrier: {{ order.carrier }} <br>
+            dateAdded: {{ order.dateAdded }} <br>
+            estimatedDelivery: {{ order.estimatedDelivery }} <br>
+            source: {{ order.source }} <br>
+            status: {{ order.status }} <br>
+            trackingCode: {{ order.trackingCode }} <br>
+            uuid: {{ order.uuid }} <br>
+        </p>
+        <ng-template pTemplate="footer">
+            <p-button label="Save" icon="pi pi-check"></p-button>
+            <p-button label="Cancel" icon="pi pi-times" styleClass="p-button-secondary" [style]="{ 'margin-left': '.5em' }"></p-button>
+        </ng-template>
+    </p-card>
+</div>
