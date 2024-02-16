@@ -1,23 +1,27 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule, provideClientHydration } from '@angular/platform-browser';
-
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { provideHttpClient, withFetch } from '@angular/common/http';
+import { CommonModule } from '@angular/common';
+import { RouterOutlet } from '@angular/router';
+
 import { SidebarModule } from 'primeng/sidebar';
 import { MenuModule } from 'primeng/menu';
 import { ButtonModule } from 'primeng/button';
+import { CardModule } from 'primeng/card';
 
 import { __decorate } from 'tslib';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
-
-
+import { ContentComponent } from './content/content.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    SidebarComponent
+    SidebarComponent,
+    ContentComponent
   ],
   imports: [
     BrowserModule,
@@ -25,10 +29,14 @@ import { SidebarComponent } from './sidebar/sidebar.component';
     BrowserAnimationsModule,
     SidebarModule,
     MenuModule,
-    ButtonModule
+    ButtonModule,
+    CommonModule,
+    RouterOutlet,
+    CardModule
   ],
   providers: [
-    provideClientHydration()
+    provideClientHydration(),
+    provideHttpClient(withFetch()),
   ],
   bootstrap: [AppComponent]
 })
