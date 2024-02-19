@@ -1,3 +1,4 @@
 .vscode
-/server/venv
+.DS_Store
+/venv
 /run_all.bat
