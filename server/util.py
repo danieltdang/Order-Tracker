@@ -1,9 +1,9 @@
 import sqlite3 as sql
 
-database = 'database.db'
+DB_PATH = 'database.db'
 
 def getOrdersForUser(uuid):
-    con = sql.connect(database)
+    con = sql.connect(DB_PATH)
     con.row_factory = sql.Row
     cur = con.cursor()
 
@@ -21,7 +21,7 @@ def getOrdersForUser(uuid):
         con.close()
 
 def getUserInfo(uuid):
-    con = sql.connect(database)
+    con = sql.connect(DB_PATH)
     con.row_factory = sql.Row
     cur = con.cursor()
 
@@ -39,7 +39,7 @@ def getUserInfo(uuid):
         con.close()
 
 def getEmailsForUser(uuid):
-    con = sql.connect(database)
+    con = sql.connect(DB_PATH)
     con.row_factory = sql.Row
     cur = con.cursor()
 

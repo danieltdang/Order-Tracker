@@ -1,6 +1,6 @@
 import sqlite3 as sql
 
-con = sql.connect('/tmp/database.db')
+con = sql.connect('database.db')
 
 # Enable foreign key support
 con.execute('PRAGMA foreign_keys = ON')

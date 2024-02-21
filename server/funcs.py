@@ -1,9 +1,9 @@
 import sqlite3 as sql
 
-database = 'database.db'
+DB_PATH = 'database.db'
 
 def insertUser(uuid, firstName, lastName):
-    con = sql.connect(database)
+    con = sql.connect(DB_PATH)
     cur = con.cursor()
 
     try:
@@ -19,7 +19,7 @@ def insertUser(uuid, firstName, lastName):
         con.close()
 
 def insertOrder(uuid, orderID, prodName, status, trackCode, estDelivery, carrier, source, dateAdded):
-    con = sql.connect(database)
+    con = sql.connect(DB_PATH)
     cur = con.cursor()
 
     try:
@@ -58,7 +58,7 @@ def insertOrder(uuid, orderID, prodName, status, trackCode, estDelivery, carrier
 
 
 def insertEmail(orderID, content, dateReceived):
-    con = sql.connect(database)
+    con = sql.connect(DB_PATH)
     cur = con.cursor()
 
     try:
