@@ -1,6 +1,7 @@
 from flask import Flask, jsonify
 from flask_cors import CORS
 import datetime
+import util
 
 app = Flask(__name__)
 CORS(app)
@@ -12,7 +13,7 @@ def get_data():
 
 @app.route('/api/getOrders')
 def get_orders():
-    data = [
+    """data = [
     {
         "uuid": "5d5408a8-3cb5-4071-afaf-f3154810a140",
         "id": "1",
@@ -45,9 +46,12 @@ def get_orders():
         "carrier": "Carrier 3",
         "source": "Source 3",
         "dateAdded": datetime.datetime.now(),
-    }
-]
-    return jsonify(data)
+    }]"""
+    uuid = "12345"
+
+    orders = util.getOrdersForUser(uuid)
+
+    return jsonify(orders)
 
 if __name__ == '__main__':
     app.run(debug=True, port=5001)
