@@ -48,10 +48,11 @@ def get_orders():
         "dateAdded": datetime.datetime.now(),
     }]"""
     uuid = "12345"
-
     orders = util.getOrdersForUser(uuid)
+    
+    orders_list = [dict(order) for order in orders]
 
-    return jsonify(orders)
+    return jsonify(orders_list)
 
 if __name__ == '__main__':
     app.run(debug=True, port=5001)

@@ -14,7 +14,7 @@ export class ContentComponent {
   constructor(private apiService: ApiService) { }
 
   getOrderId(index : number, order : any) {
-    return order.id;
+    return order.orderID;
   }
 
   ngOnInit(): void {
