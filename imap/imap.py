@@ -4,6 +4,8 @@ import time
 from dotenv import load_dotenv
 import os
 import re
+from parsers import nikeParse
+
 
 SERVER = "imap.gmail.com"
 PORT = 993
@@ -76,19 +78,22 @@ def getEmails(Mailbox):
 def parseEmail(Email):
     emailBody = Email.emailBody[0]
 
-    patterns = [
-            r'\b1Z[A-Z0-9]{16}\b',  # UPS format
-            r'\b\d+[A-Z]+\d+\b',    # Generic format
-            r'\b\d{20}\b',          # FedEx format
-            r'\b91\d+\b',           # USPS format
-        ]
+    file = open("email.txt", "a")
+    file.write(str(emailBody))
+    file.close()
 
-    for pattern in patterns:
-            match = re.search(pattern, str(emailBody))
-            if match:
-                tracking_number = match.group()
-                print(f"Tracking Number: {tracking_number}")
-                return
+    fromPattern = r'[\w\.-]+@[\w\.-]+\.\w+'
+
+    match = re.search(fromPattern, str(emailBody))
+
+    if match:
+        emailFrom = match.group()
+        print(f"Email From: {emailFrom}")
+        
+        if Email.emailFrom == "nike@official.nike.com":
+            print("Parsing Nike email.")
+            parse_nike_email(Email)
+
 
 
 
