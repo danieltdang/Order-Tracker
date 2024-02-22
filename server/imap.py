@@ -3,6 +3,7 @@ import email
 import time
 from dotenv import load_dotenv
 import os
+import re
 
 SERVER = "imap.gmail.com"
 PORT = 993
@@ -69,8 +70,25 @@ def getEmails(Mailbox):
 
     return emails
 
+# Currently only supports
+# Nike orders with UPS, 
+#FedEx, USPS and generic tracking numbers
 def parseEmail(Email):
-    pass
+    emailBody = Email.emailBody[0]
+
+    patterns = [
+            r'\b1Z[A-Z0-9]{16}\b',  # UPS format
+            r'\b\d+[A-Z]+\d+\b',    # Generic format
+            r'\b\d{20}\b',          # FedEx format
+            r'\b91\d+\b',           # USPS format
+        ]
+
+    for pattern in patterns:
+            match = re.search(pattern, str(emailBody))
+            if match:
+                tracking_number = match.group()
+                print(f"Tracking Number: {tracking_number}")
+                return
 
 
 
@@ -95,7 +113,6 @@ if __name__ == "__main__":
                 print(email.emailDate)
                 print(email.emailFrom)
                 print(email.emailTo)
-                print(email.emailBody)
                 print("\n")
                 parseEmail(email)
         else:
