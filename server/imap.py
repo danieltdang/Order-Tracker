@@ -1,11 +1,11 @@
 import imaplib
 import email
 import time
+from dotenv import load_dotenv
+import os
 
 SERVER = "imap.gmail.com"
 PORT = 993
-EMAIL = "" 
-PASSWORD = ""
 
 SUPPORTED_STORES = [""]
 
@@ -28,7 +28,7 @@ class Email:
         self.emailBody = emailBody
 
 # Connect to the mailbox
-def connectMailbox():
+def connectMailbox(EMAIL, PASSWORD):
     Mailbox = imaplib.IMAP4_SSL(SERVER, PORT)
     status = Mailbox.login(EMAIL, PASSWORD)
 
@@ -76,7 +76,12 @@ def parseEmail(Email):
 
 if __name__ == "__main__":
 
-    Mailbox = connectMailbox()
+    load_dotenv()
+
+    EMAIL = os.getenv("EMAIL")
+    PASSWORD = os.getenv("PASSWORD")
+
+    Mailbox = connectMailbox(EMAIL, PASSWORD)
     if Mailbox == None:
         print("Error.")
         exit()

@@ -4,3 +4,4 @@ __pycache__/
 /venv
 /run_all.bat
 /database.db
+.env
