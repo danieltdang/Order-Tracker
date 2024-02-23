@@ -1,5 +1,5 @@
 <div [style.width.px]="uiService.sidebarWidth$ | async">
-    <p-sidebar #sidebar [style]="{'width': (uiService.sidebarWidth$ | async) + 'px'}" [(visible)]="sidebarVisible" [modal]="modalVisible">
+    <p-sidebar [style]="{'width': (uiService.sidebarWidth$ | async) + 'px'}" [visible]="true" [modal]="false" [dismissible]="false" [showCloseIcon]="false">
         <ng-template pTemplate="header">Header Content</ng-template>
         <ng-template pTemplate="content">
             <ul>

@@ -7,10 +7,5 @@ import { UiService } from './ui.service';
   styleUrl: './sidebar.component.css'
 })
 export class SidebarComponent {
-  @ViewChild('sidebar', {static: false}) sidebarElement!: ElementRef;
-
   constructor(protected uiService: UiService) {}
-
-  sidebarVisible: boolean = true;
-  modalVisible: boolean = false;
 }
