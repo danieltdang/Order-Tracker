@@ -1,27 +1,16 @@
-import { Component, OnInit } from '@angular/core';
-import { MenuItem, MessageService } from 'primeng/api';
+import { Component, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
+import { UiService } from './ui.service';
 
 @Component({
   selector: 'app-sidebar',
   templateUrl: './sidebar.component.html',
-  styleUrl: './sidebar.component.css',
-  providers: [MessageService]
+  styleUrl: './sidebar.component.css'
 })
 export class SidebarComponent {
-  items: MenuItem[] | undefined;
+  @ViewChild('sidebar', {static: false}) sidebarElement!: ElementRef;
 
-  constructor(private messageService: MessageService) {}
+  constructor(protected uiService: UiService) {}
 
-  ngOnInit() {
-    this.items = [{
-        label: 'Hello',
-        items: [
-          {label: 'Dashboard', icon: 'pi pi-home', routerLink: ['/dashboard']},
-          {label: 'Email Hub', icon: 'pi pi-envelope', routerLink: ['/email-hub']},
-          {label: 'Packages', icon: 'pi pi-download', routerLink: ['/pagename']}, //queryParams: {'recent': 'true'}}
-          {label: 'Settings', icon: 'pi pi-cog', routerLink: ['/settings']},
-          {label: 'FAQ', icon: 'pi pi-question-circle', routerLink: ['/faq']},
-        ]
-    }];
-  }
+  sidebarVisible: boolean = true;
+  modalVisible: boolean = false;
 }
