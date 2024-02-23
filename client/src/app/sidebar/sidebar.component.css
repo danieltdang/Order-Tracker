@@ -1,0 +1,16 @@
+:host {
+    display: block;
+    height: 100%;
+  }
+  
+  /* Example if the sidebar is a direct child of the body or positioned absolutely/fixed */
+  .sidebar-container {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  /* Ensure the p-menu component fills the available space */
+  p-menu {
+    flex: 1;
+  }
