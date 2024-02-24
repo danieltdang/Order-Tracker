@@ -30,8 +30,7 @@ main {
     display: flex;
     flex-direction: column;
     justify-content: top;
-    align-items: center;
-    //padding: 1rem;
+    align-items: left;
     box-sizing: inherit;
     position: relative;
 }
@@ -40,7 +39,6 @@ main {
     display: flex;
     justify-content: flex-start;
     width: 100%;
-    //max-width: 700px;
     margin-bottom: 3rem;
 }
 

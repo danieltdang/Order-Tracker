@@ -1,15 +1,14 @@
 <div [style.width.px]="uiService.sidebarWidth$ | async">
     <p-sidebar [style]="{'width': (uiService.sidebarWidth$ | async) + 'px'}" [visible]="true" [modal]="false" [dismissible]="false" [showCloseIcon]="false">
         <ng-template pTemplate="header">Header Content</ng-template>
-        <ng-template pTemplate="content">
-            <ul>
-                <li><a routerLink="/dashboard"><i class="pi pi-home"></i> Dashboard</a></li>
-                <li><a routerLink="/email-hub"><i class="pi pi-envelope"></i> Email Hub</a></li>
-                <li><a routerLink="/packages"><i class="pi pi-box"></i> Packages</a></li>
-                <li><a routerLink="/settings"><i class="pi pi-cog"></i> Settings</a></li>
-                <li><a routerLink="/faq"><i class="pi pi-question-circle"></i> FAQ</a></li>
-            </ul>
+        <ng-template pTemplate="content" >
+            <div class="menu-container">
+                <p-menu [model]="items" styleClass="sidebar-container"/>
+            </div>
         </ng-template>
-        <ng-template pTemplate="footer">Footer Content</ng-template>
+        <ng-template pTemplate="footer">
+            <p-avatar label="D" styleClass="mr-2" size="normal" shape="circle"/>
+            Daniel Dang
+        </ng-template>
     </p-sidebar>
 </div>

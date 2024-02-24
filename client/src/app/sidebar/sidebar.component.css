@@ -3,11 +3,20 @@
     height: 100%;
   }
   
+  .p-sidebar .p-sidebar-content {
+    padding: 0px;
+  }
+
   /* Example if the sidebar is a direct child of the body or positioned absolutely/fixed */
   .sidebar-container {
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
+    border: 1px solid #fff;
+    width: 150px;
+  }
+
+  .menu-container {
+    width: 100%;
+    border-radius: 5px;
+    overflow: hidden;
   }
   
   /* Ensure the p-menu component fills the available space */

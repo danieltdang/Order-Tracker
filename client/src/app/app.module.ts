@@ -9,6 +9,8 @@ import { SidebarModule } from 'primeng/sidebar';
 import { MenuModule } from 'primeng/menu';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
+import { AvatarModule } from 'primeng/avatar';
+import { AvatarGroupModule } from 'primeng/avatargroup';
 
 import { __decorate } from 'tslib';
 
@@ -32,7 +34,9 @@ import { ContentComponent } from './content/content.component';
     ButtonModule,
     CommonModule,
     RouterOutlet,
-    CardModule
+    CardModule,
+    AvatarModule,
+    AvatarGroupModule
   ],
   providers: [
     provideClientHydration(),
