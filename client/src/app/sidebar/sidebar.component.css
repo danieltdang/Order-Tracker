@@ -3,8 +3,13 @@
   height: 100%;
 }
 
+.p-menu {
+  background: none;
+  border: 0px;
+}
+
 .p-sidebar .p-sidebar-content {
-  padding: 0;
+  padding: 0px;
 }
 
 .p-sidebar-header {
