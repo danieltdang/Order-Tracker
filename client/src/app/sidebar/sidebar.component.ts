@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { MenuItem, MessageService } from 'primeng/api';
 import { UiService } from './ui.service';
 
@@ -6,16 +6,17 @@ import { UiService } from './ui.service';
   selector: 'app-sidebar',
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.css',
-  providers: [MessageService]
+  providers: [MessageService],
+  encapsulation: ViewEncapsulation.None
 })
-export class SidebarComponent {
+export class SidebarComponent implements OnInit {
   items: MenuItem[] | undefined;
 
   constructor(protected uiService: UiService, private messageService: MessageService) {}
 
   ngOnInit() {
     this.items = [{
-        label: 'Hello',
+        label: 'Hello Example User!',
         items: [
           {label: 'Dashboard', icon: 'pi pi-home', routerLink: ['/dashboard']},
           {label: 'Email Hub', icon: 'pi pi-envelope', routerLink: ['/email-hub']},

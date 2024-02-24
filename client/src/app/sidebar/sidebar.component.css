@@ -1,25 +1,35 @@
 :host {
-    display: block;
-    height: 100%;
-  }
-  
-  .p-sidebar .p-sidebar-content {
-    padding: 0px;
-  }
+  display: block;
+  height: 100%;
+}
 
-  /* Example if the sidebar is a direct child of the body or positioned absolutely/fixed */
-  .sidebar-container {
-    border: 1px solid #fff;
-    width: 150px;
-  }
+.p-sidebar .p-sidebar-content {
+  padding: 0;
+}
 
-  .menu-container {
-    width: 100%;
-    border-radius: 5px;
-    overflow: hidden;
-  }
-  
-  /* Ensure the p-menu component fills the available space */
-  p-menu {
-    flex: 1;
-  }
+.p-sidebar-header {
+  gap: 10px;
+}
+
+.p-sidebar-footer {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/*.ui-menu {
+  padding: 0px;
+}
+
+.ui-contextmenu{
+  white-space: nowrap;
+  width: auto;
+  padding: 0px;
+}*/
+
+.menu-container {
+  width: 100%;
+  border-radius: 5px;
+  overflow: hidden;
+  overflow-wrap: break-word;
+}
