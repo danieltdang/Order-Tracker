@@ -14,6 +14,7 @@
     transition: transform .3s;
     display: flex;
     flex-direction: column;
+    position: fixed;
 }
 
 .sidebar .header {
