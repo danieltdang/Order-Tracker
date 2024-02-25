@@ -20,6 +20,7 @@ export class UiService implements OnDestroy {
     private readonly viewportRuler: ViewportRuler,
     private readonly ngZone: NgZone
   ) {
+    // Set initial sidebar width
     this.setSidebarWidth(Math.max(MIN_WIDTH, this.viewportRuler.getViewportSize().width * PERCENT_WIDTH));
   }
 
