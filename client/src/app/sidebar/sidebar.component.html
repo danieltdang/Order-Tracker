@@ -1,5 +1,5 @@
-<div [style.width.px]="uiService.sidebarWidth$ | async">
-    <div class="sidebar" [ngStyle]="{borderColor: 'var(--surface-border)', color: 'var(--text-color)', background: 'var(--surface-a)',}" [style]="{'width': (uiService.sidebarWidth$ | async) + 'px'}" >
+<div style="min-width: 200px; width: 15vw">
+    <div class="sidebar" [ngStyle]="{borderColor: 'var(--surface-border)', color: 'var(--text-color)', background: 'var(--surface-a)',}" >
         <div class="header">
             <div class="headerContainer">
                 <p-avatar icon="pi pi-box" styleClass="mr-2" size="normal" [style]="{'background-color':'#2196F3', 'color': '#ffffff'}" shape="circle"/>
