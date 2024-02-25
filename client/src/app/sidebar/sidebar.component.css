@@ -64,15 +64,10 @@ a, u {
   border: 0px;
 }
 
-.p-menu-list {
-  align-items: center;
-  justify-content: center;
-}
-
 .p-menuitem.active {
   background-color: var(--surface-d);
   color: var(--highlight-text-color);
-  border-radius: 2.25rem;
+  border-radius: 0.25rem;
 }
 
 .p-menuitem.active .p-menuitem-icon {
@@ -84,14 +79,17 @@ a, u {
 }
 
 .p-menu .p-menuitem {
-  border-radius: 0.25rem;
   margin-bottom: 0.75rem;
   height: 42px;
-  width: 90%;
+  width: 92%;
   margin-left: auto;
   margin-right: auto;
 }
 
-.p-menu > .p-menuitem:hover {
-  background-color: none;
+.p-menu .p-menuitem > .p-menuitem-content {
+  border-radius: 0.25rem;
+}
+
+.p-menu .p-menuitem > .p-menuitem-content:hover {
+  background-color: var(--surface-d);
 }
