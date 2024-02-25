@@ -2,13 +2,14 @@ import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { MenuItem } from 'primeng/api';
 
 @Component({
-  selector: 'app-sidebar',
-  templateUrl: './sidebar.component.html',
-  styleUrl: './sidebar.component.css',
+  selector: 'app-navbar',
+  templateUrl: './navbar.component.html',
+  styleUrl: './navbar.component.css',
   encapsulation: ViewEncapsulation.None
 })
 export class SidebarComponent implements OnInit {
   items: MenuItem[] | undefined;
+  sidebarVisible: boolean = true;
 
   activeMenu(event : any) {
     let node;

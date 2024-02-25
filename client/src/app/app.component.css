@@ -50,16 +50,10 @@ main {
     margin-top: 1.5rem;
 }
 
+/* Mobile/lower screen width styling, to show menubar instead of sidebar */
 @media screen and (max-width: 650px) {
     .content {
         flex-direction: column;
         width: max-content;
-    }
-
-    .divider {
-        height: 1px;
-        width: 100%;
-        background: var(--red-to-pink-to-purple-horizontal-gradient);
-        margin-block: 1.5rem;
     }
 }

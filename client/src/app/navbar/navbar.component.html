@@ -1,4 +1,22 @@
-<div style="min-width: 200px; width: 15vw">
+<div class="topbarContainer">
+    <div class="topbar" [ngStyle]="{borderColor: 'var(--surface-border)', color: 'var(--text-color)', background: 'var(--surface-a)',}">
+        <div class="header" >
+            <a routerLink="/dashboard" [ngStyle]="{color: 'var(--text-color)'}">
+                <div class="headerContainer">
+                    <p-avatar icon="pi pi-box" styleClass="mr-2" size="normal" [style]="{'background-color':'#2196F3', 'color': '#ffffff'}" shape="circle" />
+                    Order Tracker
+                </div>
+            </a>
+        </div>
+        <div class="footer">
+            <div class="footerContainer">
+                <a class="pi pi-bars"></a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="sidebarContainer">
     <div class="sidebar" [ngStyle]="{borderColor: 'var(--surface-border)', color: 'var(--text-color)', background: 'var(--surface-a)',}" >
         <div class="header" >
             <a routerLink="/dashboard" [ngStyle]="{color: 'var(--text-color)'}">
