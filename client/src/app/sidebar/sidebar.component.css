@@ -7,6 +7,9 @@ a, u {
   text-decoration: none;
 }
 
+/* 
+  SIDEBAR STYLING
+*/
 .sidebar {
     background: #1f2937;
     color: rgba(255, 255, 255, 0.87);
@@ -39,16 +42,6 @@ a, u {
   padding: 1.25rem;
 }
 
-.p-menu {
-  width: 100%;
-  background: none;
-  border: 0px;
-}
-
-.p-sidebar .p-sidebar-content {
-  padding: 0px;
-}
-
 .sidebar .headerContainer {
   display: flex;
   align-items: center;
@@ -59,4 +52,46 @@ a, u {
   display: flex;
   align-items: center;
   gap: 10px;
+}
+
+/* 
+  MENU STYLING
+*/
+
+.p-menu {
+  width: 100%;
+  background: none;
+  border: 0px;
+}
+
+.p-menu-list {
+  align-items: center;
+  justify-content: center;
+}
+
+.p-menuitem.active {
+  background-color: var(--surface-d);
+  color: var(--highlight-text-color);
+  border-radius: 2.25rem;
+}
+
+.p-menuitem.active .p-menuitem-icon {
+  color: var(--highlight-text-color);
+}
+
+.p-menu .p-submenu-header {
+  margin-bottom: 0.75rem;
+}
+
+.p-menu .p-menuitem {
+  border-radius: 0.25rem;
+  margin-bottom: 0.75rem;
+  height: 42px;
+  width: 90%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.p-menu > .p-menuitem:hover {
+  background-color: none;
 }

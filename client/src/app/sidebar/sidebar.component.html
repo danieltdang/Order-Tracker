@@ -10,7 +10,7 @@
         </div>
         <div class="content">
             <div class="menu-container">
-                <p-menu [model]="items"/>
+                <p-menu [model]="items" (click) = "activeMenu($event)"/>
             </div>
         </div>
         <div class="footer">
