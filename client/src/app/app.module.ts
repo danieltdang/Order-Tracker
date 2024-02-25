@@ -12,6 +12,7 @@ import { CardModule } from 'primeng/card';
 import { AvatarModule } from 'primeng/avatar';
 import { AvatarGroupModule } from 'primeng/avatargroup';
 import { MenubarModule } from 'primeng/menubar';
+import { ToggleButtonModule } from 'primeng/togglebutton';
 
 import { __decorate } from 'tslib';
 
@@ -38,7 +39,8 @@ import { ContentComponent } from './content/content.component';
     CardModule,
     AvatarModule,
     AvatarGroupModule,
-    MenubarModule
+    MenubarModule,
+    ToggleButtonModule
   ],
   providers: [
     provideClientHydration(),

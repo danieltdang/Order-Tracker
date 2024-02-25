@@ -11,6 +11,10 @@ export class SidebarComponent implements OnInit {
   items: MenuItem[] | undefined;
   sidebarVisible: boolean = true;
 
+  toggleSidebar(): void {
+    this.sidebarVisible = !this.sidebarVisible;
+  }
+
   activeMenu(event : any) {
     let node;
     if (event.target.classList.contains("p-submenu-header") == true) {
