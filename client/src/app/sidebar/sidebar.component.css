@@ -3,6 +3,10 @@
   height: 100%;
 }
 
+a, u {
+  text-decoration: none;
+}
+
 .sidebar {
     background: #1f2937;
     color: rgba(255, 255, 255, 0.87);
