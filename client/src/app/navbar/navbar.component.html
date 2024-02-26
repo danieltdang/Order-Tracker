@@ -10,7 +10,7 @@
         </div>
         <div class="footer">
             <div class="footerContainer">
-                <p-toggleButton offIcon="pi pi-bars" onIcon="pi pi-times" (click)="menu.toggle($event)"/>
+                <p-toggleButton offIcon="pi pi-bars" onIcon="pi pi-bars" (click)="menu.toggle($event)"/>
                 <p-menu #menu [model]="items" [popup]="true" />
             </div>
         </div>
