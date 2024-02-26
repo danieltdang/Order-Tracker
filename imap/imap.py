@@ -4,8 +4,7 @@ import time
 from dotenv import load_dotenv
 import os
 import re
-from parsers import nikeParse
-
+from parsers.nikeParse import parse_nike_email
 
 SERVER = "imap.gmail.com"
 PORT = 993
@@ -36,7 +35,7 @@ def connectMailbox(EMAIL, PASSWORD):
     status = Mailbox.login(EMAIL, PASSWORD)
 
     if status[0] == 'OK':
-        print("Conected.")
+        print("Connected.")
     else:
         print("Error.")
         return None
@@ -94,9 +93,6 @@ def parseEmail(Email):
             print("Parsing Nike email.")
             parse_nike_email(Email)
 
-
-
-
 if __name__ == "__main__":
 
     load_dotenv()
@@ -123,5 +119,5 @@ if __name__ == "__main__":
         else:
             print("No emails.")
             
-        time.sleep(300)
+        time.sleep(60)
     

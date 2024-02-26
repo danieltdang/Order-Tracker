@@ -6,7 +6,7 @@ def parseTracking(Email):
 
     patterns = [
             r'\b1Z[A-Z0-9]{16}\b',  # UPS format
-            r'\b\d+[A-Z]+\d+\b',    # Generic format
+            r'\b\d+[A-Z]+\d+\b',    # Generic format Lasership
             r'\b\d{20}\b',          # FedEx format
             r'\b91\d+\b',           # USPS format
         ]
