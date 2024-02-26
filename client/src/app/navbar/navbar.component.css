@@ -24,24 +24,14 @@ a, u {
   z-index: 2; /* Ensure topbar is always overlaps other objects */
 }
 
-.p-togglebutton.p-button {
+.p-button.p-button {
   background: none;
   border: none;
-  color: var(--text-color);
+  color: var(--text-color-secondary);
 }
 
-.p-togglebutton.p-button.p-highlight {
-  background: none;
-  border: none;
-  color: var(--text-color);
-}
-
-.p-togglebutton.p-button .p-button-icon-left, .p-togglebutton.p-button .p-button-icon-right {
-  color: var(--text-color);
-}
-
-.p-togglebutton.p-button.p-highlight .p-button-icon-left, .p-togglebutton.p-button.p-highlight .p-button-icon-right {
-  color: var(--text-color);
+.p-button.p-button:hover {
+  color: var(--highlight-text-color);
 }
 
 .p-button:focus {
