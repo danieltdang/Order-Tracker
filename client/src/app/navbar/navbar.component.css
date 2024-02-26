@@ -158,6 +158,7 @@ a, u {
 
   .p-menu {
     padding-top: 0.5rem;
+    padding-bottom: 0;
     width: 100vw;
     background: var(--surface-a);
     border: 1px solid var(--surface-d);
@@ -169,7 +170,7 @@ a, u {
     z-index: 1;
   }
   .p-menu .p-menuitem {
-    margin-bottom: 0.75rem;
+    margin-bottom: 0;
     height: 42px;
     width: 100%;
     margin-left: auto;
