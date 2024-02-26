@@ -7,64 +7,21 @@ a, u {
   text-decoration: none;
 }
 
-/* Hide sidebar by default on small screens */
-@media screen and (max-width: 650px) {
-  .sidebarContainer {
-    transform: translateX(-100%);
-  }
-
-  .sidebar {
-    transform: translateX(-100%);
-  }
-
-  .topbarContainer {
-    height: 72px;
-  }
-
-  .topbar {
-    height: 72px;
-    width: 100vw;
-    padding: 1.25rem;
-  }
-}
-
-/* Show sidebar on larger screens by default */
-@media screen and (min-width: 651px) {
-  .sidebarContainer {
-    min-width: 200px;
-    width: 15vw;
-  }
-  .sidebar {
-    min-width: 200px;
-    width: 15vw;
-    height: 100vh;
-  }
-
-  .topbarContainer {
-    transform: translateY(-100%);
-  }
-  .topbar {
-    transform: translateY(-100%);
-  }
-}
-
 /* 
   TOPBAR STYLING
 */
 
 .topbar {
-  background: #1f2937;
+  background: var(--surface-a);
   color: var(--text-color);
-  border: 1px solid #424b57;
-  box-shadow: 0px 11px 15px -7px rgba(0, 0, 0, 0.2),
-    0px 24px 38px 3px rgba(0, 0, 0, 0.14),
-    0px 9px 46px 8px rgba(0, 0, 0, 0.12);
+  border-bottom: 1px solid var(--surface-d);
   transition: transform .3s;
   display: flex;
   flex-direction: row;
   position: fixed;
   justify-content: space-between;
   align-items: center;
+  z-index: 2; /* Ensure topbar is always overlaps other objects */
 }
 
 .p-togglebutton.p-button {
@@ -95,9 +52,9 @@ a, u {
   SIDEBAR STYLING
 */
 .sidebar {
-    background: #1f2937;
+    background: var(--surface-a);
     color: var(--text-color);
-    border: 1px solid #424b57;
+    border: 1px solid var(--surface-d);
     box-shadow: 0px 11px 15px -7px rgba(0, 0, 0, 0.2),
       0px 24px 38px 3px rgba(0, 0, 0, 0.14),
       0px 9px 46px 8px rgba(0, 0, 0, 0.12);
@@ -110,6 +67,21 @@ a, u {
 .sidebar .header {
   height: 72px;
   padding: 1.25rem;
+}
+
+.sidebar .subheader {
+  align-items: center;
+  justify-content: space-between;
+  margin: 0;
+  margin-bottom: 0.75rem;
+  padding: 0.75rem 1.25rem;
+  color: var(--text-color);
+  background: var(--surface-100);
+  font-weight: 700;
+  border-top-right-radius: 0;
+  border-top-left-radius: 0;
+  font-family: var(--font-family);
+  font-feature-settings: var(--font-feature-settings, normal);
 }
 
 .sidebar .content {
@@ -173,4 +145,67 @@ a, u {
 
 .p-menu .p-menuitem > .p-menuitem-content:hover {
   background-color: var(--surface-d);
+}
+
+/* Hide sidebar by default on small screens */
+@media screen and (max-width: 650px) {
+  .sidebarContainer {
+    transform: translateX(-100%);
+  }
+  .sidebar {
+    transform: translateX(-100%);
+  }
+
+  .p-menu {
+    padding-top: 0.5rem;
+    width: 100vw;
+    background: var(--surface-a);
+    border: 1px solid var(--surface-d);
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    z-index: 1;
+  }
+  .p-menu .p-menuitem {
+    margin-bottom: 0.75rem;
+    height: 42px;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .p-menu.p-menu-overlay {
+    box-shadow: none;
+  }
+
+  .topbarContainer {
+    height: 72px;
+  }
+
+  .topbar {
+    height: 72px;
+    width: 100vw;
+    padding: 1.25rem;
+  }
+}
+
+/* Show sidebar on larger screens by default */
+@media screen and (min-width: 651px) {
+  .sidebarContainer {
+    min-width: 200px;
+    width: 15vw;
+  }
+  .sidebar {
+    min-width: 200px;
+    width: 15vw;
+    height: 100vh;
+  }
+
+  .topbarContainer {
+    transform: translateY(-100%);
+  }
+  .topbar {
+    transform: translateY(-100%);
+  }
 }

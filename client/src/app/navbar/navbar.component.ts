@@ -9,11 +9,6 @@ import { MenuItem } from 'primeng/api';
 })
 export class SidebarComponent implements OnInit {
   items: MenuItem[] | undefined;
-  sidebarVisible: boolean = true;
-
-  toggleSidebar(): void {
-    this.sidebarVisible = !this.sidebarVisible;
-  }
 
   activeMenu(event : any) {
     let node;
@@ -35,15 +30,12 @@ export class SidebarComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.items = [{
-        label: 'Hello Example User!',
-        items: [
-          {label: 'Dashboard', icon: 'pi pi-home', routerLink: ['/dashboard'], styleClass : 'active'},
-          {label: 'Email Hub', icon: 'pi pi-envelope', routerLink: ['/email-hub']},
-          {label: 'Packages', icon: 'pi pi-download', routerLink: ['/packages']}, //queryParams: {'recent': 'true'}}
-          {label: 'Settings', icon: 'pi pi-cog', routerLink: ['/settings']},
-          {label: 'FAQ', icon: 'pi pi-question-circle', routerLink: ['/faq']},
-        ]
-    }];
+    this.items = [
+      {label: 'Dashboard', icon: 'pi pi-home', routerLink: ['/dashboard'], styleClass : 'active'},
+      {label: 'Email Hub', icon: 'pi pi-envelope', routerLink: ['/email-hub']},
+      {label: 'Packages', icon: 'pi pi-download', routerLink: ['/packages']}, //queryParams: {'recent': 'true'}}
+      {label: 'Settings', icon: 'pi pi-cog', routerLink: ['/settings']},
+      {label: 'FAQ', icon: 'pi pi-question-circle', routerLink: ['/faq']},
+    ];
   }
 }

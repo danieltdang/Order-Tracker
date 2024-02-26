@@ -9,15 +9,16 @@
             </a>
         </div>
         <div class="footer">
-            <div class="footerContainer" (click)="toggleSidebar()">
-                <p-toggleButton offIcon="pi pi-bars" onIcon="pi pi-times"/>
+            <div class="footerContainer">
+                <p-toggleButton offIcon="pi pi-bars" onIcon="pi pi-times" (click)="menu.toggle($event)"/>
+                <p-menu #menu [model]="items" [popup]="true" />
             </div>
         </div>
     </div>
 </div>
 
 <div class="sidebarContainer">
-    <div class="sidebar" [ngStyle]="{transform: sidebarVisible ? 'translateX(0)' : 'translateX(-100%)', borderColor: 'var(--surface-border)', color: 'var(--text-color)', background: 'var(--surface-a)',}" >
+    <div class="sidebar" [ngStyle]="{borderColor: 'var(--surface-border)', color: 'var(--text-color)', background: 'var(--surface-a)',}" >
         <div class="header" >
             <a routerLink="/dashboard" [ngStyle]="{color: 'var(--text-color)'}">
                 <div class="headerContainer">
@@ -26,10 +27,11 @@
                 </div>
             </a>
         </div>
+        <div class="subheader">
+            Hello Example User!
+        </div>
         <div class="content">
-            <div class="menu-container">
-                <p-menu [model]="items" (click) = "activeMenu($event)"/>
-            </div>
+            <p-menu [model]="items" (click)="activeMenu($event)"/>
         </div>
         <div class="footer">
             <div class="footerContainer">
