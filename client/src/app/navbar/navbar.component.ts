@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, HostListener, OnInit, ViewEncapsulation } from '@angular/core';
 import { MenuItem } from 'primeng/api';
 
 @Component({
@@ -13,6 +13,12 @@ export class SidebarComponent implements OnInit {
 
   toggleMobileMenu() {
     this.mobileMenuActive = !this.mobileMenuActive;
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event: any){
+    if (event.target.innerWidth > 650)
+      this.mobileMenuActive = false; // close mobile menu
   }
 
   activeMenu(event : any) {

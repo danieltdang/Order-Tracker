@@ -14,7 +14,7 @@ a, u {
 .p-menu {
   width: 100%;
   background: none;
-  border: 0px;
+  border: none;
 }
 
 .p-menuitem.active {
@@ -53,13 +53,15 @@ a, u {
 .navbar {
   background: var(--surface-a);
   color: var(--text-color);
-  border: 1px solid var(--surface-d);
-  border-bottom: none; /* Applied globally but overridden for specific cases */
+  border-right: 1px solid var(--surface-d);
   transition: transform .3s;
   display: flex;
   position: fixed;
   z-index: 2; /* Ensure navbar always overlaps other objects */
-  
+}
+
+.navbar .header {
+  font-weight: 600;
 }
 
 .navbar .headerContainer, .navbar .userContainer {
@@ -84,6 +86,11 @@ a, u {
 
 /* Hide specific elements on small screens and adjust navbar layout */
 @media screen and (max-width: 650px) {
+  .navbarContainer {
+    height: 72px;
+
+  }
+  
   .navbar, .p-menu {
     width: 100vw;
   }
@@ -94,6 +101,8 @@ a, u {
     align-items: center;
     height: 72px;
     padding: 1.25rem;
+    padding-right: 0.25rem;
+    border: none;
   }
 
   .navbar .subheader, .navbar .userContainer, .subheader, .userContainer {
@@ -108,14 +117,16 @@ a, u {
   }
 
   .p-menu {
+    display: none;
+  }
+
+  .active .p-menu  {
     display: block;
     background: var(--surface-a);
     padding-top: 0.5rem;
     padding-bottom: 0;
-    border-top: none;
-    border-left: none;
-    border-right: none;
-    border-radius: 0; /* Removes all border-radius */
+    border-bottom: 1px solid var(--surface-d);
+    border-radius: 0 0 0.25rem 0; /* only have radius on bottom side */
     box-shadow: none;
   }
 
@@ -154,10 +165,10 @@ a, u {
   .navbar .subheader {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
     margin-bottom: 0.75rem;
     padding: 0.75rem 1.25rem;
-    font-weight: 700;
+    font-weight: 500;
     background: var(--surface-100);
     border-radius: 0;
   }
