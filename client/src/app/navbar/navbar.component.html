@@ -13,8 +13,9 @@
             Hello Example User!
         </div>
 
-        <div class="content">
-            <p-menu [ngClass]="{'active':  mobileMenuActive}" [model]="items" (click)="activeMenu($event);"/>
+        <div class="content" [ngClass]="{'active':  mobileMenuActive}">
+            <p-menu [model]="items" (click)="activeMenu($event);"/>
+            <div class="darkOverlay" (click)="toggleMobileMenu();"></div>
         </div>
 
         <div class="footer">
