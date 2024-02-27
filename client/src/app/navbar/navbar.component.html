@@ -1,0 +1,33 @@
+<div class="navbarContainer">
+    <div class="navbar" [ngStyle]="{borderColor: 'var(--surface-border)', color: 'var(--text-color)', background: 'var(--surface-a)',}">
+        <div class="header" >
+            <a routerLink="/dashboard" [ngStyle]="{color: 'var(--text-color)'}">
+                <div class="headerContainer">
+                    <p-avatar icon="pi pi-box" styleClass="mr-2" size="normal" [style]="{'background-color':'#2196F3', 'color': '#ffffff'}" shape="circle" />
+                    Order Tracker
+                </div>
+            </a>
+        </div>
+        
+        <div class="subheader">
+            Hello Example User!
+        </div>
+
+        <div class="content" [ngClass]="{'active':  mobileMenuActive}">
+            <p-menu [model]="items" (click)="activeMenu($event);"/>
+            <div class="darkOverlay" (click)="toggleMobileMenu();"></div>
+        </div>
+
+        <div class="footer">
+            <div class="footerContainer">
+                <div class ="mobileBurger">
+                    <p-button icon="pi pi-bars" (click)="toggleMobileMenu();"/>
+                </div>
+                <div class="userContainer">
+                    <p-avatar label="E" styleClass="mr-2" size="normal" shape="circle"/>
+                    Example User
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

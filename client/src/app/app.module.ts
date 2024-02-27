@@ -9,12 +9,16 @@ import { SidebarModule } from 'primeng/sidebar';
 import { MenuModule } from 'primeng/menu';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
+import { AvatarModule } from 'primeng/avatar';
+import { AvatarGroupModule } from 'primeng/avatargroup';
+import { MenubarModule } from 'primeng/menubar';
+import { ToggleButtonModule } from 'primeng/togglebutton';
 
 import { __decorate } from 'tslib';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { SidebarComponent } from './sidebar/sidebar.component';
+import { SidebarComponent } from './navbar/navbar.component';
 import { ContentComponent } from './content/content.component';
 
 @NgModule({
@@ -32,7 +36,11 @@ import { ContentComponent } from './content/content.component';
     ButtonModule,
     CommonModule,
     RouterOutlet,
-    CardModule
+    CardModule,
+    AvatarModule,
+    AvatarGroupModule,
+    MenubarModule,
+    ToggleButtonModule
   ],
   providers: [
     provideClientHydration(),
