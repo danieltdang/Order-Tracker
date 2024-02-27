@@ -9,6 +9,11 @@ import { MenuItem } from 'primeng/api';
 })
 export class SidebarComponent implements OnInit {
   items: MenuItem[] | undefined;
+  mobileMenuActive: boolean = false;
+
+  toggleMobileMenu() {
+    this.mobileMenuActive = !this.mobileMenuActive;
+  }
 
   activeMenu(event : any) {
     let node;

@@ -1,5 +1,5 @@
-<div class="topbarContainer">
-    <div class="topbar" [ngStyle]="{borderColor: 'var(--surface-border)', color: 'var(--text-color)', background: 'var(--surface-a)',}">
+<div class="navbarContainer">
+    <div class="navbar" [ngStyle]="{borderColor: 'var(--surface-border)', color: 'var(--text-color)', background: 'var(--surface-a)',}">
         <div class="header" >
             <a routerLink="/dashboard" [ngStyle]="{color: 'var(--text-color)'}">
                 <div class="headerContainer">
@@ -8,35 +8,24 @@
                 </div>
             </a>
         </div>
-        <div class="footer">
-            <div class="footerContainer">
-                <p-button icon="pi pi-bars" (click)="menu.toggle($event)"/>
-                <p-menu #menu [model]="items" [popup]="true" />
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="sidebarContainer">
-    <div class="sidebar" [ngStyle]="{borderColor: 'var(--surface-border)', color: 'var(--text-color)', background: 'var(--surface-a)',}" >
-        <div class="header" >
-            <a routerLink="/dashboard" [ngStyle]="{color: 'var(--text-color)'}">
-                <div class="headerContainer">
-                    <p-avatar icon="pi pi-box" styleClass="mr-2" size="normal" [style]="{'background-color':'#2196F3', 'color': '#ffffff'}" shape="circle" />
-                    Order Tracker
-                </div>
-            </a>
-        </div>
+        
         <div class="subheader">
             Hello Example User!
         </div>
+
         <div class="content">
-            <p-menu [model]="items" (click)="activeMenu($event)"/>
+            <p-menu [ngClass]="{'active':  mobileMenuActive}" [model]="items" (click)="activeMenu($event);"/>
         </div>
+
         <div class="footer">
             <div class="footerContainer">
-                <p-avatar label="E" styleClass="mr-2" size="normal" shape="circle"/>
-                Example User
+                <div class ="mobileBurger">
+                    <p-button icon="pi pi-bars" (click)="toggleMobileMenu();"/>
+                </div>
+                <div class="userContainer">
+                    <p-avatar label="E" styleClass="mr-2" size="normal" shape="circle"/>
+                    Example User
+                </div>
             </div>
         </div>
     </div>
