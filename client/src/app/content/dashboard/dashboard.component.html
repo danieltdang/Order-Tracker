@@ -1,15 +1,18 @@
 <div>
-    <p-calendar [inline]="true" [showWeek]="true"></p-calendar>
+    <p-calendar class="w-full" [inline]="true" [showWeek]="true"></p-calendar>
     <div class="py-5 grid align-items-center justify-content-center">
         <div class="col-12 md:col-6 lg:col-4">
             <div class="surface-card shadow-2 p-3 border-round">
                 <div class="flex justify-content-between mb-3">
                     <div>
-                        <span class="block text-500 font-medium mb-3">Orders</span>
+                        <div class="flex flex-row gap-2">
+                            <i class="pi pi-shopping-cart text-blue-500 text-xl"></i>
+                            <span class="block text-500 font-medium mb-3">Orders</span>
+                        </div>
                         <div class="text-900 font-medium text-xl">428</div>
                     </div>
-                    <div class="flex align-items-center justify-content-center bg-blue-100 border-round" style="width:2.5rem;height:2.5rem">
-                        <i class="pi pi-shopping-cart text-blue-500 text-xl"></i>
+                    <div class="flex align-items-center justify-content-center bg-gray-100 border-circle" style="width:1rem;height:1rem">
+                        <i class="pi pi-info text-gray-500 text-xs" pInputText pTooltip="Total amount of orders" tooltipPosition="top"></i>
                     </div>
                 </div>
                 <span class="text-green-500 font-medium">+74 </span>
@@ -57,7 +60,7 @@
                         <i class="pi pi-home text-purple-500 text-xl"></i>
                     </div>
                 </div>
-                <span class="text-green-500 font-medium">+  24 </span>
+                <span class="text-gray-500 font-medium">0 </span>
                 <span class="text-500">since last visit</span>
             </div>
         </div>
@@ -72,7 +75,7 @@
                         <i class="pi pi-undo text-red-500 text-xl"></i>
                     </div>
                 </div>
-                <span class="text-green-500 font-medium">+1 </span>
+                <span class="text-red-500 font-medium">+1 </span>
                 <span class="text-500">since last visit</span>
             </div>
         </div>
