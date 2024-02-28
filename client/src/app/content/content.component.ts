@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
-
-import { ApiService } from '../api.service';
+import { RouterModule, Routes } from '@angular/router';
 
 @Component({
   selector: 'app-content',
@@ -9,17 +8,4 @@ import { ApiService } from '../api.service';
 })
 export class ContentComponent {
 
-  orders: any;
-
-  constructor(private apiService: ApiService) { }
-
-  getOrderId(index : number, order : any) {
-    return order.orderID;
-  }
-
-  ngOnInit(): void {
-    this.apiService.getOrders().subscribe((fetchedData) => {
-      this.orders = fetchedData;
-    });
-  }
 }
