@@ -20,12 +20,22 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SidebarComponent } from './navbar/navbar.component';
 import { ContentComponent } from './content/content.component';
+import { DashboardComponent } from './content/dashboard/dashboard.component';
+import { PackagesComponent } from './content/packages/packages.component';
+import { FaqComponent } from './content/faq/faq.component';
+import { SettingsComponent } from './content/settings/settings.component';
+import { EmailHubComponent } from './content/email-hub/email-hub.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     SidebarComponent,
-    ContentComponent
+    ContentComponent,
+    DashboardComponent,
+    PackagesComponent,
+    FaqComponent,
+    SettingsComponent,
+    EmailHubComponent
   ],
   imports: [
     BrowserModule,
