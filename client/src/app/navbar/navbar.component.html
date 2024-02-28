@@ -14,7 +14,7 @@
         </div>
 
         <div class="content" [ngClass]="{'active':  mobileMenuActive}">
-            <p-menu [model]="items" (click)="activeMenu($event);"/>
+            <p-menu [model]="items"/>
             <div class="darkOverlay" (click)="toggleMobileMenu();"></div>
         </div>
 

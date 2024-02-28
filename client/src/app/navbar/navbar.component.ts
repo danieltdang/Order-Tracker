@@ -1,4 +1,5 @@
 import { Component, HostListener, OnInit, ViewEncapsulation } from '@angular/core';
+import { NavigationEnd, Router } from '@angular/router';
 import { MenuItem } from 'primeng/api';
 
 @Component({
@@ -11,6 +12,15 @@ export class SidebarComponent implements OnInit {
   items: MenuItem[] | undefined;
   mobileMenuActive: boolean = false;
 
+  // Subscribe to router events to detect navigation changes
+  constructor(private router: Router) {
+    this.router.events.subscribe(event => {
+      if (event instanceof NavigationEnd) {
+        this.updateActiveMenu();
+      }
+    });
+  }
+
   toggleMobileMenu() {
     this.mobileMenuActive = !this.mobileMenuActive;
   }
@@ -21,22 +31,16 @@ export class SidebarComponent implements OnInit {
       this.mobileMenuActive = false; // close mobile menu
   }
 
-  activeMenu(event : any) {
-    let node;
-    if (event.target.classList.contains("p-submenu-header") == true) {
-      node = "submenu";
-    } else if (event.target.tagName === "A") {
-      node = event.target.parentNode.parentNode;
-    } else {
-      node = event.target.parentNode;
-    }
-    //console.log(node);
-    if (node != "submenu") {
-      let menuitem = document.getElementsByClassName("p-menuitem");
-      for (let i = 0; i < menuitem.length; i++) {
-        menuitem[i].classList.remove("active");
-      }
-      node.classList.add("active");
+  updateActiveMenu() {
+    if (this.items) {
+      // Loop through menu items and set 'active' based on current route
+      this.items.forEach(item => {
+        if (this.router.url === item.routerLink[0]) {
+          item.styleClass = 'active';
+        } else {
+          item.styleClass = '';
+        }
+      });
     }
   }
 
@@ -48,5 +52,7 @@ export class SidebarComponent implements OnInit {
       {label: 'Settings', icon: 'pi pi-cog', routerLink: ['/settings']},
       {label: 'FAQ', icon: 'pi pi-question-circle', routerLink: ['/faq']},
     ];
+
+    this.updateActiveMenu();
   }
 }
