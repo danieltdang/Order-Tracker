@@ -13,6 +13,7 @@ import { AvatarModule } from 'primeng/avatar';
 import { AvatarGroupModule } from 'primeng/avatargroup';
 import { MenubarModule } from 'primeng/menubar';
 import { ToggleButtonModule } from 'primeng/togglebutton';
+import {StyleClassModule} from 'primeng/styleclass';
 
 import { __decorate } from 'tslib';
 
@@ -50,7 +51,8 @@ import { EmailHubComponent } from './content/email-hub/email-hub.component';
     AvatarModule,
     AvatarGroupModule,
     MenubarModule,
-    ToggleButtonModule
+    ToggleButtonModule,
+    StyleClassModule
   ],
   providers: [
     provideClientHydration(),
