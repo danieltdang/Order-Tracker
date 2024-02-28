@@ -5,6 +5,7 @@ from dotenv import load_dotenv
 import os
 import re
 from parsers.nikeParse import parse_nike_email
+from utils.upsTracking import trackUPS
 
 SERVER = "imap.gmail.com"
 PORT = 993
@@ -89,22 +90,17 @@ def parseEmail(Email):
         Email.emailFrom = match.group()
         print(f"Email From: {Email.emailFrom}")
 
-        match Email.emailFrom:
-            case "nike@official.nike.com":
-                print("Parsing Nike email.")
-                parse_nike_email(Email)
-            case _:
-                print("Unsupported store.")
-                return
-
         if Email.emailFrom == "nike@official.nike.com":
             print("Parsing Nike email.")
-            parse_nike_email(Email)
+            #parse_nike_email(Email)
+        else:
+            return
+
+    print(trackUPS("1Z12345E0305271640"))
 
 if __name__ == "__main__":
 
     load_dotenv()
-
     EMAIL = os.getenv("EMAIL")
     PASSWORD = os.getenv("PASSWORD")
 
@@ -119,12 +115,8 @@ if __name__ == "__main__":
 
         if emails != None:
             for email in emails:
-                print(email.emailSubject)
-                print(email.emailDate)
-                print(email.emailFrom)
-                print(email.emailTo)
-                print("\n")
                 parseEmail(email)
+                time.sleep(41029412)
         else:
             print("No emails.")
 
