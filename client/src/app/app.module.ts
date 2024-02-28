@@ -37,7 +37,7 @@ import { EmailHubComponent } from './content/email-hub/email-hub.component';
     PackagesComponent,
     FaqComponent,
     SettingsComponent,
-    EmailHubComponent
+    EmailHubComponent,
   ],
   imports: [
     BrowserModule,
