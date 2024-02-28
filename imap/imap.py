@@ -72,7 +72,7 @@ def getEmails(Mailbox):
     return emails
 
 # Currently only supports
-# Nike orders with UPS, 
+# Nike orders with UPS,
 #FedEx, USPS and generic tracking numbers
 def parseEmail(Email):
     emailBody = Email.emailBody[0]
@@ -86,9 +86,17 @@ def parseEmail(Email):
     match = re.search(fromPattern, str(emailBody))
 
     if match:
-        emailFrom = match.group()
-        print(f"Email From: {emailFrom}")
-        
+        Email.emailFrom = match.group()
+        print(f"Email From: {Email.emailFrom}")
+
+        match Email.emailFrom:
+            case "nike@official.nike.com":
+                print("Parsing Nike email.")
+                parse_nike_email(Email)
+            case _:
+                print("Unsupported store.")
+                return
+
         if Email.emailFrom == "nike@official.nike.com":
             print("Parsing Nike email.")
             parse_nike_email(Email)
@@ -105,6 +113,7 @@ if __name__ == "__main__":
         print("Error.")
         exit()
 
+    #TODO: Handle timeouts
     while True:
         emails = getEmails(Mailbox)
 
@@ -118,6 +127,5 @@ if __name__ == "__main__":
                 parseEmail(email)
         else:
             print("No emails.")
-            
+
         time.sleep(60)
-    

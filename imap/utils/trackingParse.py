@@ -17,3 +17,15 @@ def parseTracking(Email):
 
 
     Email.trackingCode = tracking
+
+def getUPSStatus(trackingCode):
+    pass
+
+def getFedExStatus(trackingCode):
+    pass
+
+def getUSPSStatus(trackingCode):
+    pass
+
+def getLasershipStatus(trackingCode):
+    pass
