@@ -13,7 +13,8 @@ import { AvatarModule } from 'primeng/avatar';
 import { AvatarGroupModule } from 'primeng/avatargroup';
 import { MenubarModule } from 'primeng/menubar';
 import { ToggleButtonModule } from 'primeng/togglebutton';
-import {StyleClassModule} from 'primeng/styleclass';
+import { StyleClassModule } from 'primeng/styleclass';
+import { CalendarModule } from 'primeng/calendar';
 
 import { __decorate } from 'tslib';
 
@@ -52,7 +53,8 @@ import { EmailHubComponent } from './content/email-hub/email-hub.component';
     AvatarGroupModule,
     MenubarModule,
     ToggleButtonModule,
-    StyleClassModule
+    StyleClassModule,
+    CalendarModule
   ],
   providers: [
     provideClientHydration(),
