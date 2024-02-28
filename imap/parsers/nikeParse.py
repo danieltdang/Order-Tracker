@@ -6,13 +6,14 @@ import re
 def parse_nike_email(Email):
 
     emailBody = Email.emailBody[0]
-    
+
     # Parse tracking
     parseTracking(Email)
 
-    # TODO: Parse order number
-    orderNumberPattern = r'\bC[0-9]{11}\b',
+    # Parses the order number from the email body
+    orderNumberPattern = r'\bC[0-9]{11}\b'
     orderNumber = re.search(orderNumberPattern, str(emailBody))
     if orderNumber:
-        Email.orderNumber = orderNumber.group()
+        Email.orderNumber = orderNumber
+
         print(f"Order Number: {Email.orderNumber}")
