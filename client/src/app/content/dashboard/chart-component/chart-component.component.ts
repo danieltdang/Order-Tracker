@@ -65,37 +65,27 @@ export class ChartComponentComponent implements OnInit {
             {
               label: 'Orders',
               data: randomData[0],
-              fill: false,
               backgroundColor: documentStyle.getPropertyValue('--blue-500'),
-              tension: 0
             },
             {
               label: 'Preparing',
               data: randomData[1],
-              fill: false,
               backgroundColor: documentStyle.getPropertyValue('--orange-500'),
-              tension: 0
             },
             {
               label: 'Shipping',
               data: randomData[2],
-              fill: false,
               backgroundColor: documentStyle.getPropertyValue('--yellow-500'),
-              tension: 0
             },
             {
               label: 'Delivered',
               data: randomData[3],
-              fill: false,
               backgroundColor: documentStyle.getPropertyValue('--green-500'),
-              tension: 0
             },
             {
               label: 'Returned',
               data: randomData[4],
-              fill: false,
               backgroundColor: documentStyle.getPropertyValue('--red-500'),
-              tension: 0
             },
           ]
       };
