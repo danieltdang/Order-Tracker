@@ -39,7 +39,6 @@ main {
     display: flex;
     justify-content: flex-start;
     width: 100%;
-    margin-bottom: 3rem;
 }
 
 .content h1 {
@@ -50,10 +49,15 @@ main {
     margin-top: 1.5rem;
 }
 
+.content .right {
+    padding: 2rem;
+    width: 100%;
+}
+
 /* Mobile/lower screen width styling, to show menubar instead of sidebar */
 @media screen and (max-width: 650px) {
     .content {
         flex-direction: column;
-        width: max-content;
+        width: 100%;
     }
 }
