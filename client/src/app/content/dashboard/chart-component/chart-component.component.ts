@@ -16,7 +16,7 @@ export class ChartComponentComponent implements OnInit {
     if (isPlatformBrowser(this.platformId)) {
       // Append '4d' to the colors (alpha channel), except for the hovered index
       function handleHover(evt: any, item: any, legend: any) {
-        legend.chart.data.datasets.forEach((dataset: any, index: any) => {
+        legend.chart.data.datasets.forEach((dataset: any) => {
           if (dataset.label !== item.text) {
             dataset.backgroundColor = dataset.backgroundColor + '4D';
           }
@@ -27,7 +27,7 @@ export class ChartComponentComponent implements OnInit {
 
       // Removes the alpha channel from background colors
       function handleLeave(evt: any, item: any, legend: any) {
-        legend.chart.data.datasets.forEach((dataset: any, index: any) => {
+        legend.chart.data.datasets.forEach((dataset: any) => {
           if (dataset.label !== item.text) {
             dataset.backgroundColor = dataset.backgroundColor.slice(0, -2);
           }
@@ -106,6 +106,7 @@ export class ChartComponentComponent implements OnInit {
         aspectRatio: 0.6,
         plugins: {
           legend: {
+            position: 'bottom',
             labels: {
               color: textColor
             },
