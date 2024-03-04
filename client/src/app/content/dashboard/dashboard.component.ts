@@ -33,6 +33,7 @@ export class DashboardComponent {
     this.cards = [
       {
         title: 'Orders',
+        tooltip: 'Total orders placed',
         count: 428,
         icon: 'pi-shopping-cart',
         color: 'blue',
@@ -40,6 +41,7 @@ export class DashboardComponent {
       },
       {
         title: 'Preparing',
+        tooltip: 'Orders being prepared for shipment',
         count: 200,
         icon: 'pi-box',
         color: 'orange',
@@ -47,6 +49,7 @@ export class DashboardComponent {
       },
       {
         title: 'Shipped',
+        tooltip: 'Orders that have been shipped',
         count: 127,
         icon: 'pi-globe',
         color: 'yellow',
@@ -54,6 +57,7 @@ export class DashboardComponent {
       },
       {
         title: 'Delivered',
+        tooltip: 'Orders that have been delivered',
         count: 100,
         icon: 'pi-home',
         color: 'purple',
@@ -61,6 +65,7 @@ export class DashboardComponent {
       },
       {
         title: 'Returned',
+        tooltip: 'Orders that have been returned',
         count: 1,
         icon: 'pi-undo',
         color: 'red',
