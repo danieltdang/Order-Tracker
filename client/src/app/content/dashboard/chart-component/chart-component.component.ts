@@ -40,35 +40,35 @@ export class ChartComponentComponent implements AfterViewInit {
             label: 'Orders',
             data: randomData[0],
             fill: false,
-            borderColor: documentStyle.getPropertyValue('--blue-500'),
+            backgroundColor: documentStyle.getPropertyValue('--blue-500'),
             tension: 0
           },
           {
             label: 'Preparing',
             data: randomData[1],
             fill: false,
-            borderColor: documentStyle.getPropertyValue('--orange-500'),
+            backgroundColor: documentStyle.getPropertyValue('--orange-500'),
             tension: 0
           },
           {
             label: 'Shipping',
             data: randomData[2],
             fill: false,
-            borderColor: documentStyle.getPropertyValue('--yellow-500'),
+            backgroundColor: documentStyle.getPropertyValue('--yellow-500'),
             tension: 0
           },
           {
             label: 'Delivered',
             data: randomData[3],
             fill: false,
-            borderColor: documentStyle.getPropertyValue('--purple-500'),
+            backgroundColor: documentStyle.getPropertyValue('--green-500'),
             tension: 0
           },
           {
             label: 'Returned',
             data: randomData[4],
             fill: false,
-            borderColor: documentStyle.getPropertyValue('--red-500'),
+            backgroundColor: documentStyle.getPropertyValue('--red-500'),
             tension: 0
           },
         ]
@@ -79,31 +79,33 @@ export class ChartComponentComponent implements AfterViewInit {
       maintainAspectRatio: false,
       aspectRatio: 0.6,
       plugins: {
-          legend: {
-              labels: {
-                  color: textColor
-              }
-          },
+        legend: {
+          labels: {
+            color: textColor
+          }
+        },
       },
       scales: {
-          x: {
-              ticks: {
-                  color: textColorSecondary
-              },
-              grid: {
-                  color: surfaceBorder,
-                  drawBorder: false
-              }
+        x: {
+          stacked: false,
+          ticks: {
+            color: textColorSecondary
           },
-          y: {
-              ticks: {
-                  color: textColorSecondary
-              },
-              grid: {
-                  color: surfaceBorder,
-                  drawBorder: false
-              }
+          grid: {
+            color: surfaceBorder,
+            drawBorder: false
           }
+        },
+        y: {
+          stacked: false,
+          ticks: {
+            color: textColorSecondary
+          },
+          grid: {
+            color: surfaceBorder,
+            drawBorder: false
+          }
+        }
       }
     };
   }

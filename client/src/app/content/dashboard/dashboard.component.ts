@@ -60,7 +60,7 @@ export class DashboardComponent implements OnInit {
         tooltip: 'Orders that have been delivered',
         count: 100,
         icon: 'pi-home',
-        color: 'purple',
+        color: 'green',
         change: 0,
       },
       {
