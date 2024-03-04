@@ -105,6 +105,19 @@ export class ChartComponentComponent implements OnInit {
         maintainAspectRatio: false,
         aspectRatio: 0.6,
         plugins: {
+          title: {
+            display: true,
+            text: 'Order Tracker',
+            color: textColor,
+            font: {
+              size: 20,
+              weight: 600,
+            },
+            padding: {
+              top: 0,
+              bottom: 15
+            },
+          },
           legend: {
             position: 'bottom',
             labels: {
