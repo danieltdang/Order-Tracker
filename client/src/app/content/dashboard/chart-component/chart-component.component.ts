@@ -1,15 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, AfterViewInit } from '@angular/core';
 
 @Component({
   selector: 'app-chart-component',
   templateUrl: './chart-component.component.html',
   styleUrl: './chart-component.component.css'
 })
-export class ChartComponentComponent implements OnInit {
+export class ChartComponentComponent implements AfterViewInit {
   data: any;
   options: any;
 
-  ngOnInit() {
+  ngAfterViewInit() {
     function generateRandomData(numArrays: number, arrayLength: number): number[][] {
       const arrays: number[][] = [];
     
@@ -28,7 +28,7 @@ export class ChartComponentComponent implements OnInit {
 
     const randomData = generateRandomData(5, 7);
 
-    const documentStyle = getComputedStyle(document.documentElement);
+    const documentStyle = getComputedStyle(document.documentElement); // ERROR ReferenceError: getComputedStyle is not defined at _ChartComponentComponent.ngAfterViewInit 
     const textColor = documentStyle.getPropertyValue('--text-color');
     const textColorSecondary = documentStyle.getPropertyValue('--text-color-secondary');
     const surfaceBorder = documentStyle.getPropertyValue('--surface-border');
