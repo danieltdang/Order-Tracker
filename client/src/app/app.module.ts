@@ -15,6 +15,7 @@ import { MenubarModule } from 'primeng/menubar';
 import { ToggleButtonModule } from 'primeng/togglebutton';
 import { StyleClassModule } from 'primeng/styleclass';
 import { CalendarModule } from 'primeng/calendar';
+import { ChartModule } from 'primeng/chart';
 
 import { __decorate } from 'tslib';
 
@@ -27,6 +28,7 @@ import { PackagesComponent } from './content/packages/packages.component';
 import { FaqComponent } from './content/faq/faq.component';
 import { SettingsComponent } from './content/settings/settings.component';
 import { EmailHubComponent } from './content/email-hub/email-hub.component';
+import { ChartComponentComponent } from './content/dashboard/chart-component/chart-component.component';
 
 @NgModule({
   declarations: [
@@ -38,6 +40,7 @@ import { EmailHubComponent } from './content/email-hub/email-hub.component';
     FaqComponent,
     SettingsComponent,
     EmailHubComponent,
+    ChartComponentComponent,
   ],
   imports: [
     BrowserModule,
@@ -54,7 +57,8 @@ import { EmailHubComponent } from './content/email-hub/email-hub.component';
     MenubarModule,
     ToggleButtonModule,
     StyleClassModule,
-    CalendarModule
+    CalendarModule,
+    ChartModule,
   ],
   providers: [
     provideClientHydration(),
