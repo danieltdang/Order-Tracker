@@ -51,6 +51,7 @@ export class SidebarComponent implements OnInit {
       {label: 'Packages', icon: 'pi pi-download', routerLink: ['/app/packages']}, //queryParams: {'recent': 'true'}}
       {label: 'Settings', icon: 'pi pi-cog', routerLink: ['/app/settings']},
       {label: 'FAQ', icon: 'pi pi-question-circle', routerLink: ['/app/faq']},
+      {label: 'Temp Sign Out', icon: 'pi pi-sign-out', routerLink: ['/']}
     ];
 
     this.updateActiveMenu();
