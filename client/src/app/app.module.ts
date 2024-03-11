@@ -16,19 +16,23 @@ import { ToggleButtonModule } from 'primeng/togglebutton';
 import { StyleClassModule } from 'primeng/styleclass';
 import { CalendarModule } from 'primeng/calendar';
 import { ChartModule } from 'primeng/chart';
+import { CheckboxModule } from 'primeng/checkbox';
 
 import { __decorate } from 'tslib';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { SidebarComponent } from './navbar/navbar.component';
-import { ContentComponent } from './content/content.component';
-import { DashboardComponent } from './content/dashboard/dashboard.component';
-import { PackagesComponent } from './content/packages/packages.component';
-import { FaqComponent } from './content/faq/faq.component';
-import { SettingsComponent } from './content/settings/settings.component';
-import { EmailHubComponent } from './content/email-hub/email-hub.component';
-import { ChartComponentComponent } from './content/dashboard/chart-component/chart-component.component';
+import { SidebarComponent } from './components/navbar/navbar.component';
+import { ContentComponent } from './components/content.component';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { PackagesComponent } from './components/packages/packages.component';
+import { FaqComponent } from './components/faq/faq.component';
+import { SettingsComponent } from './components/settings/settings.component';
+import { EmailHubComponent } from './components/email-hub/email-hub.component';
+import { ChartComponentComponent } from './components/dashboard/chart-component/chart-component.component';
+import { MainLayoutComponent } from './layout/main-layout/main-layout.component';
+import { LoginLayoutComponent } from './layout/login-layout/login-layout.component';
+import { LoginComponent } from './components/login/login.component';
 
 @NgModule({
   declarations: [
@@ -41,6 +45,9 @@ import { ChartComponentComponent } from './content/dashboard/chart-component/cha
     SettingsComponent,
     EmailHubComponent,
     ChartComponentComponent,
+    MainLayoutComponent,
+    LoginLayoutComponent,
+    LoginComponent,
   ],
   imports: [
     BrowserModule,
@@ -59,6 +66,7 @@ import { ChartComponentComponent } from './content/dashboard/chart-component/cha
     StyleClassModule,
     CalendarModule,
     ChartModule,
+    CheckboxModule,
   ],
   providers: [
     provideClientHydration(),

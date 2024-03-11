@@ -1,19 +1,36 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { DashboardComponent } from './content/dashboard/dashboard.component';
-import { EmailHubComponent } from './content/email-hub/email-hub.component';
-import { PackagesComponent } from './content/packages/packages.component';
-import { SettingsComponent } from './content/settings/settings.component';
-import { FaqComponent } from './content/faq/faq.component';
+import { MainLayoutComponent } from './layout/main-layout/main-layout.component';
+import { LoginLayoutComponent } from './layout/login-layout/login-layout.component';
+
+import { LoginComponent } from './components/login/login.component';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { EmailHubComponent } from './components/email-hub/email-hub.component';
+import { PackagesComponent } from './components/packages/packages.component';
+import { SettingsComponent } from './components/settings/settings.component';
+import { FaqComponent } from './components/faq/faq.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
-  { path: 'dashboard', component: DashboardComponent },
-  { path: 'email-hub', component: EmailHubComponent },
-  { path: 'packages', component: PackagesComponent },
-  { path: 'settings', component: SettingsComponent },
-  { path: 'faq', component: FaqComponent },
+  { path: '',
+    component: LoginLayoutComponent,
+    children: [
+      { path: '', component: LoginComponent },
+    ]
+  },
+  {
+    path: 'app',
+    component: MainLayoutComponent,
+    children: [
+      { path: 'dashboard', component: DashboardComponent },
+      { path: 'email-hub', component: EmailHubComponent },
+      { path: 'packages', component: PackagesComponent },
+      { path: 'settings', component: SettingsComponent },
+      { path: 'faq', component: FaqComponent },
+      // Redirect / to dashboard as fallback within the MainLayout
+      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+    ],
+  },
 ];
 
 @NgModule({
