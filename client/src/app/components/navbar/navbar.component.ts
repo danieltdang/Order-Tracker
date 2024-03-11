@@ -46,11 +46,11 @@ export class SidebarComponent implements OnInit {
 
   ngOnInit() {
     this.items = [
-      {label: 'Dashboard', icon: 'pi pi-home', routerLink: ['/dashboard'], styleClass : 'active'},
-      {label: 'Email Hub', icon: 'pi pi-envelope', routerLink: ['/email-hub']},
-      {label: 'Packages', icon: 'pi pi-download', routerLink: ['/packages']}, //queryParams: {'recent': 'true'}}
-      {label: 'Settings', icon: 'pi pi-cog', routerLink: ['/settings']},
-      {label: 'FAQ', icon: 'pi pi-question-circle', routerLink: ['/faq']},
+      {label: 'Dashboard', icon: 'pi pi-home', routerLink: ['/app/dashboard'], styleClass : 'active'},
+      {label: 'Email Hub', icon: 'pi pi-envelope', routerLink: ['/app/email-hub']},
+      {label: 'Packages', icon: 'pi pi-download', routerLink: ['/app/packages']}, //queryParams: {'recent': 'true'}}
+      {label: 'Settings', icon: 'pi pi-cog', routerLink: ['/app/settings']},
+      {label: 'FAQ', icon: 'pi pi-question-circle', routerLink: ['/app/faq']},
     ];
 
     this.updateActiveMenu();
