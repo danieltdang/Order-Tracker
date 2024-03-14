@@ -2,9 +2,9 @@ import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 
 @Component({
-  selector: 'app-chart-component',
-  templateUrl: './chart-component.component.html',
-  styleUrl: './chart-component.component.css'
+  selector: 'app-chart',
+  templateUrl: './chart.component.html',
+  styleUrl: './chart.component.css'
 })
 export class ChartComponentComponent implements OnInit {
   data: any;
