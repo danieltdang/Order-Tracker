@@ -17,6 +17,7 @@ import { StyleClassModule } from 'primeng/styleclass';
 import { CalendarModule } from 'primeng/calendar';
 import { ChartModule } from 'primeng/chart';
 import { CheckboxModule } from 'primeng/checkbox';
+import { ImageModule } from 'primeng/image';
 
 import { __decorate } from 'tslib';
 
@@ -67,6 +68,7 @@ import { LoginComponent } from './components/login/login.component';
     CalendarModule,
     ChartModule,
     CheckboxModule,
+    ImageModule,
   ],
   providers: [
     provideClientHydration(),
