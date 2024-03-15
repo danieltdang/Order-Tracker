@@ -1,0 +1,17 @@
+<p-dropdown [options]="reportsFilter" [(ngModel)]="selectedReport" (onChange)="updateRangeDates()" optionLabel="name" [filter]="true" filterBy="name" styleClass="w-20rem">
+    <ng-template pTemplate="filter" let-options="options">
+        <div class="flex justify-content-center">
+            <p-calendar [(ngModel)]="rangeDates" selectionMode="range" [readonlyInput]="true" styleClass="w-full"></p-calendar>
+        </div>
+    </ng-template>
+    <ng-template pTemplate="selectedItem" let-selectedOption>
+        <div class="flex align-items-center gap-2">
+            <div>{{ selectedOption.name }}</div>
+        </div>
+    </ng-template>
+    <ng-template let-report pTemplate="item">
+        <div class="flex align-items-center gap-2">
+            <div>{{ report.name }}</div>
+        </div>
+    </ng-template>
+</p-dropdown>

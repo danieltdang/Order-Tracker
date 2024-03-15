@@ -18,6 +18,8 @@ import { CalendarModule } from 'primeng/calendar';
 import { ChartModule } from 'primeng/chart';
 import { CheckboxModule } from 'primeng/checkbox';
 import { ImageModule } from 'primeng/image';
+import { DropdownModule } from 'primeng/dropdown';
+import { FormsModule } from '@angular/forms';
 
 import { __decorate } from 'tslib';
 
@@ -34,6 +36,7 @@ import { ChartComponentComponent } from './components/dashboard/chart/chart.comp
 import { MainLayoutComponent } from './layout/main-layout/main-layout.component';
 import { LoginLayoutComponent } from './layout/login-layout/login-layout.component';
 import { LoginComponent } from './components/login/login.component';
+import { DropdownComponent } from './components/dashboard/dropdown/dropdown.component';
 
 @NgModule({
   declarations: [
@@ -49,6 +52,7 @@ import { LoginComponent } from './components/login/login.component';
     MainLayoutComponent,
     LoginLayoutComponent,
     LoginComponent,
+    DropdownComponent,
   ],
   imports: [
     BrowserModule,
@@ -69,6 +73,8 @@ import { LoginComponent } from './components/login/login.component';
     ChartModule,
     CheckboxModule,
     ImageModule,
+    DropdownModule,
+    FormsModule,
   ],
   providers: [
     provideClientHydration(),
