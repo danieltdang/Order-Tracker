@@ -2,12 +2,17 @@
     <ng-template pTemplate="filter" let-options="options">
         <div class="flex-auto justify-content-center">
             <label for="dateRange" class="font-semibold block mb-2"> Date Range </label>
-            <p-calendar [(ngModel)]="rangeDates" selectionMode="range" [readonlyInput]="true" styleClass="w-full" inputId="dateRange"></p-calendar>
+            <p-calendar [(ngModel)]="rangeDates" selectionMode="range" (onShow)="updateRangeDates(true)" [readonlyInput]="true" styleClass="w-full" inputId="dateRange"></p-calendar>
         </div>
     </ng-template>
     <ng-template pTemplate="selectedItem" let-selectedOption>
         <div class="flex align-items-center text-base">
-            <div>{{ selectedOption.name }}</div>
+            <div *ngIf="!selectedOption.custom">
+                {{ selectedOption.name }}
+            </div>
+            <div *ngIf="selectedOption.custom">
+                {{ selectedOption.startDate | date: 'shortDate' }} - {{ selectedOption.endDate | date: 'shortDate' }}
+            </div>
         </div>
     </ng-template>
     <ng-template let-report pTemplate="item">

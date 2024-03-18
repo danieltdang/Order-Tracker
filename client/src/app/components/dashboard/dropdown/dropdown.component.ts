@@ -4,6 +4,7 @@ interface Filter {
   name: string;
   startDate: Date;
   endDate: Date;
+  custom?: boolean;
 }
 
 @Component({
@@ -34,7 +35,12 @@ export class DropdownComponent implements OnInit {
   };
   
   // update rangeDates based on the selectedReport
-  updateRangeDates(): void {
+  updateRangeDates(custom: boolean = false): void {
+    console.log(custom);
+    if (this.selectedReport) {
+      this.selectedReport.custom = custom;
+    }
+
     if (!this.selectedReport || this.selectedReport.name === 'All Time') {
       this.rangeDates = [];
     }
