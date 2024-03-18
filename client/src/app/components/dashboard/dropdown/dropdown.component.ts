@@ -19,8 +19,10 @@ export class DropdownComponent implements OnInit {
   today = new Date();
 
   getStartDateOfTheWeek = (date: Date) => {
-    const dayOfWeek = date.getDay(); // Get current day of the week, 0 (Sunday) to 6 (Saturday)
-    return new Date(date.getDate() - dayOfWeek);
+    const newDate = new Date();
+    newDate.setDate(date.getDate() - date.getDay());
+
+    return newDate;
   };
 
   getFirstDayOfMonth = (date: Date) => {
@@ -45,7 +47,7 @@ export class DropdownComponent implements OnInit {
     this.reportsFilter = [
       {
         name: 'Yesterday',
-        startDate: new Date(new Date().setDate(new Date().getDate() - 1)),
+        startDate: new Date(new Date().setDate(this.today.getDate() - 1)),
         endDate: this.today,
       },
       {
