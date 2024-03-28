@@ -1,8 +1,8 @@
-<p-dropdown [options]="reportsFilter" [(ngModel)]="selectedReport" (onChange)="updateRangeDates()" optionLabel="name" [filter]="true" filterBy="name" styleClass="w-20rem">
+<p-dropdown [options]="filterList" [(ngModel)]="selectedFilter" (onChange)="updateRangeDates()" optionLabel="name" [filter]="true" filterBy="name" styleClass="w-20rem">
     <ng-template pTemplate="filter" let-options="options">
         <div class="flex-auto justify-content-center">
             <label for="dateRange" class="font-semibold block mb-2"> Date Range </label>
-            <p-calendar [(ngModel)]="rangeDates" selectionMode="range" (onSelect)="onSelect($event)" [readonlyInput]="true" styleClass="w-full" inputId="dateRange"></p-calendar>
+            <p-calendar [(ngModel)]="dateStartEnd" selectionMode="range" (onSelect)="onSelect($event)" [readonlyInput]="true" styleClass="w-full" inputId="dateRange"></p-calendar>
         </div>
     </ng-template>
     <ng-template pTemplate="selectedItem" let-selectedOption>

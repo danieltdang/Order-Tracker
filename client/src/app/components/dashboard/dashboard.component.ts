@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
+import { Filter } from './filter';
+
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -7,6 +9,30 @@ import { Component, OnInit } from '@angular/core';
 })
 export class DashboardComponent implements OnInit {
   cards: any[] | undefined;
+  today = new Date();
+
+  chartList: Filter[] | undefined;
+  chartFilter: Filter | undefined;
+  chartDates: Date[] | undefined;
+
+  reportList: Filter[] | undefined;
+  reportFilter: Filter | undefined;
+  reportDates: Date[] | undefined;
+
+  getStartDateOfTheWeek = (date: Date) => {
+    const newDate = new Date();
+    newDate.setDate(date.getDate() - date.getDay());
+
+    return newDate;
+  };
+
+  getFirstDayOfMonth = (date: Date) => {
+    return new Date(date.getFullYear(), date.getMonth(), 1);
+  };
+
+  getFirstDayOfTheYear = (date: Date) => {
+    return new Date(date.getFullYear(), 0, 1);
+  };
 
   // Function to get the color of the change in the card
   getChangeColor(change: number, title: string): string {
@@ -73,5 +99,50 @@ export class DashboardComponent implements OnInit {
         change: 1,
       },
     ];
+
+    this.reportList = [
+      {
+        name: 'Yesterday',
+        startDate: new Date(new Date().setDate(this.today.getDate() - 1)),
+        endDate: this.today,
+      },
+      {
+        name: 'This Week',
+        startDate: this.getStartDateOfTheWeek(this.today),
+        endDate: this.today,
+      },
+      {
+        name: 'This Month',
+        startDate: this.getFirstDayOfMonth(this.today),
+        endDate: this.today,
+      },
+      {
+        name: 'Past 3 Months',
+        startDate: this.getFirstDayOfMonth(new Date(new Date().setMonth(this.today.getMonth() - 3))),
+        endDate: this.today,
+      },
+      {
+        name: 'Past 6 Months',
+        startDate: this.getFirstDayOfMonth(new Date(new Date().setMonth(this.today.getMonth() - 6))),
+        endDate: this.today,
+      },
+      {
+        name: 'This Year',
+        startDate: this.getFirstDayOfTheYear(this.today),
+        endDate: this.today,
+      },
+      { 
+        name: 'All Time',
+        startDate: new Date(0), // SHOULD BE SET TO USER'S FIRST ORDER DATE
+        endDate: this.today,
+      },
+    ];
+
+    // Set the default selectedReport to 'All Time'
+    this.reportFilter = this.reportList.find(filter => filter.name === 'All Time');
+
+    // For now, chartList is exact same as Report List
+    this.chartList = this.reportList;
+    this.chartFilter = this.chartList.find(filter => filter.name === 'All Time');
   }
 }
