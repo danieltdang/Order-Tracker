@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 
 import { Filter } from './filter';
 
@@ -11,6 +11,7 @@ export class DashboardComponent implements OnInit {
   cards: any[] | undefined;
   today = new Date();
 
+  chartData: number[][] | undefined;
   chartFrequency: string[] | undefined;
   chartFrequencySelected: string | undefined;
   chartLabels: string[] | undefined;
@@ -22,6 +23,8 @@ export class DashboardComponent implements OnInit {
   reportList: Filter[] | undefined;
   reportFilter: Filter | undefined;
   reportDates: Date[] | undefined;
+
+  constructor(private cdr: ChangeDetectorRef) { }
 
   getStartDateOfTheWeek = (date: Date) => {
     const newDate = new Date();
@@ -60,14 +63,73 @@ export class DashboardComponent implements OnInit {
     }
   }
 
+  // Function to update the chart labels based on frequency and date range
+  updateChartLabels(): void {
+    if (!this.chartDates || this.chartDates.length < 2) {
+      // Ensure there are start and end dates provided
+      return;
+    }
+  
+    const startDate = this.chartDates[0];
+    const endDate = this.chartDates[1];
+    const newLabels: string[] = []; // Create a new array
+  
+    switch (this.chartFrequencySelected) {
+      case 'Daily':
+        // Generate labels for each day between startDate and endDate
+        for (let date = new Date(startDate); date <= endDate; date.setDate(date.getDate() + 1)) {
+          newLabels.push(this.formatDate(new Date(date)));
+        }
+        break;
+      case 'Weekly':
+        // Generate weekly labels
+        for (let date = new Date(startDate); date <= endDate; date.setDate(date.getDate() + 7)) {
+          newLabels.push(`Week of ${this.formatDate(new Date(date))}`);
+        }
+        break;
+      case 'Monthly':
+        // Generate monthly labels
+        for (let date = new Date(startDate.getFullYear(), startDate.getMonth(), 1); date <= endDate; date.setMonth(date.getMonth() + 1)) {
+          newLabels.push(`${date.toLocaleString('default', { month: 'long' })} ${date.getFullYear()}`);
+        }
+        break;
+      case 'Yearly':
+        // Generate yearly labels
+        for (let year = startDate.getFullYear(); year <= endDate.getFullYear(); year++) {
+          newLabels.push(`${year}`);
+        }
+        break;
+      default:
+        // Handle unexpected frequency
+        console.warn(`Unexpected frequency: ${this.chartFrequencySelected}`);
+    }
+  
+    this.chartLabels = newLabels; // Assign the new array to chartLabels
+    this.chartData = this.generateRandomData(5, this.chartLabels.length);
+    console.log('Updated chart labels:', this.chartLabels);
+    console.log('Updated chart data:', this.chartData);
+    this.cdr.detectChanges();
+  }
+
+  // Helper function to format dates as strings
+  formatDate(date: Date): string {
+    return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+  }
+
+  onChartFrequencyChange(newFrequency: string): void {
+    this.chartFrequencySelected = newFrequency;
+    this.updateChartLabels();
+  }
+
   onChartFilterChange(newFilter: Filter | undefined): void {
     this.chartFilter = newFilter;
-    // Handle chart filter change logic here
+    this.updateChartLabels();
   }
 
   onChartDatesChange(newDates: Date[] | undefined): void {
     this.chartDates = newDates;
-    // Handle chart date change logic here
+    this.updateChartLabels();
+    this.cdr.detectChanges();
   }
 
   onReportFilterChange(newFilter: Filter | undefined): void {
@@ -77,7 +139,24 @@ export class DashboardComponent implements OnInit {
 
   onReportDatesChange(newDates: Date[] | undefined): void {
     this.reportDates = newDates;
+    this.cdr.detectChanges();
     // Handle report date change logic here
+  }
+
+  generateRandomData(numArrays: number, arrayLength: number): number[][] {
+    const arrays: number[][] = [];
+  
+    for (let i = 0; i < numArrays; i++) {
+      const arr: number[] = [];
+      for (let j = 0; j < arrayLength; j++) {
+        // Generate a random number between 0 and 40
+        const randomNumber = Math.floor(Math.random() * 41);
+        arr.push(randomNumber);
+      }
+      arrays.push(arr);
+    }
+  
+    return arrays;
   }
 
   ngOnInit() {
@@ -157,7 +236,7 @@ export class DashboardComponent implements OnInit {
       },
       { 
         name: 'All Time',
-        startDate: new Date(0), // SHOULD BE SET TO USER'S FIRST ORDER DATE
+        startDate: new Date(new Date(0).setFullYear(1999)), // SHOULD BE SET TO USER'S FIRST ORDER DATE
         endDate: this.today,
       },
     ];
@@ -170,6 +249,8 @@ export class DashboardComponent implements OnInit {
     this.chartFilter = this.chartList.find(filter => filter.name === 'All Time');
 
     this.chartFrequency = ['Daily', 'Weekly', 'Monthly', 'Yearly'];
-    this.chartFrequencySelected = this.chartFrequency[2];
+    this.chartFrequencySelected = this.chartFrequency[3];
+
+    this.updateChartLabels();
   }
 }

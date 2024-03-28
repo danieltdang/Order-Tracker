@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
+import { Component, OnInit, Inject, Input, Output, EventEmitter, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 
 @Component({
@@ -6,9 +6,34 @@ import { isPlatformBrowser } from '@angular/common';
   templateUrl: './chart.component.html',
   styleUrl: './chart.component.css'
 })
-export class ChartComponentComponent implements OnInit {
+export class ChartComponent implements OnInit {
   data: any;
   options: any;
+  // Labels are dynamically generated in Dashboard
+  private _labels: string[] | undefined;
+  private _chartData: any[] | undefined;
+
+  @Output() labelsChange = new EventEmitter<string[] | undefined>();
+  @Output() chartDataChange = new EventEmitter<number[][] | undefined>();
+
+  // Proper getters and setters to intercept and emit changes
+  @Input()
+  get labels(): string[] | undefined {
+    return this._labels;
+  }
+  set labels(val: string[] | undefined) {
+    this._labels = val;
+    this.labelsChange.emit(this._labels);
+  }
+
+  @Input()
+  get chartData(): number[][] | undefined {
+    return this._chartData;
+  }
+  set chartData(val: number[][] | undefined) {
+    this._chartData = val;
+    this.chartDataChange.emit(this._chartData);
+  }
 
   constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
 
@@ -36,59 +61,44 @@ export class ChartComponentComponent implements OnInit {
         legend.chart.update();
       }
 
-      function generateRandomData(numArrays: number, arrayLength: number): number[][] {
-        const arrays: number[][] = [];
-      
-        for (let i = 0; i < numArrays; i++) {
-          const arr: number[] = [];
-          for (let j = 0; j < arrayLength; j++) {
-            // Generate a random number between 0 and 40
-            const randomNumber = Math.floor(Math.random() * 41);
-            arr.push(randomNumber);
-          }
-          arrays.push(arr);
-        }
-      
-        return arrays;
-      }
-
-      const randomData = generateRandomData(5, 6);
-
-      const documentStyle = getComputedStyle(document.documentElement); // ERROR ReferenceError: getComputedStyle is not defined at _ChartComponentComponent.ngAfterViewInit 
+      const documentStyle = getComputedStyle(document.documentElement);
       const textColor = documentStyle.getPropertyValue('--surface-900');
       const textColorSecondary = documentStyle.getPropertyValue('--text-color-secondary');
       const surfaceBorder = documentStyle.getPropertyValue('--surface-border');
 
+      console.log(this.labels);
+      console.log(this.chartData);
+
       this.data = {
-          labels: ['October', 'November', 'December', 'January', 'February', 'March'],
+          labels: this.labels,
           datasets: [
             {
               label: 'Orders',
-              data: randomData[0],
+              data: this.chartData?.[0] ?? [],
               borderColor: documentStyle.getPropertyValue('--blue-500'),
               backgroundColor: documentStyle.getPropertyValue('--blue-500'),
             },
             {
               label: 'Preparing',
-              data: randomData[1],
+              data: this.chartData?.[1] ?? [],
               borderColor: documentStyle.getPropertyValue('--orange-500'),
               backgroundColor: documentStyle.getPropertyValue('--orange-500'),
             },
             {
               label: 'Shipping',
-              data: randomData[2],
+              data: this.chartData?.[2] ?? [],
               borderColor: documentStyle.getPropertyValue('--yellow-500'),
               backgroundColor: documentStyle.getPropertyValue('--yellow-500'),
             },
             {
               label: 'Delivered',
-              data: randomData[3],
+              data: this.chartData?.[3] ?? [],
               borderColor: documentStyle.getPropertyValue('--green-500'),
               backgroundColor: documentStyle.getPropertyValue('--green-500'),
             },
             {
               label: 'Returned',
-              data: randomData[4],
+              data: this.chartData?.[4] ?? [],
               borderColor: documentStyle.getPropertyValue('--red-500'),
               backgroundColor: documentStyle.getPropertyValue('--red-500'),
             },

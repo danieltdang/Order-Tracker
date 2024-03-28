@@ -46,7 +46,7 @@ export class DropdownComponent implements OnInit {
       this.selectedFilter.custom = custom;
     }
 
-    if (!this.selectedFilter || this.selectedFilter.name === 'All Time') {
+    if (!this.selectedFilter) {// || this.selectedFilter.name === 'All Time') {
       this.dateStartEnd = [];
     }
     else if (this.selectedFilter) {

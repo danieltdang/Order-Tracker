@@ -1,11 +1,11 @@
 <div class="col-12 max-w-full">
   <div class="surface-card col-12 mb-3 shadow-2 p-3 border-round">
-    <div class="flex flex-column justify-content-between mb-3">
+    <div class="flex flex-column justify-content-between mb-2">
       <span class="block text-900 text-2xl font-semibold mb-2">Order Tracker</span>
-      <app-chart/>
+      <app-chart [(labels)]="chartLabels" [(chartData)]="chartData"/>
     </div>
     <div class="flex flex-wrap justify-content-end gap-2">
-      <p-dropdown [options]="chartFrequency" [(ngModel)]="chartFrequencySelected" styleClass="w-9rem"/>
+      <p-dropdown [options]="chartFrequency" [(ngModel)]="chartFrequencySelected" (ngModelChange)="onChartFrequencyChange($event)" styleClass="w-9rem"/>
       <app-dropdown
         [filterList]="chartList"
         [(selectedFilter)]="chartFilter"

@@ -32,7 +32,7 @@ import { PackagesComponent } from './components/packages/packages.component';
 import { FaqComponent } from './components/faq/faq.component';
 import { SettingsComponent } from './components/settings/settings.component';
 import { EmailHubComponent } from './components/email-hub/email-hub.component';
-import { ChartComponentComponent } from './components/dashboard/chart/chart.component';
+import { ChartComponent } from './components/dashboard/chart/chart.component';
 import { MainLayoutComponent } from './layout/main-layout/main-layout.component';
 import { LoginLayoutComponent } from './layout/login-layout/login-layout.component';
 import { LoginComponent } from './components/login/login.component';
@@ -48,7 +48,7 @@ import { DropdownComponent } from './components/dashboard/dropdown/dropdown.comp
     FaqComponent,
     SettingsComponent,
     EmailHubComponent,
-    ChartComponentComponent,
+    ChartComponent,
     MainLayoutComponent,
     LoginLayoutComponent,
     LoginComponent,
