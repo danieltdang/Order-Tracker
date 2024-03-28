@@ -17,6 +17,9 @@ import { StyleClassModule } from 'primeng/styleclass';
 import { CalendarModule } from 'primeng/calendar';
 import { ChartModule } from 'primeng/chart';
 import { CheckboxModule } from 'primeng/checkbox';
+import { ImageModule } from 'primeng/image';
+import { DropdownModule } from 'primeng/dropdown';
+import { FormsModule } from '@angular/forms';
 
 import { __decorate } from 'tslib';
 
@@ -29,10 +32,11 @@ import { PackagesComponent } from './components/packages/packages.component';
 import { FaqComponent } from './components/faq/faq.component';
 import { SettingsComponent } from './components/settings/settings.component';
 import { EmailHubComponent } from './components/email-hub/email-hub.component';
-import { ChartComponentComponent } from './components/dashboard/chart-component/chart-component.component';
+import { ChartComponent } from './components/dashboard/chart/chart.component';
 import { MainLayoutComponent } from './layout/main-layout/main-layout.component';
 import { LoginLayoutComponent } from './layout/login-layout/login-layout.component';
 import { LoginComponent } from './components/login/login.component';
+import { DropdownComponent } from './components/dashboard/dropdown/dropdown.component';
 
 @NgModule({
   declarations: [
@@ -44,10 +48,11 @@ import { LoginComponent } from './components/login/login.component';
     FaqComponent,
     SettingsComponent,
     EmailHubComponent,
-    ChartComponentComponent,
+    ChartComponent,
     MainLayoutComponent,
     LoginLayoutComponent,
     LoginComponent,
+    DropdownComponent,
   ],
   imports: [
     BrowserModule,
@@ -67,6 +72,9 @@ import { LoginComponent } from './components/login/login.component';
     CalendarModule,
     ChartModule,
     CheckboxModule,
+    ImageModule,
+    DropdownModule,
+    FormsModule,
   ],
   providers: [
     provideClientHydration(),
