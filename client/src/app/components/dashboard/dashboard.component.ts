@@ -11,6 +11,9 @@ export class DashboardComponent implements OnInit {
   cards: any[] | undefined;
   today = new Date();
 
+  chartFrequency: string[] = ['Daily', 'Weekly', 'Monthly', 'Yearly'];
+  chartFrequencySelected: string = 'Monthly';
+
   chartList: Filter[] | undefined;
   chartFilter: Filter | undefined;
   chartDates: Date[] | undefined;
