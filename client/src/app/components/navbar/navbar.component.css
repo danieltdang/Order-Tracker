@@ -100,6 +100,7 @@ a, u {
     justify-content: space-between;
     align-items: center;
     height: 72px;
+    width: 100%;
     padding: 1.25rem;
     padding-right: 0.25rem;
     border: none;

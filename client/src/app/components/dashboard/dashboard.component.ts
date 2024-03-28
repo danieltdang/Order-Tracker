@@ -11,8 +11,9 @@ export class DashboardComponent implements OnInit {
   cards: any[] | undefined;
   today = new Date();
 
-  chartFrequency: string[] = ['Daily', 'Weekly', 'Monthly', 'Yearly'];
-  chartFrequencySelected: string = 'Monthly';
+  chartFrequency: string[] | undefined;
+  chartFrequencySelected: string | undefined;
+  chartLabels: string[] | undefined;
 
   chartList: Filter[] | undefined;
   chartFilter: Filter | undefined;
@@ -167,5 +168,8 @@ export class DashboardComponent implements OnInit {
     // For now, chartList is exact same as Report List
     this.chartList = this.reportList;
     this.chartFilter = this.chartList.find(filter => filter.name === 'All Time');
+
+    this.chartFrequency = ['Daily', 'Weekly', 'Monthly', 'Yearly'];
+    this.chartFrequencySelected = this.chartFrequency[2];
   }
 }

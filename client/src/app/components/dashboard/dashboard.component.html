@@ -1,19 +1,22 @@
 <div class="col-12 max-w-full">
   <div class="surface-card col-12 mb-3 shadow-2 p-3 border-round">
-    <div class="flex flex-row justify-content-between mb-3">
-      <span class="block text-900 text-2xl font-semibold mb-3">Order Tracker</span>
+    <div class="flex flex-column justify-content-between mb-3">
+      <span class="block text-900 text-2xl font-semibold mb-2">Order Tracker</span>
+      <app-chart/>
+    </div>
+    <div class="flex flex-wrap justify-content-end gap-2">
+      <p-dropdown [options]="chartFrequency" [(ngModel)]="chartFrequencySelected" styleClass="w-9rem"/>
       <app-dropdown
         [filterList]="chartList"
         [(selectedFilter)]="chartFilter"
         (selectedFilterChange)="onChartFilterChange($event)"
         [dateStartEnd]="chartDates"
         (dateStartEndChange)="onChartDatesChange($event)">
-      </app-dropdown>  
+    </app-dropdown>
     </div>
-    <app-chart/>
   </div>
   <div class="surface-card shadow-2 p-3 border-round">
-    <div class="flex flex-row justify-content-between mb-3">
+    <div class="flex flex-wrap gap-2 flex-row justify-content-between mb-3">
       <span class="block text-900 text-2xl font-semibold">Report</span>
       <app-dropdown
         [filterList]="reportList"
