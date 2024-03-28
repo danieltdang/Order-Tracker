@@ -76,44 +76,44 @@ export class DashboardComponent implements OnInit {
   
     switch (this.chartFrequencySelected) {
       case 'Daily':
-        // Generate labels for each day between startDate and endDate
-        for (let date = new Date(startDate); date <= endDate; date.setDate(date.getDate() + 1)) {
+        // Adjust endDate to the end of the day, otherwise current day will be excluded
+        let adjustedEndDate = new Date(endDate);
+        adjustedEndDate.setHours(23, 59, 59, 999);
+        
+        // Generate labels for each day between startDate and adjustedEndDate
+        for (let date = new Date(startDate); date <= adjustedEndDate; date.setDate(date.getDate() + 1)) {
           newLabels.push(this.formatDate(new Date(date)));
         }
         break;
       case 'Weekly':
-        // Generate weekly labels
         for (let date = new Date(startDate); date <= endDate; date.setDate(date.getDate() + 7)) {
           newLabels.push(`Week of ${this.formatDate(new Date(date))}`);
         }
         break;
       case 'Monthly':
-        // Generate monthly labels
         for (let date = new Date(startDate.getFullYear(), startDate.getMonth(), 1); date <= endDate; date.setMonth(date.getMonth() + 1)) {
           newLabels.push(`${date.toLocaleString('default', { month: 'long' })} ${date.getFullYear()}`);
         }
         break;
       case 'Yearly':
-        // Generate yearly labels
         for (let year = startDate.getFullYear(); year <= endDate.getFullYear(); year++) {
           newLabels.push(`${year}`);
         }
         break;
       default:
-        // Handle unexpected frequency
         console.warn(`Unexpected frequency: ${this.chartFrequencySelected}`);
     }
   
     this.chartLabels = newLabels; // Assign the new array to chartLabels
     this.chartData = this.generateRandomData(5, this.chartLabels.length);
-    console.log('Updated chart labels:', this.chartLabels);
-    console.log('Updated chart data:', this.chartData);
+    //console.log('Updated chart labels:', this.chartLabels);
+    //console.log('Updated chart data:', this.chartData);
     this.cdr.detectChanges();
   }
 
   // Helper function to format dates as strings
   formatDate(date: Date): string {
-    return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+    return `${String(date.getMonth() + 1).padStart(2, '0')}/${String(date.getDate()).padStart(2, '0')}/${date.getFullYear()}`;
   }
 
   onChartFrequencyChange(newFrequency: string): void {

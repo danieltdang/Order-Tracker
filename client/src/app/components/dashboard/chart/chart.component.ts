@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject, Input, Output, EventEmitter, PLATFORM_ID } from '@angular/core';
+import { Component, OnInit, Inject, Input, Output, EventEmitter, PLATFORM_ID, OnChanges, SimpleChanges } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 
 @Component({
@@ -6,24 +6,24 @@ import { isPlatformBrowser } from '@angular/common';
   templateUrl: './chart.component.html',
   styleUrl: './chart.component.css'
 })
-export class ChartComponent implements OnInit {
+export class ChartComponent implements OnInit, OnChanges {
   data: any;
   options: any;
   // Labels are dynamically generated in Dashboard
   private _labels: string[] | undefined;
   private _chartData: any[] | undefined;
 
-  @Output() labelsChange = new EventEmitter<string[] | undefined>();
+  @Output() chartLabelsChange = new EventEmitter<string[] | undefined>();
   @Output() chartDataChange = new EventEmitter<number[][] | undefined>();
 
   // Proper getters and setters to intercept and emit changes
   @Input()
-  get labels(): string[] | undefined {
+  get chartLabels(): string[] | undefined {
     return this._labels;
   }
-  set labels(val: string[] | undefined) {
+  set chartLabels(val: string[] | undefined) {
     this._labels = val;
-    this.labelsChange.emit(this._labels);
+    this.chartLabelsChange.emit(this._labels);
   }
 
   @Input()
@@ -36,7 +36,7 @@ export class ChartComponent implements OnInit {
   }
 
   constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
-
+  
   ngOnInit() {
     if (isPlatformBrowser(this.platformId)) {
       // Append '4d' to the colors (alpha channel), except for the hovered index
@@ -66,11 +66,8 @@ export class ChartComponent implements OnInit {
       const textColorSecondary = documentStyle.getPropertyValue('--text-color-secondary');
       const surfaceBorder = documentStyle.getPropertyValue('--surface-border');
 
-      console.log(this.labels);
-      console.log(this.chartData);
-
       this.data = {
-          labels: this.labels,
+          labels: this.chartLabels,
           datasets: [
             {
               label: 'Orders',
@@ -141,6 +138,51 @@ export class ChartComponent implements OnInit {
             }
           }
         }
+      };
+    }
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['chartLabels'] || changes['chartData']) {
+      const documentStyle = getComputedStyle(document.documentElement);
+      const textColor = documentStyle.getPropertyValue('--surface-900');
+      const textColorSecondary = documentStyle.getPropertyValue('--text-color-secondary');
+      const surfaceBorder = documentStyle.getPropertyValue('--surface-border');
+
+      this.data = {
+        labels: this.chartLabels,
+        datasets: [
+          {
+            label: 'Orders',
+            data: this.chartData?.[0] ?? [],
+            borderColor: documentStyle.getPropertyValue('--blue-500'),
+            backgroundColor: documentStyle.getPropertyValue('--blue-500'),
+          },
+          {
+            label: 'Preparing',
+            data: this.chartData?.[1] ?? [],
+            borderColor: documentStyle.getPropertyValue('--orange-500'),
+            backgroundColor: documentStyle.getPropertyValue('--orange-500'),
+          },
+          {
+            label: 'Shipping',
+            data: this.chartData?.[2] ?? [],
+            borderColor: documentStyle.getPropertyValue('--yellow-500'),
+            backgroundColor: documentStyle.getPropertyValue('--yellow-500'),
+          },
+          {
+            label: 'Delivered',
+            data: this.chartData?.[3] ?? [],
+            borderColor: documentStyle.getPropertyValue('--green-500'),
+            backgroundColor: documentStyle.getPropertyValue('--green-500'),
+          },
+          {
+            label: 'Returned',
+            data: this.chartData?.[4] ?? [],
+            borderColor: documentStyle.getPropertyValue('--red-500'),
+            backgroundColor: documentStyle.getPropertyValue('--red-500'),
+          },
+        ]
       };
     }
   }

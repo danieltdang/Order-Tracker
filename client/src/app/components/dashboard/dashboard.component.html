@@ -2,7 +2,7 @@
   <div class="surface-card col-12 mb-3 shadow-2 p-3 border-round">
     <div class="flex flex-column justify-content-between mb-2">
       <span class="block text-900 text-2xl font-semibold mb-2">Order Tracker</span>
-      <app-chart [(labels)]="chartLabels" [(chartData)]="chartData"/>
+      <app-chart [(chartLabels)]="chartLabels" [(chartData)]="chartData"/>
     </div>
     <div class="flex flex-wrap justify-content-end gap-2">
       <p-dropdown [options]="chartFrequency" [(ngModel)]="chartFrequencySelected" (ngModelChange)="onChartFrequencyChange($event)" styleClass="w-9rem"/>
