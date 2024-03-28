@@ -56,6 +56,26 @@ export class DashboardComponent implements OnInit {
     }
   }
 
+  onChartFilterChange(newFilter: Filter | undefined): void {
+    this.chartFilter = newFilter;
+    // Handle chart filter change logic here
+  }
+
+  onChartDatesChange(newDates: Date[] | undefined): void {
+    this.chartDates = newDates;
+    // Handle chart date change logic here
+  }
+
+  onReportFilterChange(newFilter: Filter | undefined): void {
+    this.reportFilter = newFilter;
+    // Handle report filter change logic here
+  }
+
+  onReportDatesChange(newDates: Date[] | undefined): void {
+    this.reportDates = newDates;
+    // Handle report date change logic here
+  }
+
   ngOnInit() {
     this.cards = [
       {

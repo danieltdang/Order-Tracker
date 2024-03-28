@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 import { Filter } from '../filter';
 
@@ -9,8 +9,33 @@ import { Filter } from '../filter';
 })
 export class DropdownComponent implements OnInit {
   @Input() filterList: Filter[] | undefined;
-  @Input() selectedFilter: Filter | undefined;
-  @Input() dateStartEnd: Date[] | undefined;
+
+  // Use temporary internal variables to hold the input values
+  private _selectedFilter: Filter | undefined;
+  private _dateStartEnd: Date[] | undefined;
+
+  @Output() selectedFilterChange = new EventEmitter<Filter | undefined>();
+  @Output() dateStartEndChange = new EventEmitter<Date[] | undefined>();
+
+  // Proper getters and setters to intercept and emit changes
+  @Input()
+  get selectedFilter(): Filter | undefined {
+    return this._selectedFilter;
+  }
+  set selectedFilter(val: Filter | undefined) {
+    this._selectedFilter = val;
+    this.selectedFilterChange.emit(this._selectedFilter);
+  }
+
+  @Input()
+  get dateStartEnd(): Date[] | undefined {
+    return this._dateStartEnd;
+  }
+  set dateStartEnd(val: Date[] | undefined) {
+    this._dateStartEnd = val;
+    this.dateStartEndChange.emit(this._dateStartEnd);
+  }
+  
   today = new Date();
   daySelected: number = -1; // -1 means first date is selected, 1 means second date is selected
   
