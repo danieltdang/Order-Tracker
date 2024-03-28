@@ -19,6 +19,8 @@ export class DropdownComponent implements OnInit {
   rangeDates: Date[] | undefined;
   today = new Date();
 
+  daySelected: number = -1; // -1 means first date is selected, 1 means second date is selected
+
   getStartDateOfTheWeek = (date: Date) => {
     const newDate = new Date();
     newDate.setDate(date.getDate() - date.getDay());
@@ -36,7 +38,7 @@ export class DropdownComponent implements OnInit {
   
   // update rangeDates based on the selectedReport
   updateRangeDates(custom: boolean = false): void {
-    console.log(custom);
+    //console.log(custom);
     if (this.selectedReport) {
       this.selectedReport.custom = custom;
     }
@@ -46,6 +48,23 @@ export class DropdownComponent implements OnInit {
     }
     else if (this.selectedReport) {
       this.rangeDates = [this.selectedReport.startDate, this.selectedReport.endDate];
+    }
+  }
+
+  onSelect(event : Date): void {
+    //console.log(event);
+    //console.log(this.daySelected);
+    
+    if (this.selectedReport) {
+      if (this.daySelected === 1) {
+        this.selectedReport.endDate = event;
+        this.updateRangeDates(true);
+      }
+      else {
+        this.selectedReport.startDate = event;
+      }
+
+    this.daySelected *= -1;
     }
   }
 
@@ -83,7 +102,7 @@ export class DropdownComponent implements OnInit {
       },
       { 
         name: 'All Time',
-        startDate: new Date(0),
+        startDate: new Date(0), // SHOULD BE SET TO USER'S FIRST ORDER DATE
         endDate: this.today,
       },
     ];
