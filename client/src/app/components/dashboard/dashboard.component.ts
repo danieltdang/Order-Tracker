@@ -1,5 +1,6 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 
+import { Report } from './report';
 import { Filter } from './filter';
 
 @Component({
@@ -8,7 +9,7 @@ import { Filter } from './filter';
   styleUrl: './dashboard.component.css',
 })
 export class DashboardComponent implements OnInit {
-  cards: any[] | undefined;
+  cards: Report[] | undefined;
   today = new Date();
 
   chartData: number[][] | undefined;
