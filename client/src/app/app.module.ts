@@ -13,19 +13,46 @@ import { AvatarModule } from 'primeng/avatar';
 import { AvatarGroupModule } from 'primeng/avatargroup';
 import { MenubarModule } from 'primeng/menubar';
 import { ToggleButtonModule } from 'primeng/togglebutton';
+import { StyleClassModule } from 'primeng/styleclass';
+import { CalendarModule } from 'primeng/calendar';
+import { ChartModule } from 'primeng/chart';
+import { CheckboxModule } from 'primeng/checkbox';
+import { ImageModule } from 'primeng/image';
+import { DropdownModule } from 'primeng/dropdown';
+import { FormsModule } from '@angular/forms';
 
 import { __decorate } from 'tslib';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { SidebarComponent } from './navbar/navbar.component';
-import { ContentComponent } from './content/content.component';
+import { SidebarComponent } from './components/navbar/navbar.component';
+import { ContentComponent } from './components/content.component';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { PackagesComponent } from './components/packages/packages.component';
+import { FaqComponent } from './components/faq/faq.component';
+import { SettingsComponent } from './components/settings/settings.component';
+import { EmailHubComponent } from './components/email-hub/email-hub.component';
+import { ChartComponent } from './components/dashboard/chart/chart.component';
+import { MainLayoutComponent } from './layout/main-layout/main-layout.component';
+import { LoginLayoutComponent } from './layout/login-layout/login-layout.component';
+import { LoginComponent } from './components/login/login.component';
+import { DropdownComponent } from './components/dashboard/dropdown/dropdown.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     SidebarComponent,
-    ContentComponent
+    ContentComponent,
+    DashboardComponent,
+    PackagesComponent,
+    FaqComponent,
+    SettingsComponent,
+    EmailHubComponent,
+    ChartComponent,
+    MainLayoutComponent,
+    LoginLayoutComponent,
+    LoginComponent,
+    DropdownComponent,
   ],
   imports: [
     BrowserModule,
@@ -40,7 +67,14 @@ import { ContentComponent } from './content/content.component';
     AvatarModule,
     AvatarGroupModule,
     MenubarModule,
-    ToggleButtonModule
+    ToggleButtonModule,
+    StyleClassModule,
+    CalendarModule,
+    ChartModule,
+    CheckboxModule,
+    ImageModule,
+    DropdownModule,
+    FormsModule,
   ],
   providers: [
     provideClientHydration(),

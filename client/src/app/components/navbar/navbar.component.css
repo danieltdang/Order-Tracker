@@ -67,7 +67,7 @@ a, u {
 .navbar .headerContainer, .navbar .userContainer {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 5px;
 }
 
 .navbar .p-button {
@@ -100,6 +100,7 @@ a, u {
     justify-content: space-between;
     align-items: center;
     height: 72px;
+    width: 100%;
     padding: 1.25rem;
     padding-right: 0.25rem;
     border: none;

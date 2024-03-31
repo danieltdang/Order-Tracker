@@ -1,13 +1,13 @@
 import { Component } from '@angular/core';
 
-import { ApiService } from '../api.service';
+import { ApiService } from '../../api.service';
 
 @Component({
-  selector: 'app-content',
-  templateUrl: './content.component.html',
-  styleUrl: './content.component.css'
+  selector: 'app-packages',
+  templateUrl: './packages.component.html',
+  styleUrl: './packages.component.css'
 })
-export class ContentComponent {
+export class PackagesComponent {
 
   orders: any;
 
