@@ -1,24 +1,178 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 from flask_cors import CORS
 import datetime
+import json
+import sqlite3
 import util
 
 app = Flask(__name__)
 CORS(app)
 
-@app.route('/api/data')
-def get_data():
-    data = {"message": "Hello from Flask!"}
-    return jsonify(data)
+##########################
+# USER RELATED ENDPOINTS #
+##########################
 
-@app.route('/api/getOrders')
-def get_orders():
-    uuid = "12345"
-    orders = util.getOrdersForUser(uuid)
-    
-    orders_list = [dict(order) for order in orders]
+@app.route('/api/users/<uuid>', methods = ["GET", "DELETE"])
+def user_id(uuid):
+    # Get information of specific user
+    if request.method == "GET":
+        user = util.getUserInfo(uuid)
+        if user == None:
+            return jsonify({
+                "message": "User not found",
+                "status": 404
+            })
+        return jsonify(dict(user))
 
-    return jsonify(orders_list)
+    # Delete a specific user
+    elif request.method == "DELETE":
+        if util.removeUser(uuid):
+            return jsonify({
+                "message": f"User {uuid} successfully removed",
+                "status": 200
+            })
+        else:
+            return jsonify({
+                "message": "User not found",
+                "status": 404
+            })
+
+@app.route('/api/users', methods = ["GET", "POST"])
+def user():
+    # Creating a new user
+    if request.method == "POST":
+        fn = request.form['firstName']
+        ln = request.form['lastName']
+        uuid = request.form['uuid']
+
+        try:
+            util.addUser(fn, ln, uuid)
+        except sqlite3.IntegrityError:
+            return jsonify({
+                "message": f"User with id {uuid} already exists.",
+                "status": 409
+            })
+
+        return jsonify({
+            "message": "Success",
+            "status": 201
+        })
+
+    # Getting all users
+    elif request.method == "GET":
+        users = [dict(u) for u in util.getAllUsers()]
+
+        return jsonify({
+            "data": users,
+            "status": 200
+        })
+
+
+
+###########################
+# ORDER RELATED ENDPOINTS #
+###########################
+
+@app.route('/api/users/<uuid>/orders', methods = ["GET", "POST"])
+def user_all_orders(uuid):
+    if request.method == "GET":
+        orders = [dict(order) for order in util.getOrdersForUser(uuid)]
+
+        return jsonify({
+            "data": orders,
+            "status": 200
+        })
+    elif request.method == "POST":
+        uuid = request.form['uuid']
+        orderID = request.form['orderID']
+        prodName = request.form['prodName']
+        status = request.form['status']
+        trackCode = request.form['trackCode']
+        estDelivery = request.form['estDelivery']
+        carrier = request.form['carrier']
+        source = request.form['source']
+        dateAdded = request.form['dateAdded']
+
+        try:
+            util.addOrder(
+                uuid,
+                orderID,
+                prodName,
+                status,
+                trackCode,
+                estDelivery,
+                carrier,
+                source,
+                dateAdded
+            )
+        except sqlite3.IntegrityError:
+            return jsonify({
+                "message": f"Order with id {orderID} already exists",
+                "status": 400
+            })
+
+        return jsonify({
+            "message": f"Successfully created order {orderID}",
+            "status": 201
+        })
+
+
+@app.route('/api/users/<uuid>/orders/<order_id>', methods = ["GET"])
+def user_order(uuid, order_id):
+    if request.method == "GET":
+        order = util.getOrderInfo(uuid, order_id)
+        if order == None:
+            return jsonify({
+                "message": "Order not found",
+                "status": 404
+            })
+        return jsonify(dict(order))
+
+
+###########################
+# EMAIL RELATED ENDPOINTS #
+###########################
+
+@app.route('/api/users/<uuid>/emails', methods = ["GET"])
+def user_emails(uuid):
+    if request.method == "GET":
+        emails = [dict(email) for email in util.getEmailsForUser(uuid)]
+
+        return jsonify({
+            "data": emails,
+            "status": 200
+        })
+
+@app.route('/api/orders/<order_id>/emails', methods = ["GET", "POST"])
+def order_emails(order_id):
+    if request.method == "GET":
+        emails = [dict(email) for email in util.getEmailsForOrder(order_id)]
+
+        return jsonify({
+            "data": emails,
+            "status": 200
+        })
+    elif request.method == "POST":
+        content = request.form['content']
+        dateReceived = request.form['dateReceived']
+
+        try:
+            util.addEmail(
+                order_id,
+                content,
+                dateReceived,
+            )
+
+            return jsonify({
+                "message": f"Successfully created email.",
+                "status": 201
+            })
+        except Exception as e:
+            return jsonify({
+                "message": f"Error occured in email post endpoint: {e}",
+                "status": 400
+            })
+
 
 if __name__ == '__main__':
     app.run(debug=True, port=5001)
