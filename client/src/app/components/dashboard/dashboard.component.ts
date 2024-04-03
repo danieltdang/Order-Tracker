@@ -121,7 +121,7 @@ export class DashboardComponent implements OnInit {
   // Function to update the report stats based on date range
   updateReportStats(): void {
     this.reportStats = this.generate2DRandom(2, 5);
-    console.log('Updated report stats:', this.reportStats);
+    //console.log('Updated report stats:', this.reportStats);
     
     if (!this.reportStats) {
       // Ensure there are start and end dates provided
