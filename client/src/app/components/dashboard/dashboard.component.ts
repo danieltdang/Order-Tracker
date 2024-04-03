@@ -1,5 +1,6 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, SimpleChanges } from '@angular/core';
 
+import { Report } from './report';
 import { Filter } from './filter';
 
 @Component({
@@ -8,7 +9,6 @@ import { Filter } from './filter';
   styleUrl: './dashboard.component.css',
 })
 export class DashboardComponent implements OnInit {
-  cards: any[] | undefined;
   today = new Date();
 
   chartData: number[][] | undefined;
@@ -20,9 +20,11 @@ export class DashboardComponent implements OnInit {
   chartFilter: Filter | undefined;
   chartDates: Date[] | undefined;
 
+  reportCards: Report[] | undefined;
   reportList: Filter[] | undefined;
   reportFilter: Filter | undefined;
   reportDates: Date[] | undefined;
+  reportStats: number[][] | undefined;
 
   constructor(private cdr: ChangeDetectorRef) { }
 
@@ -105,7 +107,7 @@ export class DashboardComponent implements OnInit {
     }
   
     this.chartLabels = newLabels; // Assign the new array to chartLabels
-    this.chartData = this.generateRandomData(5, this.chartLabels.length);
+    this.chartData = this.generate2DRandom(5, this.chartLabels.length);
     //console.log('Updated chart labels:', this.chartLabels);
     //console.log('Updated chart data:', this.chartData);
     this.cdr.detectChanges();
@@ -114,6 +116,68 @@ export class DashboardComponent implements OnInit {
   // Helper function to format dates as strings
   formatDate(date: Date): string {
     return `${String(date.getMonth() + 1).padStart(2, '0')}/${String(date.getDate()).padStart(2, '0')}/${date.getFullYear()}`;
+  }
+
+  // Function to update the report stats based on date range
+  updateReportStats(): void {
+    this.reportStats = this.generate2DRandom(2, 5);
+    //console.log('Updated report stats:', this.reportStats);
+    
+    if (!this.reportStats) {
+      // Ensure there are start and end dates provided
+      console.log('No stats provided')
+      return;
+    }
+  
+    //const startDate = this.reportDates[0];
+    //const endDate = this.reportDates[1];
+  
+    this.reportCards = [
+      {
+        title: 'Orders',
+        tooltip: 'Total orders placed',
+        count: this.reportStats[0][0],
+        icon: 'pi-shopping-cart',
+        color: 'blue',
+        change: this.reportStats[1][0],
+      },
+      {
+        title: 'Preparing',
+        tooltip: 'Orders being prepared for shipment',
+        count: this.reportStats[0][1],
+        icon: 'pi-box',
+        color: 'orange',
+        change: this.reportStats[1][1],
+      },
+      {
+        title: 'Shipped',
+        tooltip: 'Orders that have been shipped',
+        count: this.reportStats[0][2],
+        icon: 'pi-globe',
+        color: 'yellow',
+        change: this.reportStats[1][2],
+      },
+      {
+        title: 'Delivered',
+        tooltip: 'Orders that have been delivered',
+        count: this.reportStats[0][3],
+        icon: 'pi-home',
+        color: 'green',
+        change: this.reportStats[1][3],
+      },
+      {
+        title: 'Returned',
+        tooltip: 'Orders that have been returned',
+        count: this.reportStats[0][4],
+        icon: 'pi-undo',
+        color: 'red',
+        change: this.reportStats[1][4],
+      },
+    ];
+
+    // This assignment creates a new reference for reportCards array which will trigger Angular's change detection
+    this.reportCards = [...this.reportCards];
+    this.cdr.detectChanges();
   }
 
   onChartFrequencyChange(newFrequency: string): void {
@@ -134,16 +198,29 @@ export class DashboardComponent implements OnInit {
 
   onReportFilterChange(newFilter: Filter | undefined): void {
     this.reportFilter = newFilter;
+    this.updateReportStats();
     // Handle report filter change logic here
   }
 
   onReportDatesChange(newDates: Date[] | undefined): void {
     this.reportDates = newDates;
+    this.updateReportStats();
     this.cdr.detectChanges();
     // Handle report date change logic here
   }
 
-  generateRandomData(numArrays: number, arrayLength: number): number[][] {
+  generate1DRandom(arrayLength: number): number[] {
+    const arr: number[] = [];
+    for (let j = 0; j < arrayLength; j++) {
+      // Generate a random number between 0 and 40
+      const randomNumber = Math.floor(Math.random() * 41);
+      arr.push(randomNumber);
+    }
+  
+    return arr;
+  }
+
+  generate2DRandom(numArrays: number, arrayLength: number): number[][] {
     const arrays: number[][] = [];
   
     for (let i = 0; i < numArrays; i++) {
@@ -160,46 +237,46 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.cards = [
+    this.reportCards = [
       {
         title: 'Orders',
         tooltip: 'Total orders placed',
-        count: 428,
+        count: this.reportStats?.[0]?.[0] ?? 0,
         icon: 'pi-shopping-cart',
         color: 'blue',
-        change: 74,
+        change: this.reportStats?.[1]?.[0] ?? 0,
       },
       {
         title: 'Preparing',
         tooltip: 'Orders being prepared for shipment',
-        count: 200,
+        count: this.reportStats?.[0]?.[1] ?? 0,
         icon: 'pi-box',
         color: 'orange',
-        change: 27,
+        change: this.reportStats?.[1]?.[1] ?? 0,
       },
       {
         title: 'Shipped',
         tooltip: 'Orders that have been shipped',
-        count: 127,
+        count: this.reportStats?.[0]?.[2] ?? 0,
         icon: 'pi-globe',
         color: 'yellow',
-        change: 34,
+        change: this.reportStats?.[1]?.[2] ?? 0,
       },
       {
         title: 'Delivered',
         tooltip: 'Orders that have been delivered',
-        count: 100,
+        count: this.reportStats?.[0]?.[3] ?? 0,
         icon: 'pi-home',
         color: 'green',
-        change: 0,
+        change: this.reportStats?.[1]?.[3] ?? 0,
       },
       {
         title: 'Returned',
         tooltip: 'Orders that have been returned',
-        count: 1,
+        count: this.reportStats?.[0]?.[4] ?? 0,
         icon: 'pi-undo',
         color: 'red',
-        change: 1,
+        change: this.reportStats?.[1]?.[4] ?? 0,
       },
     ];
 
@@ -251,6 +328,15 @@ export class DashboardComponent implements OnInit {
     this.chartFrequency = ['Daily', 'Weekly', 'Monthly', 'Yearly'];
     this.chartFrequencySelected = this.chartFrequency[3];
 
+    this.updateReportStats();
     this.updateChartLabels();
+
+    console.log(this.reportStats);
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['reportStats']) {
+      this.updateReportStats();
+    }
   }
 }

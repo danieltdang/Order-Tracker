@@ -27,7 +27,7 @@
       </app-dropdown>  
     </div>
     <div class="grid align-items-center justify-content-center">
-      <div class="col-12 md:col-6 lg:col-4" *ngFor="let card of cards">
+      <div class="col-12 md:col-6 lg:col-4" *ngFor="let card of reportCards">
         <div class="surface-card p-3 surface-border border-2 border-round">
           <div class="flex justify-content-between mb-3">
             <div>
@@ -42,7 +42,7 @@
             </div>
           </div>
           <span [ngClass]="getChangeColor(card.change, card.title)" class="font-medium">{{card.change > 0 ? '+' : ''}}{{card.change}}</span>
-          <span class="text-gray-500 font-medium" *ngIf="card.changeType === 'steady'">0</span>
+          <span class="text-gray-500 font-medium"></span>
           <span class="text-500"> since last visit</span>
         </div>
       </div>
