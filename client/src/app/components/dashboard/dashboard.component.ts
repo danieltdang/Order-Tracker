@@ -120,19 +120,63 @@ export class DashboardComponent implements OnInit {
 
   // Function to update the report stats based on date range
   updateReportStats(): void {
-    if (!this.reportDates || this.reportDates.length < 2) {
+    this.reportStats = this.generate2DRandom(2, 5);
+    console.log('Updated report stats:', this.reportStats);
+    
+    if (!this.reportStats) {
       // Ensure there are start and end dates provided
-      console.log('No dates provided')
+      console.log('No stats provided')
       return;
     }
   
-    const startDate = this.reportDates[0];
-    const endDate = this.reportDates[1];
+    //const startDate = this.reportDates[0];
+    //const endDate = this.reportDates[1];
   
-    this.reportStats = this.generate2DRandom(2, 5);
-    console.log("Hi", this.reportStats);
-    //console.log('Updated chart labels:', this.chartLabels);
-    //console.log('Updated chart data:', this.chartData);
+    this.reportCards = [
+      {
+        title: 'Orders',
+        tooltip: 'Total orders placed',
+        count: this.reportStats[0][0],
+        icon: 'pi-shopping-cart',
+        color: 'blue',
+        change: this.reportStats[1][0],
+      },
+      {
+        title: 'Preparing',
+        tooltip: 'Orders being prepared for shipment',
+        count: this.reportStats[0][1],
+        icon: 'pi-box',
+        color: 'orange',
+        change: this.reportStats[1][1],
+      },
+      {
+        title: 'Shipped',
+        tooltip: 'Orders that have been shipped',
+        count: this.reportStats[0][2],
+        icon: 'pi-globe',
+        color: 'yellow',
+        change: this.reportStats[1][2],
+      },
+      {
+        title: 'Delivered',
+        tooltip: 'Orders that have been delivered',
+        count: this.reportStats[0][3],
+        icon: 'pi-home',
+        color: 'green',
+        change: this.reportStats[1][3],
+      },
+      {
+        title: 'Returned',
+        tooltip: 'Orders that have been returned',
+        count: this.reportStats[0][4],
+        icon: 'pi-undo',
+        color: 'red',
+        change: this.reportStats[1][4],
+      },
+    ];
+
+    // This assignment creates a new reference for reportCards array which will trigger Angular's change detection
+    this.reportCards = [...this.reportCards];
     this.cdr.detectChanges();
   }
 
