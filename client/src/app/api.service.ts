@@ -8,12 +8,17 @@ export class ApiService {
   constructor(private http: HttpClient) { }
 
   private ip = 'http://127.0.0.1:5001/';
+  private userID = '312331'
 
   public getData() {
     return this.http.get(this.ip + 'api/data');
   }
 
   public getOrders() {
-    return this.http.get(this.ip + 'api/getOrders');
+    return this.http.get(`${this.ip}/api/users/${this.userID}/orders`);
+  }
+
+  public getEmails() {
+    return this.http.get(`${this.ip}/api/users/${this.userID}/emails`);
   }
 }
