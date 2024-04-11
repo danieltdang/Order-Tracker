@@ -1,0 +1,22 @@
+<div class="surface-card p-5 shadow-2 border-round w-full">
+    <div class="text-center mb-5">
+        <div class="text-900 text-3xl font-medium mb-3">Password Recovery</div>
+        <span class="text-600 font-medium line-height-3">Enter the email address or username of the account you reset the password for.</span>
+    </div>
+
+    <div>
+        <div class="flex flex-column gap-2 mb-4">
+            <label for="username">Email or Username</label>
+            <input pInputText type="text" class="p-inputtext" id="username" placeholder="Enter recovery details" [(ngModel)]="value" /> 
+        </div>
+
+        <div class="flex align-items-center justify-content-center mb-6">
+            <div class="flex align-items-center">
+                <label for="rememberme1" class="text-900">Remembered your password?</label>
+                <a routerLink="" class="font-medium no-underline ml-2 text-blue-500 text-right cursor-pointer">Log In</a>
+            </div>
+        </div>
+
+        <p-button (onClick)="forgot()" styleClass="w-full" label="Submit"></p-button>
+    </div>
+</div>

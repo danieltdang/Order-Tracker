@@ -1,2 +1,11 @@
-<!-- Login page content rendered with no sidebar -->
-<router-outlet />
+<!-- Background with inline style for the image -->
+<div class="z-0 fixed w-full h-full top-0 left-0 bg-cover bg-center bg-no-repeat opacity-70"
+    style="background-image: url('https://www.cnet.com/a/img/resize/4e1f3fccd8ac2d8a87864626f0efe54d9ac63039/hub/2013/12/13/be10d54f-67d7-11e3-a665-14feb5ca9861/maps-main.png?auto=webp&fit=crop&height=675&width=1200')">
+</div>
+
+<!-- Flex container for centering content, ensure full height and width -->
+<div class="flex align-items-center justify-content-center h-full w-full absolute top-0 left-0">
+    <div class="z-1 w-full md:w-10 lg:w-6">
+        <router-outlet></router-outlet>
+    </div>
+</div>

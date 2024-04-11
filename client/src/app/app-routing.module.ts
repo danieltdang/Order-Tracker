@@ -5,6 +5,9 @@ import { MainLayoutComponent } from './layout/main-layout/main-layout.component'
 import { LoginLayoutComponent } from './layout/login-layout/login-layout.component';
 
 import { LoginComponent } from './components/login/login.component';
+import { SignupComponent } from './components/login/signup.component';
+import { ForgotComponent } from './components/login/forgot.component';
+
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { EmailHubComponent } from './components/email-hub/email-hub.component';
 import { PackagesComponent } from './components/packages/packages.component';
@@ -16,6 +19,8 @@ const routes: Routes = [
     component: LoginLayoutComponent,
     children: [
       { path: '', component: LoginComponent },
+      { path: 'signup', component: SignupComponent },
+      { path: 'forgot', component: ForgotComponent },
     ]
   },
   {
