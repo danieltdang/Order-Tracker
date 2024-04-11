@@ -52,7 +52,7 @@
           <div>
             <div class="flex flex-column mb-4">
               <label for="password1" class="block text-900 font-medium mb-2">Current Password</label>
-              <p-password id="password1" styleClass="mb-3" placeholder="Current Password" [(ngModel)]="currPass" [toggleMask]="true"></p-password>
+              <p-password id="password1" styleClass="mb-3" placeholder="Current Password" [feedback]="false" [(ngModel)]="currPass" [toggleMask]="true"></p-password>
       
               <label for="password2" class="block text-900 font-medium mb-2">New Password</label>
               <p-password id="password2" placeholder="New Password" [(ngModel)]="confirmPass1" [toggleMask]="true"></p-password>
@@ -60,7 +60,7 @@
               <p-password id="password3" styleClass="mt-2" placeholder="Retype New Password" [(ngModel)]="confirmPass2" [toggleMask]="true"></p-password>
             </div>
     
-            <p-button size="small" label="Save Changes"></p-button>
+            <p-button size="small" icon="pi pi-check" label="Save Changes"></p-button>
           </div>
         </div>
       </div>
@@ -82,12 +82,14 @@
   <div class="col-12 sm:col-12 lg:col-6 mb-1">
     <div class="surface-card h-full shadow-2 p-3 border-round">
       <div class="flex flex-column justify-content-between mb-2">
-        <span class="block text-900 text-2xl font-semibold mb-2">Reset Account</span>
+        <span class="block text-900 text-2xl font-semibold mb-2">Delete Account</span>
       </div>
       <div>
-        <div>Clear your orders, emails, account, and more.</div>
-        <div class="flex mt-3 gap-2">
-          <p-button size="small" label="Reset Account" severity="danger"></p-button>
+        <div>Delete your orders, emails, account, and more.</div>
+        <div class="flex mt-3">
+          <p-toast></p-toast>
+          <p-confirmDialog></p-confirmDialog>
+          <p-button (click)="confirm($event)" icon="pi pi-times" size="small" label="Delete Account" severity="danger"></p-button>
         </div>
       </div>
     </div>
