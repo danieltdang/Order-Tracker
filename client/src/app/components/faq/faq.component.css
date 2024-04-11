@@ -7,42 +7,42 @@
   }
 
   .faq-header {
-    text-align: left; /* Align the heading and subtitle to the right */
-    margin-bottom: 20px; /* Add some space between the header and the FAQ section */
+    text-align: left;
+    margin-bottom: 20px; 
   }
   
   .faq-heading {
-    font-size: 24px; /* Adjust the font size of the heading */
-    color: #ffffff; /* Dark text color */
+    font-size: 24px;
+    color: #ffffff;
   }
   
   .faq-subtitle {
-    font-size: 16px; /* Adjust the font size of the subtitle */
-    color: #ffffff; /* Lighter text color */
+    font-size: 16px;
+    color: #ffffff;
   }  
   
   .faq-question {
     cursor: pointer;
     padding: 10px;
-    background-color: #336699; /* Dark blue background color */
-    border: 1px solid #204060; /* Dark blue border color */
+    background-color: #336699;
+    border: 1px solid #204060;
     border-radius: 5px;
-    color: #fff; /* White text color */
-    text-align: center; /* Center-align the text */
+    color: #fff;
+    text-align: center;
   }
   
   
   .faq-answer {
     padding: 10px;
-    background-color: #444; /* Dark gray background color */
-    border: 1px solid #333; /* Dark gray border color */
+    background-color: #444;
+    border: 1px solid #333;
     border-radius: 5px;
-    color: #fff; /* White text color */
+    color: #fff;
   }
   
   
   .faq-answer.active {
-    display: block; /* Show the answer when active */
+    display: block;
   }
   
   .fa-angle-up,
