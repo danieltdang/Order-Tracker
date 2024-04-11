@@ -40,6 +40,8 @@ import { MainLayoutComponent } from './layout/main-layout/main-layout.component'
 import { LoginLayoutComponent } from './layout/login-layout/login-layout.component';
 import { LoginComponent } from './components/login/login.component';
 import { DropdownComponent } from './components/dashboard/dropdown/dropdown.component';
+import { SignupComponent } from './components/login/signup.component';
+import { ForgetpasswordComponent } from './components/login/forgetpassword.component';
 
 @NgModule({
   declarations: [
@@ -56,6 +58,8 @@ import { DropdownComponent } from './components/dashboard/dropdown/dropdown.comp
     LoginLayoutComponent,
     LoginComponent,
     DropdownComponent,
+    SignupComponent,
+    ForgetpasswordComponent,
   ],
   imports: [
     BrowserModule,
