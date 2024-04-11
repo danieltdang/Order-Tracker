@@ -11,6 +11,10 @@ export class SettingsComponent {
   themes: Theme[] | undefined;
   selectedTheme: Theme | undefined;
 
+  currPass: string | undefined;
+  confirmPass1: string | undefined;
+  confirmPass2: string | undefined;
+
   constructor(private themeService: ThemeService) { }
 
   changeTheme() {

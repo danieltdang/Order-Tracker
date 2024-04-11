@@ -19,6 +19,7 @@ import { ChartModule } from 'primeng/chart';
 import { CheckboxModule } from 'primeng/checkbox';
 import { ImageModule } from 'primeng/image';
 import { DropdownModule } from 'primeng/dropdown';
+import { PasswordModule } from 'primeng/password';
 import { FormsModule } from '@angular/forms';
 
 import { __decorate } from 'tslib';
@@ -75,6 +76,7 @@ import { DropdownComponent } from './components/dashboard/dropdown/dropdown.comp
     ImageModule,
     DropdownModule,
     FormsModule,
+    PasswordModule,
   ],
   providers: [
     provideClientHydration(),
