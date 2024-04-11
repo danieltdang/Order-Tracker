@@ -1,7 +1,116 @@
-<p>
-    Account Settings (email, name, password reset, reset/delete account)
-    2FA
-    Theme Preference
-    Date Time Preference
-    Privacy Settings (cookies/security)
-</p>
+<div class="grid">
+  <div class="col-12">
+    <div class="flex flex-column justify-content-between mb-2">
+      <span class="block text-900 text-2xl font-semibold mb-2">Settings</span>
+    </div>
+    <div>Manage your account, defaults, privacy, and security settings.</div>
+  </div>
+  <div class="col-12 sm:col-12 lg:col-6 mb-1">
+    <div class="surface-card h-full shadow-2 p-3 border-round">
+      <div class="flex flex-column justify-content-between mb-2">
+        <span class="block text-900 text-2xl font-semibold mb-2">Account</span>
+      </div>
+      <div>
+        <div class="mb-2">
+          View and edit your account details.
+        </div>
+        <div class="flex flex-row">
+          <div class="col-6 p-0">
+            <span class="text-gray-400">Email</span>
+          </div>
+          <div class="p-0">
+            <span>example&#64;email.com</span>
+          </div>
+        </div>
+        <div class="flex flex-row">
+          <div class="col-6 p-0">
+            <span class="text-gray-400">Name</span>
+          </div>
+          <div class="p-0">
+            <span>Example User</span>
+          </div>
+        </div>
+        <div class="flex flex-row">
+          <div class="col-6 p-0">
+            <span class="text-gray-400">Username</span>
+          </div>
+          <div class="p-0">
+            <span>&#64;example_user</span>
+          </div>
+        </div>
+      </div>
+      <div class="mt-3">
+        <div class="mb-2">
+          Devices associated with your Order Tracker account.
+        </div>
+        <div class="flex flex-row gap-2 mt-3">
+          <p-avatar icon="pi pi-desktop" styleClass="mr-2" size="large" shape="circle"/>
+          <div class="flex flex-column">
+            <span>Windows | Tallahassee, Florida, US</span>
+            <span class="text-gray-400">Last active: Now</span>
+          </div>
+        </div>
+        <div class="flex flex-row gap-2 mt-3">
+          <p-avatar icon="pi pi-mobile" styleClass="mr-2" size="large" shape="circle"/>
+          <div class="flex flex-column">
+            <span>iOS | Tallahassee, Florida, US</span>
+            <span class="text-gray-400">Last active: 2 days ago</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-12 sm:col-12 lg:col-6 mb-1">
+    <div class="surface-card h-full shadow-2 p-3 border-round">
+      <div class="flex flex-column justify-content-between mb-2">
+        <span class="block text-900 text-2xl font-semibold mb-2">Change Your Password</span>
+      </div>
+      <div>
+        <div>For your security, we highly recommend that you choose a unique password that you don't use for any other online account.</div>
+        <div class="flex mt-3 gap-2">
+          <div>
+            <div class="flex flex-column mb-4">
+              <label for="password1" class="block text-900 font-medium mb-2">Current Password</label>
+              <p-password id="password1" styleClass="mb-3" placeholder="Current Password" [feedback]="false" [(ngModel)]="currPass" [toggleMask]="true"></p-password>
+      
+              <label for="password2" class="block text-900 font-medium mb-2">New Password</label>
+              <p-password id="password2" placeholder="New Password" [(ngModel)]="confirmPass1" [toggleMask]="true"></p-password>
+
+              <p-password id="password3" styleClass="mt-2" placeholder="Retype New Password" [(ngModel)]="confirmPass2" [toggleMask]="true"></p-password>
+            </div>
+    
+            <p-button size="small" icon="pi pi-check" label="Save Changes"></p-button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-12 sm:col-12 lg:col-6 mb-1">
+    <div class="surface-card h-full shadow-2 p-3 border-round">
+      <div class="flex flex-column justify-content-between mb-2">
+        <span class="block text-900 text-2xl font-semibold mb-2">Defaults</span>
+      </div>
+      <div>
+        <div>Theme Preference</div>
+        <div class="flex mt-3 gap-2">
+          <p-dropdown label="Select Theme" [options]="themes" [(ngModel)]="selectedTheme" optionLabel="displayName" (onChange)="changeTheme()"></p-dropdown>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-12 sm:col-12 lg:col-6 mb-1">
+    <div class="surface-card h-full shadow-2 p-3 border-round">
+      <div class="flex flex-column justify-content-between mb-2">
+        <span class="block text-900 text-2xl font-semibold mb-2">Delete Account</span>
+      </div>
+      <div>
+        <div>Delete your orders, emails, account, and more.</div>
+        <div class="flex mt-3">
+          <p-toast></p-toast>
+          <p-confirmDialog></p-confirmDialog>
+          <p-button (click)="confirm($event)" icon="pi pi-times" size="small" label="Delete Account" severity="danger"></p-button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
