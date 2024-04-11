@@ -6,7 +6,7 @@ import { LoginLayoutComponent } from './layout/login-layout/login-layout.compone
 
 import { LoginComponent } from './components/login/login.component';
 import { SignupComponent } from './components/login/signup.component';
-import { ForgetpasswordComponent } from './components/login/forgetpassword.component';
+import { ForgotComponent } from './components/login/forgot.component';
 
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { EmailHubComponent } from './components/email-hub/email-hub.component';
@@ -20,7 +20,7 @@ const routes: Routes = [
     children: [
       { path: '', component: LoginComponent },
       { path: 'signup', component: SignupComponent },
-      { path: 'forget', component: ForgetpasswordComponent },
+      { path: 'forgot', component: ForgotComponent },
     ]
   },
   {

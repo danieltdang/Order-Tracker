@@ -41,7 +41,7 @@ import { LoginLayoutComponent } from './layout/login-layout/login-layout.compone
 import { LoginComponent } from './components/login/login.component';
 import { DropdownComponent } from './components/dashboard/dropdown/dropdown.component';
 import { SignupComponent } from './components/login/signup.component';
-import { ForgetpasswordComponent } from './components/login/forgetpassword.component';
+import { ForgotComponent } from './components/login/forgot.component';
 
 @NgModule({
   declarations: [
@@ -59,7 +59,7 @@ import { ForgetpasswordComponent } from './components/login/forgetpassword.compo
     LoginComponent,
     DropdownComponent,
     SignupComponent,
-    ForgetpasswordComponent,
+    ForgotComponent,
   ],
   imports: [
     BrowserModule,
