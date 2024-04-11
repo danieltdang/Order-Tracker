@@ -53,6 +53,9 @@
       </div>
       <div>
         <div>Theme Preference</div>
+        <div>
+          <p-dropdown label="Select Theme" [options]="themes" [(ngModel)]="selectedTheme" optionLabel="displayName" (onChange)="changeTheme()"></p-dropdown>
+        </div>
       </div>
     </div>
   </div>
