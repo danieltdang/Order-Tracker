@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import axios from 'axios';
 
 @Component({
   selector: 'app-signup',
@@ -13,10 +14,24 @@ export class SignupComponent {
   pass2: string | undefined;
 
   signup() {
-    console.log('First Name:', this.firstName);
-    console.log('Last Name:', this.lastName);
-    console.log('Email:', this.email);
-    console.log('Password 1:', this.pass1);
-    console.log('Password 2:', this.pass2);
+    const data = {
+      firstName: this.firstName,
+      lastName: this.lastName,
+      email: this.email,
+      password: this.pass1
+    };
+
+    if (this.pass1 !== this.pass2) {
+      alert('Passwords do not match');
+    } else {
+      axios.post('http://localhost:5001/auth/register', data)
+        .then(res => {
+          document.cookie = `userToken=${res.data.userToken}`;
+          document.cookie = `userId=${res.data.uuid}`;
+        })
+        .catch(err => {
+          alert('Signup failed');
+        });
+    }
   }
 }

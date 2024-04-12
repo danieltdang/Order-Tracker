@@ -4,6 +4,8 @@ import datetime
 import json
 import sqlite3
 import util
+import auth.auth as auth
+import time
 
 app = Flask(__name__)
 CORS(app)
@@ -172,6 +174,60 @@ def order_emails(order_id):
                 "message": f"Error occured in email post endpoint: {e}",
                 "status": 400
             })
+
+###########################
+# AUTHENTICATION ENDPOINTS #
+###########################
+
+@app.route('/auth/register', methods = ["POST"])
+def register_user():
+    request.body = request.get_json()
+    first_name = request.body.get('firstName')
+    last_name = request.body.get('lastName')
+    email = request.body.get('email')
+    password = request.body.get('password')
+    
+    response = auth.register_user(first_name, last_name, email, password)
+    
+    if (response[0] != ""):
+        return jsonify({
+            "uuid": response[0],
+            "userToken": response[1],
+            "status": 200
+        })
+    
+    return jsonify({
+        "message": "Internal server error",
+        "status": 500
+    })
+
+@app.route('/auth/login', methods = ["POST"])
+def login_user():
+    request.body = request.get_json()
+
+    email = request.body.get('email')
+    password = request.body.get('password')
+
+    if (email == None or password == None):
+        return jsonify({
+            "message": "Email or password not provided",
+            "status": 400
+        })
+    
+    response = auth.login_user(email, password)
+
+    if (response[0] != ""):
+        return jsonify({
+            "uuid": response[0],
+            "userToken": response[1],
+            "status": 200
+        })
+    
+    return jsonify({
+        "message": "Invalid credentials",
+        "status": 401
+    })
+ 
 
 
 if __name__ == '__main__':

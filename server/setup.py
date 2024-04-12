@@ -9,7 +9,9 @@ con.execute("""
 CREATE TABLE IF NOT EXISTS "User"(
     uuid TEXT PRIMARY KEY,
     firstName TEXT,
-    lastName TEXT
+    lastName TEXT,
+    email TEXT,
+    password TEXT
 )
 """)
 
