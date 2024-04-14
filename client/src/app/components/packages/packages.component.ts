@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-
+import { Table } from 'primeng/table';
 import { ApiService } from '../../api.service';
 
 @Component({
@@ -8,7 +8,6 @@ import { ApiService } from '../../api.service';
   styleUrl: './packages.component.css'
 })
 export class PackagesComponent {
-
   orders: any;
 
   constructor(private apiService: ApiService) { }
@@ -21,5 +20,9 @@ export class PackagesComponent {
     this.apiService.getOrders().subscribe((fetchedData: any) => {
       this.orders = fetchedData.data;
     });
+  }
+
+  clear(table: Table) {
+    table.clear();
   }
 }

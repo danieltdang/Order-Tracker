@@ -22,6 +22,7 @@ import { DropdownModule } from 'primeng/dropdown';
 import { PasswordModule } from 'primeng/password';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ToastModule } from 'primeng/toast';
+import { TableModule } from 'primeng/table';
 import { FormsModule } from '@angular/forms';
 
 import { __decorate } from 'tslib';
@@ -85,6 +86,7 @@ import { ForgotComponent } from './components/login/forgot.component';
     PasswordModule,
     ConfirmDialogModule,
     ToastModule,
+    TableModule,
   ],
   providers: [
     provideClientHydration(),

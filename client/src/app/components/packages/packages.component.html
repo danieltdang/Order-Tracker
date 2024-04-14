@@ -1,20 +1,44 @@
-<div *ngFor="let order of orders; trackBy: getOrderId">
-    <p-card header="{{ order.productName }}" subheader="ID: {{ order.orderID }}" class="card">
-        <!--<ng-template pTemplate="header">
-            <img alt="Card" src="https://primefaces.org/cdn/primeng/images/usercard.png" />
-        </ng-template>-->
-        <p>
-            carrier: {{ order.carrier }} <br>
-            dateAdded: {{ order.dateAdded }} <br>
-            estimatedDelivery: {{ order.estimatedDelivery }} <br>
-            source: {{ order.source }} <br>
-            status: {{ order.status }} <br>
-            trackingCode: {{ order.trackingCode }} <br>
-            userID: {{ order.user }} <br>
-        </p>
-        <ng-template pTemplate="footer">
-            <p-button label="Save" icon="pi pi-check"></p-button>
-            <p-button label="Cancel" icon="pi pi-times" styleClass="p-button-secondary" [style]="{ 'margin-left': '.5em' }"></p-button>
+<div class="surface-card col-12 mb-3 shadow-2 p-3 border-round">
+    <p-table
+        #dt1
+        [value]="orders" 
+        [paginator]="true" 
+        [rows]="25"
+        [paginator]="true"
+        paginatorStyleClass="border-none"
+        [showCurrentPageReport]="true"
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+        [rowsPerPageOptions]="[25, 50, 100]"
+        [globalFilterFields]="['source', 'productName', 'status', 'trackingCode', 'carrier', 'dateAdded']"
+    >
+        <ng-template pTemplate="caption">
+            <div class="flex">
+                <button pButton label="Clear" class="p-button-outlined" icon="pi pi-filter-slash" (click)="clear(dt1)"></button>
+                <span class="p-input-icon-left ml-auto">
+                    <i class="pi pi-search"></i>
+                    <input pInputText class="p-inputtext" type="text" (input)="dt1.filterGlobal($any($event.target).value, 'contains')" placeholder="Search keyword" />
+                </span>
+            </div>
         </ng-template>
-    </p-card>
+        <ng-template pTemplate="header">
+            <tr>
+                <th class="white-space-nowrap" pSortableColumn="source">Source <p-sortIcon field="source"></p-sortIcon></th>
+                <th class="white-space-nowrap" pSortableColumn="productName">Name <p-sortIcon field="productName"></p-sortIcon></th>
+                <th class="white-space-nowrap" pSortableColumn="status">Status <p-sortIcon field="status"></p-sortIcon></th>
+                <th class="white-space-nowrap" pSortableColumn="trackingCode">Tracking Code <p-sortIcon field="trackingCode"></p-sortIcon></th>
+                <th class="white-space-nowrap" pSortableColumn="carrier">Carrier <p-sortIcon field="carrier"></p-sortIcon></th>
+                <th class="white-space-nowrap" pSortableColumn="dateAdded">Date Added <p-sortIcon field="dateAdded"></p-sortIcon></th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-order>
+            <tr>
+                <td>{{ order.source }}</td>
+                <td>{{ order.productName }}</td>
+                <td>{{ order.status }}</td>
+                <td>{{ order.trackingCode }}</td>
+                <td>{{ order.carrier }}</td>
+                <td>{{ order.dateAdded }}</td>
+            </tr>
+        </ng-template>
+    </p-table>
 </div>
