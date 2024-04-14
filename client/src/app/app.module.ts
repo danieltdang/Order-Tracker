@@ -4,6 +4,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { provideHttpClient, withFetch } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 
 import { SidebarModule } from 'primeng/sidebar';
 import { MenuModule } from 'primeng/menu';
@@ -23,7 +24,6 @@ import { PasswordModule } from 'primeng/password';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ToastModule } from 'primeng/toast';
 import { TableModule } from 'primeng/table';
-import { FormsModule } from '@angular/forms';
 
 import { __decorate } from 'tslib';
 
@@ -43,6 +43,7 @@ import { LoginComponent } from './components/login/login.component';
 import { DropdownComponent } from './components/dashboard/dropdown/dropdown.component';
 import { SignupComponent } from './components/login/signup.component';
 import { ForgotComponent } from './components/login/forgot.component';
+import { PackageDetailComponent } from './components/packages/package-detail/package-detail.component';
 
 @NgModule({
   declarations: [
@@ -61,6 +62,7 @@ import { ForgotComponent } from './components/login/forgot.component';
     DropdownComponent,
     SignupComponent,
     ForgotComponent,
+    PackageDetailComponent,
   ],
   imports: [
     BrowserModule,

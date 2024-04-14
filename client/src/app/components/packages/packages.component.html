@@ -10,6 +10,8 @@
         currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
         [rowsPerPageOptions]="[25, 50, 100]"
         [globalFilterFields]="['source', 'productName', 'status', 'trackingCode', 'carrier', 'dateAdded']"
+        selectionMode="single"
+        (onRowSelect)="onRowSelect($event)"
     >
         <ng-template pTemplate="caption">
             <div class="flex">
@@ -31,7 +33,7 @@
             </tr>
         </ng-template>
         <ng-template pTemplate="body" let-order>
-            <tr>
+            <tr [pSelectableRow]="order">
                 <td>{{ order.source }}</td>
                 <td>{{ order.productName }}</td>
                 <td>{{ order.status }}</td>
