@@ -26,6 +26,8 @@ import { ToastModule } from 'primeng/toast';
 import { TableModule } from 'primeng/table';
 import { BreadcrumbModule } from 'primeng/breadcrumb';
 
+import { GoogleMapsModule } from '@angular/google-maps';
+
 import { __decorate } from 'tslib';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -91,6 +93,7 @@ import { PackageDetailComponent } from './components/packages/package-detail/pac
     ToastModule,
     TableModule,
     BreadcrumbModule,
+    GoogleMapsModule,
   ],
   providers: [
     provideClientHydration(),

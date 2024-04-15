@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { MenuItem } from 'primeng/api';
 import { ActivatedRoute } from '@angular/router';
 import { PackageStatusService } from '../package-status.service';
 import { ApiService } from '../../../api.service';
@@ -10,8 +9,6 @@ import { ApiService } from '../../../api.service';
   styleUrl: './package-detail.component.css'
 })
 export class PackageDetailComponent implements OnInit {
-  home: MenuItem | undefined;
-  items: MenuItem[] | undefined;
   packageID: string | undefined;
   order : any;
 
@@ -24,14 +21,11 @@ export class PackageDetailComponent implements OnInit {
   ngOnInit(): void {
     this.route.params.subscribe(params => {
       this.packageID = params['id'];
-      this.items = [ { label: `Package #${this.packageID}` } ];
       this.apiService.getOrderByID(params['id']).subscribe((fetchedData: any) => {
         this.order = fetchedData;
       });
       
     })
-
-    this.home = { icon: 'null', label: 'Packages', routerLink: '/packages' };
     
   }
 }
