@@ -1,8 +1,16 @@
 <p-breadcrumb 
-  styleClass="surface-card col-12 shadow-2 mb-3 p-3 border-round" 
+  styleClass="surface-card w-max shadow-2 mb-3 p-3 border-round" 
   [model]="items" 
   [home]="home"
 />
+<a routerLink="/app/packages">
+  <p-button 
+    styleClass="surface-card hover:surface-200 w-max font-light border-200 shadow-2 mb-3 p-3 border-round text-color" 
+    size="small" 
+    icon="pi pi-arrow-left" 
+    label="Go Back">
+  </p-button>
+</a>
 
 <div class="surface-card col-12 shadow-2 p-3 border-round">
   <h1>Package Details</h1>
