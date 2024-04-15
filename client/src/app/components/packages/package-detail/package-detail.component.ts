@@ -24,7 +24,7 @@ export class PackageDetailComponent implements OnInit {
   ngOnInit(): void {
     this.route.params.subscribe(params => {
       this.packageID = params['id'];
-
+      this.items = [ { label: `Package #${this.packageID}` } ];
       this.apiService.getOrderByID(params['id']).subscribe((fetchedData: any) => {
         this.order = fetchedData;
       });
@@ -32,6 +32,6 @@ export class PackageDetailComponent implements OnInit {
     })
 
     this.home = { icon: 'null', label: 'Packages', routerLink: '/packages' };
-    this.items = [ { label: `Package #${this.packageID}` } ];
+    
   }
 }
