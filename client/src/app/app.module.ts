@@ -25,6 +25,7 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ToastModule } from 'primeng/toast';
 import { TableModule } from 'primeng/table';
 import { BreadcrumbModule } from 'primeng/breadcrumb';
+import { ToolbarModule } from 'primeng/toolbar';
 
 import { GoogleMapsModule } from '@angular/google-maps';
 
@@ -94,6 +95,7 @@ import { PackageDetailComponent } from './components/packages/package-detail/pac
     TableModule,
     BreadcrumbModule,
     GoogleMapsModule,
+    ToolbarModule,
   ],
   providers: [
     provideClientHydration(),

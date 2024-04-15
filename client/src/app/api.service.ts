@@ -8,7 +8,7 @@ export class ApiService {
   constructor(private http: HttpClient) { }
 
   private ip = 'http://127.0.0.1:5001';
-  private userID = '312331'
+  private uuid = '312331'
 
   public getData() {
     return this.http.get(this.ip + '/api/data');
@@ -44,12 +44,12 @@ export class ApiService {
   ###########################
   */
   public getAllUserOrders() {
-    return this.http.get(`${this.ip}/api/users/${this.userID}/orders`);
+    return this.http.get(`${this.ip}/api/users/${this.uuid}/orders`);
   }
 
   public createUserOrder(uuid: string, orderID: string, prodName: string, status: string, trackCode: string, estDelivery: string, carrier: string, source: string, dateAdded: string) {
     const formData: FormData = new FormData();
-    formData.append('uuid', uuid);
+    formData.append('uuid', this.uuid);
     formData.append('orderID', orderID);
     formData.append('prodName', prodName);
     formData.append('status', status);
@@ -59,7 +59,7 @@ export class ApiService {
     formData.append('source', source);
     formData.append('dateAdded', dateAdded);
 
-    return this.http.post(`${this.ip}/api/users/${this.userID}/orders`, formData, {
+    return this.http.post(`${this.ip}/api/users/${this.uuid}/orders`, formData, {
       headers: {
         'Content-Type': 'multipart/form-data'
       },
@@ -68,7 +68,7 @@ export class ApiService {
   }
 
   public getOrderByID(order_id: string) {
-    return this.http.get(`${this.ip}/api/users/${this.userID}/orders/${order_id}`);
+    return this.http.get(`${this.ip}/api/users/${this.uuid}/orders/${order_id}`);
   }
 
   /*
@@ -78,11 +78,11 @@ export class ApiService {
   */
 
   public getUserEmails() {
-    return this.http.get(`${this.ip}/api/users/${this.userID}/emails`);
+    return this.http.get(`${this.ip}/api/users/${this.uuid}/emails`);
   }
 
   public getOrderEmails(order_id: string) {
-    return this.http.get(`${this.ip}/api/users/${this.userID}/orders/${order_id}/emails`);
+    return this.http.get(`${this.ip}/api/users/${this.uuid}/orders/${order_id}/emails`);
   }
 
   public createOrderEmail(order_id: string, content: string, dateReceived: string) {

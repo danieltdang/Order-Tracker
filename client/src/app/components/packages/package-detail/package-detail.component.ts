@@ -18,6 +18,10 @@ export class PackageDetailComponent implements OnInit {
     return this.statusService.getStatus(status);
   }
 
+  formatDate(date: string) {
+    return this.statusService.formatDate(date);
+  }
+
   ngOnInit(): void {
     this.route.params.subscribe(params => {
       this.packageID = params['id'];

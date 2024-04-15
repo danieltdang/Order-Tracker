@@ -17,7 +17,7 @@
     <h2 class="m-0 mb-3">Package Details</h2>
 
     <div class="surface-card col-12 shadow-2 p-3 mb-3 border-round">
-      <h2 class="m-0">Estimated Delivery: {{ order?.estimatedDelivery }}</h2>
+      <h2 class="m-0">Estimated Delivery: {{ formatDate(order?.estimatedDelivery) }}</h2>
       <h2 class="m-0 font-normal">{{ getStatus(order?.status) }}</h2>
     </div>
 
@@ -60,7 +60,7 @@
             <span class="text-gray-400">Date Added</span>
           </div>
           <div class="p-0">
-            <span>{{ order?.dateAdded }}</span>
+            <span>{{ formatDate(order?.dateAdded) }}</span>
           </div>
         </div>
         <div class="flex flex-row">
@@ -68,7 +68,7 @@
             <span class="text-gray-400">Estimated Delivery</span>
           </div>
           <div class="p-0">
-            <span>{{ order?.estimatedDelivery }}</span>
+            <span>{{ formatDate(order?.estimatedDelivery) }}</span>
           </div>
         </div>
       </div>
@@ -79,11 +79,13 @@
     <h2 class="m-0 mb-3">Timeline</h2>
 
     <div class="surface-card col-12 shadow-2 p-3 border-round mb-3">
-      <span>something</span>
+      <h3 class="m-0 font-normal">Package Arrived at Front Door</h3>
+      <span>{{ formatDate(order?.estimatedDelivery) }}</span>
     </div>
 
     <div class="surface-card col-12 shadow-2 p-3 border-round mb-3">
-      <span>something</span>
+      <h3 class="m-0 font-normal">Order Created</h3>
+      <span>{{ formatDate(order?.dateAdded) }}</span>
     </div>
   </div>
 </div>
