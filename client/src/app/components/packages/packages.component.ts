@@ -11,7 +11,7 @@ import { Router } from '@angular/router';
 })
 export class PackagesComponent {
   orders: any;
-
+  selectedOrders: any;
   constructor(private apiService: ApiService, private router: Router, private statusService: PackageStatusService) { }
 
   getOrderId(index : number, order : any) {
@@ -34,5 +34,9 @@ export class PackagesComponent {
 
   getStatus(status: number) {
     return this.statusService.getStatus(status);
+  }
+
+  formatDate(date: string) {
+    return this.statusService.formatDate(date);
   }
 }

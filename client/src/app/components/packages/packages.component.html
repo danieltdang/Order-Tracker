@@ -1,14 +1,13 @@
-<div class="surface-card col-12 mb-3 shadow-2 p-3 border-round">
+<div class="surface-card col-12 mb-3 shadow-2 p-3 pb-0 border-round">
     <p-table
         #dt1
-        [value]="orders" 
+        [value]="orders"
         [paginator]="true" 
         [rows]="25"
         [paginator]="true"
         paginatorStyleClass="border-none"
         [showCurrentPageReport]="true"
         currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
-        [rowsPerPageOptions]="[25, 50, 100]"
         [globalFilterFields]="['source', 'productName', 'status', 'trackingCode', 'carrier', 'dateAdded']"
         selectionMode="single"
         (onRowSelect)="onRowSelect($event)"
@@ -39,7 +38,7 @@
                 <td>{{ getStatus(order.status) }}</td>
                 <td>{{ order.trackingCode }}</td>
                 <td>{{ order.carrier }}</td>
-                <td>{{ order.dateAdded }}</td>
+                <td>{{ formatDate(order?.dateAdded) }}</td>
             </tr>
         </ng-template>
     </p-table>
