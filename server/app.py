@@ -11,6 +11,17 @@ app = Flask(__name__)
 CORS(app)
 
 ##########################
+# MISC ENDPOINTS #
+##########################
+
+@app.route('/api/health', methods = ["GET"])
+def health():
+    return jsonify({
+        "message": "OK",
+        "status": 200
+    })
+
+##########################
 # USER RELATED ENDPOINTS #
 ##########################
 
