@@ -11,6 +11,7 @@ import { ForgotComponent } from './components/login/forgot.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { EmailHubComponent } from './components/email-hub/email-hub.component';
 import { PackagesComponent } from './components/packages/packages.component';
+import { PackageDetailComponent } from './components/packages/package-detail/package-detail.component';
 import { SettingsComponent } from './components/settings/settings.component';
 import { FaqComponent } from './components/faq/faq.component';
 
@@ -30,6 +31,7 @@ const routes: Routes = [
       { path: 'dashboard', component: DashboardComponent },
       { path: 'email-hub', component: EmailHubComponent },
       { path: 'packages', component: PackagesComponent },
+      { path: 'packages/:id', component: PackageDetailComponent },
       { path: 'settings', component: SettingsComponent },
       { path: 'faq', component: FaqComponent },
       // Redirect / to dashboard as fallback within the MainLayout

@@ -1,0 +1,89 @@
+<a routerLink="/app/packages">
+  <p-button 
+    styleClass="surface-card hover:surface-200 w-max font-light border-200 shadow-2p-3 border-round text-color" 
+    size="small" 
+    icon="pi pi-arrow-left" 
+    label="Go Back">
+  </p-button>
+</a>
+
+<h1 class="my-3">
+  {{ order?.productName }}
+  <span class="text-color-secondary font-normal">(Package #{{ order?.orderID }})</span>
+</h1>
+
+<div class="grid">
+  <div class="col-8">
+    <h2 class="m-0 mb-3">Package Details</h2>
+
+    <div class="surface-card col-12 shadow-2 p-3 mb-3 border-round">
+      <h2 class="m-0">Estimated Delivery: {{ order?.estimatedDelivery }}</h2>
+      <h2 class="m-0 font-normal">{{ getStatus(order?.status) }}</h2>
+    </div>
+
+    <div class="surface-card col-12 shadow-2 p-3 border-round">
+      <div>
+        <div class="flex flex-row">
+          <div class="col-6 p-0">
+            <span class="text-gray-400">Status</span>
+          </div>
+          <div class="p-0">
+            <span>{{ getStatus(order?.status) }}</span>
+          </div>
+        </div>
+        <div class="flex flex-row">
+          <div class="col-6 p-0">
+            <span class="text-gray-400">Tracking Code</span>
+          </div>
+          <div class="p-0">
+            <span>{{ order?.trackingCode }}</span>
+          </div>
+        </div>
+        <div class="flex flex-row">
+          <div class="col-6 p-0">
+            <span class="text-gray-400">Carrier</span>
+          </div>
+          <div class="p-0">
+            <span>{{ order?.carrier }}</span>
+          </div>
+        </div>
+        <div class="flex flex-row">
+          <div class="col-6 p-0">
+            <span class="text-gray-400">Source</span>
+          </div>
+          <div class="p-0">
+            <span>{{ order?.source }}</span>
+          </div>
+        </div>
+        <div class="flex flex-row">
+          <div class="col-6 p-0">
+            <span class="text-gray-400">Date Added</span>
+          </div>
+          <div class="p-0">
+            <span>{{ order?.dateAdded }}</span>
+          </div>
+        </div>
+        <div class="flex flex-row">
+          <div class="col-6 p-0">
+            <span class="text-gray-400">Estimated Delivery</span>
+          </div>
+          <div class="p-0">
+            <span>{{ order?.estimatedDelivery }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-4">
+    <h2 class="m-0 mb-3">Timeline</h2>
+
+    <div class="surface-card col-12 shadow-2 p-3 border-round mb-3">
+      <span>something</span>
+    </div>
+
+    <div class="surface-card col-12 shadow-2 p-3 border-round mb-3">
+      <span>something</span>
+    </div>
+  </div>
+</div>
