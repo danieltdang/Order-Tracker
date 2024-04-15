@@ -24,6 +24,7 @@ import { PasswordModule } from 'primeng/password';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ToastModule } from 'primeng/toast';
 import { TableModule } from 'primeng/table';
+import { BreadcrumbModule } from 'primeng/breadcrumb';
 
 import { __decorate } from 'tslib';
 
@@ -89,6 +90,7 @@ import { PackageDetailComponent } from './components/packages/package-detail/pac
     ConfirmDialogModule,
     ToastModule,
     TableModule,
+    BreadcrumbModule,
   ],
   providers: [
     provideClientHydration(),

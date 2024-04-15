@@ -18,6 +18,10 @@ export class ApiService {
     return this.http.get(`${this.ip}/api/users/${this.userID}/orders`);
   }
 
+  public getOrderByID(order_id: String) {
+    return this.http.get(`${this.ip}/api/users/${this.userID}/orders/${order_id}`);
+  }
+
   public getEmails() {
     return this.http.get(`${this.ip}/api/users/${this.userID}/emails`);
   }
