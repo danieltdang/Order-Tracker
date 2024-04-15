@@ -19,7 +19,7 @@ export class PackagesComponent {
   }
 
   ngOnInit(): void {
-    this.apiService.getOrders().subscribe((fetchedData: any) => {
+    this.apiService.getAllUserOrders().subscribe((fetchedData: any) => {
       this.orders = fetchedData.data;
     });
   }

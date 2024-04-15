@@ -55,7 +55,7 @@ export class SidebarComponent implements OnInit {
     this.items = [
       {label: 'Dashboard', icon: 'pi pi-home', routerLink: ['/app/dashboard'], styleClass : 'active'},
       {label: 'Email Hub', icon: 'pi pi-envelope', routerLink: ['/app/email-hub']},
-      {label: 'Packages', icon: 'pi pi-download', routerLink: ['/app/packages']}, //queryParams: {'recent': 'true'}}
+      {label: 'Packages', icon: 'pi pi-box', routerLink: ['/app/packages']}, //queryParams: {'recent': 'true'}}
       {label: 'Settings', icon: 'pi pi-cog', routerLink: ['/app/settings']},
       {label: 'FAQ', icon: 'pi pi-question-circle', routerLink: ['/app/faq']},
       {label: 'Sign Out', icon: 'pi pi-sign-out', routerLink: ['/']}
