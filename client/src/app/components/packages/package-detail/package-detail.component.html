@@ -14,6 +14,16 @@
 
 <div class="surface-card col-12 shadow-2 p-3 border-round">
   <h1>Package Details</h1>
-  <p>Package ID: {{ packageID }}</p>
+  <p>
+    Name: {{ order.productName }} <br>
+    Package ID: {{ order.orderID }} <br>
+    carrier: {{ order.carrier }} <br>
+    dateAdded: {{ order.dateAdded }} <br>
+    estimatedDelivery: {{ order.estimatedDelivery }} <br>
+    source: {{ order.source }} <br>
+    status: {{ getStatus(order.status) }} <br>
+    trackingCode: {{ order.trackingCode }} <br>
+    userID: {{ order.user }} <br>
+  </p>
 </div>
   

@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Table } from 'primeng/table';
 import { ApiService } from '../../api.service';
+import { PackageStatusService } from './package-status.service';
 import { Router } from '@angular/router';
 
 @Component({
@@ -11,7 +12,7 @@ import { Router } from '@angular/router';
 export class PackagesComponent {
   orders: any;
 
-  constructor(private apiService: ApiService, private router: Router) { }
+  constructor(private apiService: ApiService, private router: Router, private statusService: PackageStatusService) { }
 
   getOrderId(index : number, order : any) {
     return order.orderID;
@@ -29,5 +30,9 @@ export class PackagesComponent {
 
   onRowSelect(event: any) {
     this.router.navigate(['app/packages', event.data.orderID]);
+  }
+
+  getStatus(status: number) {
+    return this.statusService.getStatus(status);
   }
 }

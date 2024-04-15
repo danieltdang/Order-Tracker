@@ -36,7 +36,7 @@
             <tr [pSelectableRow]="order">
                 <td>{{ order.source }}</td>
                 <td>{{ order.productName }}</td>
-                <td>{{ order.status }}</td>
+                <td>{{ getStatus(order.status) }}</td>
                 <td>{{ order.trackingCode }}</td>
                 <td>{{ order.carrier }}</td>
                 <td>{{ order.dateAdded }}</td>
