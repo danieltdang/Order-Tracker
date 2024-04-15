@@ -1,4 +1,4 @@
-<div class="surface-card col-12 mb-3 shadow-2 p-3 border-round">
+<div class="surface-card col-12 mb-3 shadow-2 p-3 pb-0 border-round">
     <p-table
         #dt1
         [value]="orders"
@@ -8,7 +8,6 @@
         paginatorStyleClass="border-none"
         [showCurrentPageReport]="true"
         currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
-        [rowsPerPageOptions]="[25, 50, 100]"
         [globalFilterFields]="['source', 'productName', 'status', 'trackingCode', 'carrier', 'dateAdded']"
         selectionMode="single"
         (onRowSelect)="onRowSelect($event)"
