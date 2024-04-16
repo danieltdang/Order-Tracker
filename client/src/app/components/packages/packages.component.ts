@@ -17,9 +17,12 @@ export class PackagesComponent {
   order!: Order;
   orders!: Order[];
   selectedOrders!: Order[] | null;
+  dateAdded!: Date;
+  estimatedDelivery!: Date;
   statuses!: any[];
   submitted: boolean = false;
   orderDialog: boolean = false;
+
   constructor(private apiService: ApiService, private router: Router, private statusService: PackageStatusService,
               private messageService: MessageService, private confirmationService: ConfirmationService) { }
 
@@ -41,6 +44,8 @@ export class PackagesComponent {
 
   editOrder(order: Order) {
     this.order = { ...order };
+    this.dateAdded = new Date(order.dateAdded);
+    this.estimatedDelivery = new Date(order.estimatedDelivery);
     this.orderDialog = true;
   }
 
@@ -72,15 +77,24 @@ export class PackagesComponent {
     this.submitted = false;
   }
 
-  saveProduct() {
+  formatDateToString(date: Date) {
+    const day = date.getDate();
+    const month = date.getMonth() + 1; // Month is zero-indexed in JavaScript, so add 1
+    const year = date.getFullYear();
+    return `${month}-${day}-${year}`;
+  }
+
+  saveOrder() {
     this.submitted = true;
 
     if (this.order.productName?.trim()) {
+      this.order.dateAdded = this.formatDateToString(this.dateAdded);
+      this.order.estimatedDelivery = this.formatDateToString(this.estimatedDelivery);
+
       if (this.order.orderID) {
         this.orders[this.findIndexById(this.order.orderID)] = this.order;
         this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Order Updated', life: 3000 });
       } else {
-        //this.order.orderID = this.createId();
         this.orders.push(this.order);
         this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Order Created', life: 3000 });
       }
@@ -113,6 +127,8 @@ export class PackagesComponent {
       source: '',
       dateAdded: ''
     };
+    this.dateAdded = new Date();
+    this.estimatedDelivery = new Date();
     this.submitted = false;
     this.orderDialog = true;
   }
