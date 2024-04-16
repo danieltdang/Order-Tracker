@@ -75,8 +75,8 @@ def signToken(user_id):
         'userID': user_id,
         'exp': expiration_time
     }
-    token = jwt.encode(payload, os.getenv('SECRET_KEY'), algorithm='HS256')
-    return token
+    
+    return jwt.encode(payload, os.getenv('SECRET_KEY'), algorithm='HS256')
 
 export = {
     "verifyToken": verifyToken,

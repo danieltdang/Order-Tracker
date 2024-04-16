@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { Theme } from "./theme";
 import { ThemeService } from '../../theme-service';
+import axios from 'axios';
+
 
 import { ConfirmationService, MessageService, ConfirmEventType } from 'primeng/api';
 
@@ -38,6 +40,20 @@ export class SettingsComponent {
         rejectIcon:"none",
 
         accept: () => {
+          let headers = {
+            'Authoriiization': 'Bearer ' + localStorage.getItem("token"),
+          }
+
+          axios.delete('https://localhost:5001/users/' + localStorage.getItem("userId"), { headers: headers })
+            .then((response) => {
+              console.log(response);
+              localStorage.clear();
+              window.location.href = "/login";
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+
           this.messageService.add({ severity: 'info', summary: 'Confirmed', detail: 'Account deleted' });
         },
         reject: () => {
