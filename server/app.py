@@ -342,7 +342,7 @@ def login_user():
 # ORDEREVENT RELATED ENDPOINTS #
 ################################
 
-@app.route('/api/orders/<order_id>/orderEvents', methods = ["GET", "POST", "DELETE"])
+@app.route('/api/orders/<order_id>/events', methods = ["GET", "POST", "DELETE"])
 def order_events(order_id):
     if request.method == "GET":
         orderEvents = [dict(orderEvent) for orderEvent in util.getOrderEventsForOrder(order_id)]
