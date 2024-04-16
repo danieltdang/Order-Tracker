@@ -167,7 +167,7 @@ def getOrderInfo(user, order_id):
 
         return order
     except:
-        raise Exception(f"Error occured when trying to retrieve order {order_id} from user '{uuid}'.")
+        raise Exception(f"Error occured when trying to retrieve order {order_id} from user '{user}'.")
     finally:
         con.close()
 
