@@ -384,7 +384,8 @@ def getOrderEventsForOrder(order_id):
 
     try:
         cur.execute("""
-            SELECT * FROM "OrderEvent"
+            SELECT "OrderEvent".desc, "OrderEvent".date
+            FROM "OrderEvent"
             JOIN "Order" ON "OrderEvent"."order" = "Order".orderID
             WHERE "Order".orderID = ?
         """, (order_id,))
