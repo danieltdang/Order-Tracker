@@ -336,8 +336,52 @@ def login_user():
         "message": "Invalid credentials",
         "status": 401
     })
- 
 
+
+################################
+# ORDEREVENT RELATED ENDPOINTS #
+################################
+
+@app.route('/api/orders/<order_id>/orderEvents', methods = ["GET", "POST", "DELETE"])
+def order_events(order_id):
+    if request.method == "GET":
+        orderEvents = [dict(orderEvent) for orderEvent in util.getOrderEventsForOrder(order_id)]
+
+        return jsonify({
+            "data": orderEvents,
+            "status": 200
+        })
+    elif request.method == "POST":
+        desc = request.form['description']
+        date = request.form['date']
+
+        try:
+            util.addOrderEvent(
+                order_id,
+                desc,
+                date
+            )
+
+            return jsonify({
+                "message": f"Successfully created order event.",
+                "status": 201
+            })
+        except Exception as e:
+            return jsonify({
+                "message": f"Error occured in orderEvent post endpoint: {e}",
+                "status": 400
+            })
+    elif request.method == "DELETE":
+        if util.removeOrderEventsForOrder(order_id):
+            return jsonify({
+                "message": f"Order events for #{order_id} successfully removed",
+                "status": 200
+            })
+        else:
+            return jsonify({
+                "message": "Order not found (cannot delete events)",
+                "status": 404
+            })
 
 if __name__ == '__main__':
     app.run(debug=True, port=5001)
