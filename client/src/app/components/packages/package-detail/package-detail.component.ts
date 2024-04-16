@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { PackageStatusService } from '../package-status.service';
-import { ApiService } from '../../../api.service';
+import { ApiService } from '../../../services/api.service';
 
 @Component({
   selector: 'app-package-detail',

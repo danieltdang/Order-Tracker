@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Table } from 'primeng/table';
 import { ConfirmationService, MessageService } from 'primeng/api';
-import { ApiService } from '../../api.service';
+import { ApiService } from '../../services/api.service';
 import { PackageStatusService } from './package-status.service';
 import { Router } from '@angular/router';
 
