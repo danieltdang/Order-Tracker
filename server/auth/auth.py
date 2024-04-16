@@ -57,6 +57,29 @@ def login_user(email, password):
 
     return ("", "")
 
+def change_password(uuid, old_password, new_password):
+    con = sql.connect(DB_PATH)
+    cur = con.cursor()
+
+    try:
+        cur.execute("""SELECT * FROM "User" WHERE uuid = ?""", (uuid,))
+        user = cur.fetchone()
+
+        if user is None:
+            return False
+                
+        if bcrypt.checkpw(old_password.encode('utf-8'), user[4]):
+            hashed_password = bcrypt.hashpw(new_password.encode('utf-8'), bcrypt.gensalt())
+            cur.execute("""UPDATE "User" SET password = ? WHERE uuid = ?""", (hashed_password, uuid))
+            con.commit()
+            return True
+        else: 
+            return False
+        
+    finally:
+        con.close()
+
+
 def verifyToken(uuid, token):
     try:
         data = jwt.decode(token, os.getenv('SECRET_KEY'), algorithms=['HS256'])

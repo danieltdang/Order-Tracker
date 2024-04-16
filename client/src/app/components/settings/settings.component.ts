@@ -31,7 +31,53 @@ export class SettingsComponent {
     }
   }
 
-  async confirm(event: Event) {
+  async passwordConfirm(event: Event) {
+    this.confirmationService.confirm({
+      target: event.target as EventTarget,
+      message: 'Are you sure you want to change your password?',
+      header: 'Change Password Confirmation',
+      icon: 'pi pi-info-circle',
+      acceptButtonStyleClass:"p-button-danger p-button-text",
+      rejectButtonStyleClass:"p-button-text p-button-text",
+      acceptIcon:"none",
+      rejectIcon:"none",
+
+      accept: async () => {
+        const userToken = await getData('userToken');
+        const userID = await getData('userID');
+
+        let headers = {
+          'Authorization': userToken
+        }
+
+        let payload = {
+          "uuid": userID,
+          "oldPassword": this.currPass,
+          "newPassword": this.confirmPass1
+        }
+
+        if (this.confirmPass1 !== this.confirmPass2) {
+          alert('Passwords do not match');
+        } else {
+          try {
+            const result = await axios.post("http://localhost:5001/auth/change-password", payload, { headers: headers });
+
+            if (result.status == 200) {
+              this.messageService.add({ severity: 'info', summary: 'Confirmed', detail: 'Password changed' });
+            } else {
+              alert('Password change failed');
+            }
+          }
+          catch (err) {
+            console.error('Error during password change:', err);
+            alert('Password change failed');
+          }
+        }
+      }
+    });
+  }
+
+  async deleteConfirm(event: Event) {
     this.confirmationService.confirm({
         target: event.target as EventTarget,
         message: 'Are you sure you want to delete this account?',
@@ -47,7 +93,7 @@ export class SettingsComponent {
           const userID = await getData('userID');
 
           let headers = {
-            'Authoriiization': 'Bearer ' + userToken
+            'Authorization': userToken
           }
 
         try {

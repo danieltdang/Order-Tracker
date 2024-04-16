@@ -8,7 +8,7 @@ import auth.auth as auth
 import time
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, supports_credentials=True, expose_headers=["Authorization"])
 
 ##########################
 # MISC ENDPOINTS #
@@ -288,7 +288,41 @@ def login_user():
         "status": 401
     })
  
+@app.route('/auth/change-password', methods = ["POST"])
+def change_password():
+    request.body = request.get_json()
 
+    uuid = request.body.get('uuid')
+    old_password = request.body.get('oldPassword')
+    new_password = request.body.get('newPassword')
+
+    print(uuid, old_password, new_password)
+
+    if (uuid == None or old_password == None or new_password == None):
+        return jsonify({
+            "message": "UUID, old password, or new password not provided",
+            "status": 400
+        }), 400
+    
+    userToken = request.headers.get('Authorization')
+    print("Received token:", userToken)
+
+    if (not auth.verifyToken(uuid, request.headers.get('Authorization'))):
+        return jsonify({
+            "message": "Invalid authorization token",
+            "status": 401
+        }), 401
+    
+    if (auth.change_password(uuid, old_password, new_password)):
+        return jsonify({
+            "message": "Password successfully changed",
+            "status": 200
+        }), 200
+    
+    return jsonify({
+        "message": "Invalid credentials",
+        "status": 401
+    }), 401
 
 if __name__ == '__main__':
     app.run(debug=True, port=5001)
