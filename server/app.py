@@ -29,6 +29,7 @@ def health():
 def user_id(uuid):
 
     uuid = str(uuid)
+    print(uuid)
     
     if not uuid:
         return jsonify({
@@ -69,6 +70,7 @@ def user_id(uuid):
                 "status": 200
             })
         else:
+            print(f"User {uuid} not found")
             return jsonify({
                 "message": "User not found",
                 "status": 404

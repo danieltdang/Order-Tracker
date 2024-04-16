@@ -16,3 +16,11 @@ export const getData = async (key: string) => {
         return null;
     }
 }
+
+export const clearData = async () => {
+    try {
+        await AsyncStorage.clear();
+    } catch (e) {
+        console.error('Error clearing data:', e);
+    }
+}
