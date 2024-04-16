@@ -5,7 +5,7 @@ import { ApiService } from '../../api.service';
 import { PackageStatusService } from './package-status.service';
 import { Router } from '@angular/router';
 
-import { Order } from './order';
+import { Order } from '../../interfaces/order';
 
 @Component({
   selector: 'app-packages',

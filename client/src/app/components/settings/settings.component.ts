@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Theme } from "./theme";
+import { Theme } from "../../interfaces/theme";
 import { ThemeService } from '../../theme-service';
 
 import { ConfirmationService, MessageService, ConfirmEventType } from 'primeng/api';

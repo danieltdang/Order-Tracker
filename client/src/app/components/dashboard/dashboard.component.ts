@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectorRef, SimpleChanges } from '@angular/core';
 
-import { Report } from './report';
-import { Filter } from './filter';
+import { Report } from '../../interfaces/report';
+import { Filter } from '../../interfaces/filter';
 
 @Component({
   selector: 'app-dashboard',
