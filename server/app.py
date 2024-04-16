@@ -130,7 +130,7 @@ def user_all_orders(uuid):
         })
 
 
-@app.route('/api/users/<uuid>/orders/<order_id>', methods = ["GET"])
+@app.route('/api/users/<uuid>/orders/<order_id>', methods = ["GET", "DELETE"])
 def user_order(uuid, order_id):
     if request.method == "GET":
         order = util.getOrderInfo(uuid, order_id)
@@ -140,6 +140,18 @@ def user_order(uuid, order_id):
                 "status": 404
             })
         return jsonify(dict(order))
+    elif request.method == "DELETE":
+        if util.removeOrder(order):
+            return jsonify({
+                "message": f"Order #{order} successfully removed",
+                "status": 200
+            })
+        else:
+            return jsonify({
+                "message": "Order not found",
+                "status": 404
+            })
+
 
 
 ###########################
@@ -156,7 +168,7 @@ def user_emails(uuid):
             "status": 200
         })
 
-@app.route('/api/orders/<order_id>/emails', methods = ["GET", "POST"])
+@app.route('/api/orders/<order_id>/emails', methods = ["GET", "POST", "DELETE"])
 def order_emails(order_id):
     if request.method == "GET":
         emails = [dict(email) for email in util.getEmailsForOrder(order_id)]
@@ -185,7 +197,18 @@ def order_emails(order_id):
                 "message": f"Error occured in email post endpoint: {e}",
                 "status": 400
             })
-
+    elif request.method == "DELETE":
+        if util.removeEmailsForOrder(order_id):
+            return jsonify({
+                "message": f"Emails for #{order_id} successfully removed",
+                "status": 200
+            })
+        else:
+            return jsonify({
+                "message": "Order not found (cannot delete emails)",
+                "status": 404
+            })
+        
 ###########################
 # AUTHENTICATION ENDPOINTS #
 ###########################

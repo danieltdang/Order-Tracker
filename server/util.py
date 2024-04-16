@@ -155,6 +155,43 @@ def getOrderInfo(uuid, order_id):
     finally:
         con.close()
 
+def removeOrder(order):
+    con = sql.connect(DB_PATH)
+    cur = con.cursor()
+
+    try:
+        cur.execute("""
+            DELETE FROM "Order"
+            WHERE "Order".orderID = ?
+        """, 
+            (order,)
+        )
+        con.commit()
+    except Exception as e:
+        raise e
+    finally:
+        con.close()
+        return True
+
+def updateOrder(order):
+    con = sql.connect(DB_PATH)
+    cur = con.cursor()
+
+    try:
+        cur.execute("""
+            DELETE FROM "Order"
+            WHERE "Order".orderID = ?
+        """, 
+            (order,)
+        )
+        con.commit()
+    except Exception as e:
+        raise e
+    finally:
+        con.close()
+
+
+
 
 
 
@@ -225,3 +262,22 @@ def getEmailsForOrder(order_id):
         raise Exception(f"Error occured when trying to retrieve emails for order '{order_id}'.")
     finally:
         con.close()
+
+
+def removeEmailsForOrder(order):
+    con = sql.connect(DB_PATH)
+    cur = con.cursor()
+
+    try:
+        cur.execute("""
+            DELETE FROM "Email"
+            WHERE "Email"."order" = ?
+        """, 
+            (order,)
+        )
+        con.commit()
+    except Exception as e:
+        raise e
+    finally:
+        con.close()
+        return True
