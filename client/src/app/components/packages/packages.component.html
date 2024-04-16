@@ -59,15 +59,39 @@
 <p-dialog [(visible)]="orderDialog" [style]="{ width: '450px' }" header="Order Details" [modal]="true" styleClass="p-fluid">
     <ng-template pTemplate="content">
         <div class="field">
-            <label for="name">Product Name</label>
+            <label for="name">Order ID</label>
+            <input class="p-inputtext" type="text" pInputText id="id" [(ngModel)]="order.orderID" required autofocus />
+            <small class="p-error" *ngIf="submitted && !order.orderID">Order ID is required.</small>
+        </div>
+
+        <div class="field">
+            <label for="name">Name</label>
             <input class="p-inputtext" type="text" pInputText id="name" [(ngModel)]="order.productName" required autofocus />
             <small class="p-error" *ngIf="submitted && !order.productName">Name is required.</small>
         </div>
 
         <div class="field">
             <label for="name">Tracking Code</label>
-            <input class="p-inputtext" type="text" pInputText id="name" [(ngModel)]="order.trackingCode" required autofocus />
-            <small class="p-error" *ngIf="submitted && !order.trackingCode">Name is required.</small>
+            <input class="p-inputtext" type="text" pInputText id="tracking" [(ngModel)]="order.trackingCode" required autofocus />
+            <small class="p-error" *ngIf="submitted && !order.trackingCode">Tracking Code is required.</small>
+        </div>
+
+        <div class="field">
+            <label for="name">Status</label>
+            <input class="p-inputtext" type="text" pInputText id="status" [(ngModel)]="order.status" required autofocus />
+            <small class="p-error" *ngIf="submitted && !order.status">Status is required.</small>
+        </div>
+
+        <div class="field">
+            <label for="name">Carrier</label>
+            <input class="p-inputtext" type="text" pInputText id="carrier" [(ngModel)]="order.carrier" required autofocus />
+            <small class="p-error" *ngIf="submitted && !order.carrier">Carrier is required.</small>
+        </div>
+
+        <div class="field">
+            <label for="name">Source</label>
+            <input class="p-inputtext" type="text" pInputText id="source" [(ngModel)]="order.source" required autofocus />
+            <small class="p-error" *ngIf="submitted && !order.source">Source is required.</small>
         </div>
     </ng-template>
     <ng-template pTemplate="footer">
