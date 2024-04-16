@@ -27,6 +27,30 @@ def health():
 
 @app.route('/api/users/<uuid>', methods = ["GET", "DELETE"])
 def user_id(uuid):
+
+    uuid = str(uuid)
+    
+    if not uuid:
+        return jsonify({
+            "message": "User id not provided",
+            "status": 400
+        })
+    
+    authorization = request.headers.get('Authorization')
+
+    if not authorization:
+        return jsonify({
+            "message": "Authorization token not provided",
+            "status": 401
+        })
+    
+
+    if not auth.verifyToken(uuid, authorization):
+        return jsonify({
+            "message": "Invalid authorization token",
+            "status": 401
+        })
+
     # Get information of specific user
     if request.method == "GET":
         user = util.getUserInfo(uuid)
