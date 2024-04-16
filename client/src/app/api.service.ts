@@ -8,7 +8,7 @@ export class ApiService {
   constructor(private http: HttpClient) { }
 
   private ip = 'http://127.0.0.1:5001';
-  private uuid = '312331'
+  private uuid = '12345'
 
   public getData() {
     return this.http.get(this.ip + '/api/data');
