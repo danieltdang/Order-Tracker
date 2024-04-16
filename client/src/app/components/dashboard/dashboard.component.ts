@@ -125,7 +125,7 @@ export class DashboardComponent implements OnInit {
     
     if (!this.reportStats) {
       // Ensure there are start and end dates provided
-      console.log('No stats provided')
+      //console.log('No stats provided')
       return;
     }
   
@@ -331,7 +331,7 @@ export class DashboardComponent implements OnInit {
     this.updateReportStats();
     this.updateChartLabels();
 
-    console.log(this.reportStats);
+    //console.log(this.reportStats);
   }
 
   ngOnChanges(changes: SimpleChanges): void {

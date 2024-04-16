@@ -2,23 +2,30 @@
     <p-table
         #dt1
         [value]="orders"
+        [(selection)]="selectedOrders"
         [paginator]="true" 
         [rows]="25"
         [paginator]="true"
         paginatorStyleClass="border-none"
         [showCurrentPageReport]="true"
         currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
-        [globalFilterFields]="['source', 'productName', 'status', 'trackingCode', 'carrier', 'dateAdded']"
+        [globalFilterFields]="['source', 'productName', 'trackingCode', 'carrier']"
         selectionMode="single"
         (onRowSelect)="onRowSelect($event)"
     >
         <ng-template pTemplate="caption">
-            <div class="flex">
-                <button pButton label="Clear" class="p-button-outlined" icon="pi pi-filter-slash" (click)="clear(dt1)"></button>
-                <span class="p-input-icon-left ml-auto">
-                    <i class="pi pi-search"></i>
-                    <input pInputText class="p-inputtext" type="text" (input)="dt1.filterGlobal($any($event.target).value, 'contains')" placeholder="Search keyword" />
-                </span>
+            <div class="flex justify-content-between">
+                <div>
+                    <span class="p-input-icon-left mr-2">
+                        <i class="pi pi-search"></i>
+                        <input pInputText class="p-inputtext" type="text" (input)="dt1.filterGlobal($any($event.target).value, 'contains')" placeholder="Search keyword" />
+                    </span>
+                    <button pButton label="Clear" class="p-button-outlined" icon="pi pi-filter-slash" (click)="clear(dt1)"></button>
+                </div>
+                <div>
+                    <p-toast></p-toast>
+                    <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
+                </div>
             </div>
         </ng-template>
         <ng-template pTemplate="header">
@@ -29,6 +36,7 @@
                 <th class="white-space-nowrap" pSortableColumn="trackingCode">Tracking Code <p-sortIcon field="trackingCode"></p-sortIcon></th>
                 <th class="white-space-nowrap" pSortableColumn="carrier">Carrier <p-sortIcon field="carrier"></p-sortIcon></th>
                 <th class="white-space-nowrap" pSortableColumn="dateAdded">Date Added <p-sortIcon field="dateAdded"></p-sortIcon></th>
+                <th class="white-space-nowrap">Actions</th>
             </tr>
         </ng-template>
         <ng-template pTemplate="body" let-order>
@@ -39,7 +47,33 @@
                 <td>{{ order.trackingCode }}</td>
                 <td>{{ order.carrier }}</td>
                 <td>{{ formatDate(order?.dateAdded) }}</td>
+                <td>
+                    <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-info mr-2" (click)="editOrder(order)"></button>
+                    <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger" (click)="deleteOrder(order)"></button>
+                </td>
             </tr>
         </ng-template>
     </p-table>
 </div>
+
+<p-dialog [(visible)]="orderDialog" [style]="{ width: '450px' }" header="Order Details" [modal]="true" styleClass="p-fluid">
+    <ng-template pTemplate="content">
+        <div class="field">
+            <label for="name">Product Name</label>
+            <input class="p-inputtext" type="text" pInputText id="name" [(ngModel)]="order.productName" required autofocus />
+            <small class="p-error" *ngIf="submitted && !order.productName">Name is required.</small>
+        </div>
+
+        <div class="field">
+            <label for="name">Tracking Code</label>
+            <input class="p-inputtext" type="text" pInputText id="name" [(ngModel)]="order.trackingCode" required autofocus />
+            <small class="p-error" *ngIf="submitted && !order.trackingCode">Name is required.</small>
+        </div>
+    </ng-template>
+    <ng-template pTemplate="footer">
+        <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+        <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" (click)="saveProduct()"></button>
+    </ng-template>
+</p-dialog>
+
+<p-confirmDialog [style]="{ width: '450px' }"></p-confirmDialog>
