@@ -110,18 +110,18 @@ def user():
 # ORDER RELATED ENDPOINTS #
 ###########################
 
-@app.route('/api/users/<uuid>/orders', methods = ["GET", "POST"])
-def user_all_orders(uuid):
+@app.route('/api/users/<user>/orders', methods = ["GET", "POST"])
+def user_all_orders(user):
     if request.method == "GET":
-        orders = [dict(order) for order in util.getOrdersForUser(uuid)]
+        orders = [dict(order) for order in util.getOrdersForUser(user)]
 
         return jsonify({
             "data": orders,
             "status": 200
         })
     elif request.method == "POST":
-        uuid = request.form['uuid']
-        orderID = request.form['orderID']
+        senderLocation = request.form['senderLocation']
+        receiverLocation = request.form['receiverLocation']
         prodName = request.form['prodName']
         status = request.form['status']
         trackCode = request.form['trackCode']
@@ -132,29 +132,30 @@ def user_all_orders(uuid):
 
         try:
             util.addOrder(
-                uuid,
-                orderID,
+                user,
                 prodName,
                 status,
                 trackCode,
                 estDelivery,
                 carrier,
                 source,
-                dateAdded
+                dateAdded,
+                senderLocation,
+                receiverLocation,
             )
-        except sqlite3.IntegrityError:
+        except sqlite3.Error:
             return jsonify({
-                "message": f"Order with id {orderID} already exists",
+                "message": "Error occured when adding order.",
                 "status": 400
             })
 
         return jsonify({
-            "message": f"Successfully created order {orderID}",
+            "message": f"Successfully added order for user {user}",
             "status": 201
         })
 
 
-@app.route('/api/users/<uuid>/orders/<order_id>', methods = ["GET", "DELETE"])
+@app.route('/api/users/<uuid>/orders/<order_id>', methods = ["GET", "DELETE", "PUT"])
 def user_order(uuid, order_id):
     if request.method == "GET":
         order = util.getOrderInfo(uuid, order_id)
@@ -175,6 +176,40 @@ def user_order(uuid, order_id):
                 "message": "Order not found",
                 "status": 404
             })
+    elif request.method == "PUT":
+        senderLocation = request.form['senderLocation']
+        receiverLocation = request.form['receiverLocation']
+        prodName = request.form['prodName']
+        status = request.form['status']
+        trackCode = request.form['trackCode']
+        estDelivery = request.form['estDelivery']
+        carrier = request.form['carrier']
+        source = request.form['source']
+        dateAdded = request.form['dateAdded']
+
+        try:
+            util.updateOrder(
+                order_id,
+                prodName,
+                status,
+                trackCode,
+                estDelivery,
+                carrier,
+                source,
+                dateAdded,
+                senderLocation,
+                receiverLocation
+            )
+        except sqlite3.Error:
+            return jsonify({
+                "message": "Error occured when updating order.",
+                "status": 400
+            })
+
+        return jsonify({
+            "message": f"Successfully updated order {order_id}",
+            "status": 201
+        })
 
 
 
@@ -232,7 +267,23 @@ def order_emails(order_id):
                 "message": "Order not found (cannot delete emails)",
                 "status": 404
             })
-        
+
+
+@app.route('/api/orders/<order_id>/emails/<email_id>', methods = ["DELETE"])
+def user_email_by_ID(order_id, email_id):
+    if request.method == "DELETE":
+        if util.removeEmailByID(email_id):
+            return jsonify({
+                "message": f"Email #{email_id} successfully removed",
+                "status": 200
+            })
+        else:
+            return jsonify({
+                "message": "Email not found",
+                "status": 404
+            })
+
+
 ###########################
 # AUTHENTICATION ENDPOINTS #
 ###########################
