@@ -57,9 +57,14 @@ def login_user(email, password):
 
     return ("", "")
 
-def verifyToken(token):
+def verifyToken(uuid, token):
     try:
-        jwt.decode(token, os.getenv('SECRET_KEY'), algorithms=['HS256'])
+        data = jwt.decode(token, os.getenv('SECRET_KEY'), algorithms=['HS256'])
+        
+        # We check if the paypload decoded contains that of the same uuid passed in from the request
+        if data['userID'] != uuid:
+            return False
+        
         return True
     except Exception as e:
         return False
