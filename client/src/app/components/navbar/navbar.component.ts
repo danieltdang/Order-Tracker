@@ -40,6 +40,9 @@ export class SidebarComponent implements OnInit {
   
       // Loop through menu items and set 'active' based on current route
       this.items.forEach(item => {
+        if (item.routerLink === undefined) 
+          return;
+
         if (item.routerLink[0] === '/') {
           // Check if the current URL is exactly '/' for the root path
           item.styleClass = this.router.url === '/' ? 'active' : '';
