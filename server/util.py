@@ -81,15 +81,26 @@ def getAllUsers():
 
 
 
-def addOrder(uuid, orderID, prodName, status, trackCode, estDelivery, carrier, source, dateAdded):
+def addOrder(
+    user, 
+    prodName,
+    status,
+    trackCode,
+    estDelivery, 
+    carrier,
+    source,
+    dateAdded,
+    senderLocation, 
+    receiverLocation
+):
     con = sql.connect(DB_PATH)
     cur = con.cursor()
 
+    # orderID omitted as it will auto increment
     try:
         cur.execute("""
             INSERT OR IGNORE INTO "Order"
             (
-                orderID,
                 "user",
                 productName,
                 status,
@@ -97,27 +108,32 @@ def addOrder(uuid, orderID, prodName, status, trackCode, estDelivery, carrier, s
                 estimatedDelivery,
                 carrier,
                 source,
-                dateAdded
+                dateAdded,
+                senderLocation,
+                receiverLocation
             )
-            VALUES (?,?,?,?,?,?,?,?,?)
+            VALUES (?,?,?,?,?,?,?,?,?,?)
         """, 
             (
-                orderID,
-                uuid,
+                user,
                 prodName,
                 status,
                 trackCode,
                 estDelivery,
                 carrier,
                 source,
-                dateAdded
+                dateAdded,
+                senderLocation,
+                receiverLocation
             )
         )
         con.commit()
     except:
         raise Exception("Error occurred when trying to insert order.")
     finally:
+        order_id = cur.lastrowid
         con.close()
+        return order_id
 
 def getOrdersForUser(uuid):
     con = sql.connect(DB_PATH)
@@ -137,7 +153,7 @@ def getOrdersForUser(uuid):
     finally:
         con.close()
 
-def getOrderInfo(uuid, order_id):
+def getOrderInfo(user, order_id):
     con = sql.connect(DB_PATH)
     con.row_factory = sql.Row
     cur = con.cursor()
@@ -146,14 +162,83 @@ def getOrderInfo(uuid, order_id):
         cur.execute("""
             SELECT * FROM "Order"
             WHERE "Order".user = ? AND "Order".orderID = ?
-        """, (uuid, order_id))
+        """, (user, order_id))
         order = cur.fetchone()
 
         return order
     except:
-        raise Exception(f"Error occured when trying to retrieve order {order_id} from user '{uuid}'.")
+        raise Exception(f"Error occured when trying to retrieve order {order_id} from user '{user}'.")
     finally:
         con.close()
+
+def removeOrder(order):
+    con = sql.connect(DB_PATH)
+    cur = con.cursor()
+
+    try:
+        cur.execute("""
+            DELETE FROM "Order"
+            WHERE "Order".orderID = ?
+        """, 
+            (order,)
+        )
+        con.commit()
+    except Exception as e:
+        raise e
+    finally:
+        con.close()
+        return True
+
+def updateOrder(
+    order_id,
+    prodName,
+    status,
+    trackCode,
+    estDelivery, 
+    carrier,
+    source,
+    dateAdded,
+    senderLocation, 
+    receiverLocation
+):
+    con = sql.connect(DB_PATH)
+    cur = con.cursor()
+
+    # orderID omitted as it will auto increment
+    try:
+        cur.execute("""
+            UPDATE "Order"
+            SET productName = ?,
+                status = ?,
+                trackingCode = ?,
+                estimatedDelivery = ?,
+                carrier = ?,
+                source = ?,
+                dateAdded = ?,
+                senderLocation = ?,
+                receiverLocation = ?
+            WHERE "Order"."orderID" = ?
+        """, 
+            (
+                prodName,
+                status,
+                trackCode,
+                estDelivery,
+                carrier,
+                source,
+                dateAdded,
+                senderLocation,
+                receiverLocation,
+                order_id
+            )
+        )
+        con.commit()
+    except:
+        raise Exception("Error occurred when trying to update order.")
+    finally:
+        con.close()
+
+
 
 
 
@@ -225,3 +310,107 @@ def getEmailsForOrder(order_id):
         raise Exception(f"Error occured when trying to retrieve emails for order '{order_id}'.")
     finally:
         con.close()
+
+def removeEmailForOrder(order):
+    con = sql.connect(DB_PATH)
+    cur = con.cursor()
+
+    try:
+        cur.execute("""
+            DELETE FROM "Email"
+            WHERE "Email"."order" = ?
+        """, 
+            (order,)
+        )
+        con.commit()
+    except Exception as e:
+        raise e
+    finally:
+        con.close()
+        return True
+    
+def removeEmailsByID(email_id):
+    con = sql.connect(DB_PATH)
+    cur = con.cursor()
+
+    try:
+        cur.execute("""
+            DELETE FROM "Email"
+            WHERE "Email"."emailID" = ?
+        """, 
+            (email_id,)
+        )
+        con.commit()
+    except Exception as e:
+        raise e
+    finally:
+        con.close()
+        return True
+
+
+
+
+
+def addOrderEvent(order, desc, date):
+    con = sql.connect(DB_PATH)
+    cur = con.cursor()
+
+    try:
+        cur.execute("""
+            INSERT OR IGNORE INTO "OrderEvent"
+            (
+                "order",
+                desc,
+                date
+            )
+            VALUES (?,?,?)
+        """, 
+            (
+                order,
+                desc,
+                date,
+            )
+        )
+        con.commit()
+    except Exception as e:
+        raise e
+    finally:
+        con.close()
+
+def getOrderEventsForOrder(order_id):
+    con = sql.connect(DB_PATH)
+    con.row_factory = sql.Row
+    cur = con.cursor()
+
+    try:
+        cur.execute("""
+            SELECT "OrderEvent".desc, "OrderEvent".date
+            FROM "OrderEvent"
+            JOIN "Order" ON "OrderEvent"."order" = "Order".orderID
+            WHERE "Order".orderID = ?
+        """, (order_id,))
+        emails = cur.fetchall()
+
+        return emails
+    except:
+        raise Exception(f"Error occured when trying to retrieve orderEvents for order '{order_id}'.")
+    finally:
+        con.close()
+
+def removeOrderEventsForOrder(order):
+    con = sql.connect(DB_PATH)
+    cur = con.cursor()
+
+    try:
+        cur.execute("""
+            DELETE FROM "OrderEvent"
+            WHERE "OrderEvent"."order" = ?
+        """, 
+            (order,)
+        )
+        con.commit()
+    except Exception as e:
+        raise e
+    finally:
+        con.close()
+        return True

@@ -1,1 +1,13 @@
-<p>email-hub works!</p>
+<div class="grid">
+    <div class="col-4" *ngFor="let email of allEmails">
+        <p-card header="Package #{{ email.order}}" subheader="Received: {{ email.dateReceived }}" class="card">
+            <!--<ng-template pTemplate="header">
+                <img alt="Card" src="https://primefaces.org/cdn/primeng/images/usercard.png" />
+            </ng-template>-->
+            <p [innerHTML]="email.content"></p>
+            <ng-template pTemplate="footer">
+                <p-button label="Go to order" icon="pi pi-arrow-up-right" (click)="goToOrder(email.order)"></p-button>
+            </ng-template>
+        </p-card>
+    </div>
+</div>

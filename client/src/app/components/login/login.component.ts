@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import axios from 'axios';
 import { Router } from '@angular/router';
+import { storeData } from '../../storage/util';
 
 @Component({
   selector: 'app-login',
@@ -13,25 +14,25 @@ export class LoginComponent {
 
   constructor(private router: Router) {}
 
-  login() {
+  async login() {
     const data = {
       email: this.email,
       password: this.password
     };
   
-    axios.post('http://localhost:5001/auth/login', data)
-      .then(res => {
-        if (res.status === 200) {
-          document.cookie = `userToken=${res.data.userToken}; path=/`;
-          document.cookie = `userId=${res.data.uuid}; path=/`;
-          } else {
-          console.log('Login not successful:', res.status);
-          alert('Login failed with status: ' + res.status);
-        }
-      })
-      .catch(err => {
-        console.error('Error during login:', err);
-        alert('Login failed with error: ' + err.message);
-      });
+    try {
+      const result = await axios.post('http://localhost:5001/auth/login', data);
+
+      if (result.status == 200) {
+        await storeData('userToken', result.data.userToken);
+        await storeData('userID', result.data.uuid);
+
+        this.router.navigate(['/app']);
+      } else {
+        alert('Login failed');
+      }
+    } catch (err) {
+      console.error('Error during login:', err);
+      alert('Login failed');}
   }
 }

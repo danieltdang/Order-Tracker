@@ -22,7 +22,7 @@ python app.py
 - Ensure you have `NPM` installed on your machine.
 - Install the packages used from NPM:
 ```bash
-npm install
+npm ci
 ```
 
 ### Running the Client

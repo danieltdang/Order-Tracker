@@ -1,6 +1,7 @@
 import { Component, HostListener, OnInit, ViewEncapsulation } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { MenuItem } from 'primeng/api';
+import {clearData} from '../../storage/util';
 
 @Component({
   selector: 'app-navbar',
@@ -49,6 +50,11 @@ export class SidebarComponent implements OnInit {
       });
     }
   }
+
+  async signOut() {
+    await clearData();
+    this.router.navigate(['/']);
+  }
   
 
   ngOnInit() {
@@ -58,7 +64,7 @@ export class SidebarComponent implements OnInit {
       {label: 'Packages', icon: 'pi pi-box', routerLink: ['/app/packages']}, //queryParams: {'recent': 'true'}}
       {label: 'Settings', icon: 'pi pi-cog', routerLink: ['/app/settings']},
       {label: 'FAQ', icon: 'pi pi-question-circle', routerLink: ['/app/faq']},
-      {label: 'Sign Out', icon: 'pi pi-sign-out', routerLink: ['/']}
+      {label: 'Sign Out', icon: 'pi pi-sign-out', command: () => this.signOut()}
     ];
 
     this.updateActiveMenu();

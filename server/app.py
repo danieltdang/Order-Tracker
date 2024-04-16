@@ -8,7 +8,18 @@ import auth.auth as auth
 import time
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, supports_credentials=True, expose_headers=["Authorization"])
+
+##########################
+# MISC ENDPOINTS #
+##########################
+
+@app.route('/api/health', methods = ["GET"])
+def health():
+    return jsonify({
+        "message": "OK",
+        "status": 200
+    })
 
 ##########################
 # USER RELATED ENDPOINTS #
@@ -16,6 +27,31 @@ CORS(app)
 
 @app.route('/api/users/<uuid>', methods = ["GET", "DELETE"])
 def user_id(uuid):
+
+    uuid = str(uuid)
+    print(uuid)
+    
+    if not uuid:
+        return jsonify({
+            "message": "User id not provided",
+            "status": 400
+        })
+    
+    authorization = request.headers.get('Authorization')
+
+    if not authorization:
+        return jsonify({
+            "message": "Authorization token not provided",
+            "status": 401
+        })
+    
+
+    if not auth.verifyToken(uuid, authorization):
+        return jsonify({
+            "message": "Invalid authorization token",
+            "status": 401
+        })
+
     # Get information of specific user
     if request.method == "GET":
         user = util.getUserInfo(uuid)
@@ -34,6 +70,7 @@ def user_id(uuid):
                 "status": 200
             })
         else:
+            print(f"User {uuid} not found")
             return jsonify({
                 "message": "User not found",
                 "status": 404
@@ -75,18 +112,18 @@ def user():
 # ORDER RELATED ENDPOINTS #
 ###########################
 
-@app.route('/api/users/<uuid>/orders', methods = ["GET", "POST"])
-def user_all_orders(uuid):
+@app.route('/api/users/<user>/orders', methods = ["GET", "POST"])
+def user_all_orders(user):
     if request.method == "GET":
-        orders = [dict(order) for order in util.getOrdersForUser(uuid)]
+        orders = [dict(order) for order in util.getOrdersForUser(user)]
 
         return jsonify({
             "data": orders,
             "status": 200
         })
     elif request.method == "POST":
-        uuid = request.form['uuid']
-        orderID = request.form['orderID']
+        senderLocation = request.form['senderLocation']
+        receiverLocation = request.form['receiverLocation']
         prodName = request.form['prodName']
         status = request.form['status']
         trackCode = request.form['trackCode']
@@ -97,29 +134,30 @@ def user_all_orders(uuid):
 
         try:
             util.addOrder(
-                uuid,
-                orderID,
+                user,
                 prodName,
                 status,
                 trackCode,
                 estDelivery,
                 carrier,
                 source,
-                dateAdded
+                dateAdded,
+                senderLocation,
+                receiverLocation,
             )
-        except sqlite3.IntegrityError:
+        except sqlite3.Error:
             return jsonify({
-                "message": f"Order with id {orderID} already exists",
+                "message": "Error occured when adding order.",
                 "status": 400
             })
 
         return jsonify({
-            "message": f"Successfully created order {orderID}",
+            "message": f"Successfully added order for user {user}",
             "status": 201
         })
 
 
-@app.route('/api/users/<uuid>/orders/<order_id>', methods = ["GET"])
+@app.route('/api/users/<uuid>/orders/<order_id>', methods = ["GET", "DELETE", "PUT"])
 def user_order(uuid, order_id):
     if request.method == "GET":
         order = util.getOrderInfo(uuid, order_id)
@@ -129,6 +167,52 @@ def user_order(uuid, order_id):
                 "status": 404
             })
         return jsonify(dict(order))
+    elif request.method == "DELETE":
+        if util.removeOrder(order):
+            return jsonify({
+                "message": f"Order #{order} successfully removed",
+                "status": 200
+            })
+        else:
+            return jsonify({
+                "message": "Order not found",
+                "status": 404
+            })
+    elif request.method == "PUT":
+        senderLocation = request.form['senderLocation']
+        receiverLocation = request.form['receiverLocation']
+        prodName = request.form['prodName']
+        status = request.form['status']
+        trackCode = request.form['trackCode']
+        estDelivery = request.form['estDelivery']
+        carrier = request.form['carrier']
+        source = request.form['source']
+        dateAdded = request.form['dateAdded']
+
+        try:
+            util.updateOrder(
+                order_id,
+                prodName,
+                status,
+                trackCode,
+                estDelivery,
+                carrier,
+                source,
+                dateAdded,
+                senderLocation,
+                receiverLocation
+            )
+        except sqlite3.Error:
+            return jsonify({
+                "message": "Error occured when updating order.",
+                "status": 400
+            })
+
+        return jsonify({
+            "message": f"Successfully updated order {order_id}",
+            "status": 201
+        })
+
 
 
 ###########################
@@ -145,7 +229,7 @@ def user_emails(uuid):
             "status": 200
         })
 
-@app.route('/api/orders/<order_id>/emails', methods = ["GET", "POST"])
+@app.route('/api/orders/<order_id>/emails', methods = ["GET", "POST", "DELETE"])
 def order_emails(order_id):
     if request.method == "GET":
         emails = [dict(email) for email in util.getEmailsForOrder(order_id)]
@@ -174,6 +258,33 @@ def order_emails(order_id):
                 "message": f"Error occured in email post endpoint: {e}",
                 "status": 400
             })
+    elif request.method == "DELETE":
+        if util.removeEmailsForOrder(order_id):
+            return jsonify({
+                "message": f"Emails for #{order_id} successfully removed",
+                "status": 200
+            })
+        else:
+            return jsonify({
+                "message": "Order not found (cannot delete emails)",
+                "status": 404
+            })
+
+
+@app.route('/api/orders/<order_id>/emails/<email_id>', methods = ["DELETE"])
+def user_email_by_ID(order_id, email_id):
+    if request.method == "DELETE":
+        if util.removeEmailByID(email_id):
+            return jsonify({
+                "message": f"Email #{email_id} successfully removed",
+                "status": 200
+            })
+        else:
+            return jsonify({
+                "message": "Email not found",
+                "status": 404
+            })
+
 
 ###########################
 # AUTHENTICATION ENDPOINTS #
@@ -227,8 +338,86 @@ def login_user():
         "message": "Invalid credentials",
         "status": 401
     })
- 
 
+@app.route('/auth/change-password', methods = ["POST"])
+def change_password():
+    request.body = request.get_json()
+
+    uuid = request.body.get('uuid')
+    old_password = request.body.get('oldPassword')
+    new_password = request.body.get('newPassword')
+
+    print(uuid, old_password, new_password)
+
+    if (uuid == None or old_password == None or new_password == None):
+        return jsonify({
+            "message": "UUID, old password, or new password not provided",
+            "status": 400
+        }), 400
+    
+    userToken = request.headers.get('Authorization')
+    print("Received token:", userToken)
+
+    if (not auth.verifyToken(uuid, request.headers.get('Authorization'))):
+        return jsonify({
+            "message": "Invalid authorization token",
+            "status": 401
+        }), 401
+    
+    if (auth.change_password(uuid, old_password, new_password)):
+        return jsonify({
+            "message": "Password successfully changed",
+            "status": 200
+        }), 200
+    
+    return jsonify({
+        "message": "Invalid credentials",
+        "status": 401
+    }), 401
+################################
+# ORDEREVENT RELATED ENDPOINTS #
+################################
+
+@app.route('/api/orders/<order_id>/events', methods = ["GET", "POST", "DELETE"])
+def order_events(order_id):
+    if request.method == "GET":
+        orderEvents = [dict(orderEvent) for orderEvent in util.getOrderEventsForOrder(order_id)]
+
+        return jsonify({
+            "data": orderEvents,
+            "status": 200
+        })
+    elif request.method == "POST":
+        desc = request.form['description']
+        date = request.form['date']
+
+        try:
+            util.addOrderEvent(
+                order_id,
+                desc,
+                date
+            )
+
+            return jsonify({
+                "message": f"Successfully created order event.",
+                "status": 201
+            })
+        except Exception as e:
+            return jsonify({
+                "message": f"Error occured in orderEvent post endpoint: {e}",
+                "status": 400
+            })
+    elif request.method == "DELETE":
+        if util.removeOrderEventsForOrder(order_id):
+            return jsonify({
+                "message": f"Order events for #{order_id} successfully removed",
+                "status": 200
+            })
+        else:
+            return jsonify({
+                "message": "Order not found (cannot delete events)",
+                "status": 404
+            })
 
 if __name__ == '__main__':
     app.run(debug=True, port=5001)

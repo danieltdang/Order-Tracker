@@ -22,7 +22,9 @@ CREATE TABLE IF NOT EXISTS "User"(
 con.execute("""
 CREATE TABLE IF NOT EXISTS "Order"(
     user TEXT,
-    orderID TEXT PRIMARY KEY,
+    orderID INTEGER PRIMARY KEY,
+    senderLocation TEXT,
+    receiverLocation TEXT,
     productName TEXT,
     status INTEGER,
     trackingCode TEXT,
@@ -40,9 +42,22 @@ CREATE TABLE IF NOT EXISTS "Order"(
 
 con.execute("""
 CREATE TABLE IF NOT EXISTS "Email"(
-    "order" TEXT,
+    "order" INTEGER,
+    "emailID" INTEGER PRIMARY KEY,
     content TEXT,
     dateReceived TEXT,
+    FOREIGN KEY ("order") REFERENCES "Order"(orderID)
+)
+""")
+
+# An order can also have many order events
+
+con.execute("""
+CREATE TABLE IF NOT EXISTS "OrderEvent"(
+    "order" INTEGER,
+    "orderEventID" INTEGER PRIMARY KEY,
+    desc TEXT,
+    date TEXT,
     FOREIGN KEY ("order") REFERENCES "Order"(orderID)
 )
 """)

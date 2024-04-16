@@ -79,7 +79,7 @@
               <p-password id="password3" styleClass="mt-2" placeholder="Retype New Password" [(ngModel)]="confirmPass2" [toggleMask]="true"></p-password>
             </div>
     
-            <p-button size="small" icon="pi pi-check" label="Save Changes"></p-button>
+            <p-button (click)="passwordConfirm($event)" size="small" icon="pi pi-check" label="Save Changes"></p-button>
           </div>
         </div>
       </div>
@@ -108,7 +108,7 @@
         <div class="flex mt-3">
           <p-toast></p-toast>
           <p-confirmDialog></p-confirmDialog>
-          <p-button (click)="confirm($event)" icon="pi pi-times" size="small" label="Delete Account" severity="danger"></p-button>
+          <p-button (click)="deleteConfirm($event)" icon="pi pi-times" size="small" label="Delete Account" severity="danger"></p-button>
         </div>
       </div>
     </div>
