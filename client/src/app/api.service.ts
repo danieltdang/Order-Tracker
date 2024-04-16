@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
+import { Order } from './interfaces/order';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -8,7 +10,8 @@ export class ApiService {
   constructor(private http: HttpClient) { }
 
   private ip = 'http://127.0.0.1:5001';
-  private uuid = '12345'
+  private uuid = localStorage?.getItem("userID") || '12345';
+
 
   public getData() {
     return this.http.get(this.ip + '/api/data');
@@ -47,17 +50,17 @@ export class ApiService {
     return this.http.get(`${this.ip}/api/users/${this.uuid}/orders`);
   }
 
-  public createUserOrder(uuid: string, orderID: string, prodName: string, status: string, trackCode: string, estDelivery: string, carrier: string, source: string, dateAdded: string) {
+  public createUserOrder(order: Order) {
     const formData: FormData = new FormData();
     formData.append('uuid', this.uuid);
-    formData.append('orderID', orderID);
-    formData.append('prodName', prodName);
-    formData.append('status', status);
-    formData.append('trackCode', trackCode);
-    formData.append('estDelivery', estDelivery);
-    formData.append('carrier', carrier);
-    formData.append('source', source);
-    formData.append('dateAdded', dateAdded);
+    formData.append('orderID', order.orderID);
+    formData.append('prodName', order.productName);
+    formData.append('status', order.status);
+    formData.append('trackCode', order.trackingCode);
+    formData.append('estDelivery', order.estimatedDelivery);
+    formData.append('carrier', order.carrier);
+    formData.append('source', order.source);
+    formData.append('dateAdded', order.dateAdded);
 
     return this.http.post(`${this.ip}/api/users/${this.uuid}/orders`, formData, {
       headers: {
