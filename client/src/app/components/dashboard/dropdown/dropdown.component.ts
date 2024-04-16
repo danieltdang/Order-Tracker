@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
-import { Filter } from '../filter';
+import { Filter } from '../../../interfaces/filter';
 
 @Component({
   selector: 'app-dropdown',

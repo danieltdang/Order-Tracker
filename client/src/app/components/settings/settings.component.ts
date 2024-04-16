@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Theme } from "./theme";
+import { Theme } from "../../interfaces/theme";
 import { ThemeService } from '../../theme-service';
 import axios from 'axios';
 import { getData, clearData } from '../../storage/util';
