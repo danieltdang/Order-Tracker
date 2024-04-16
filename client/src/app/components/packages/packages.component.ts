@@ -17,6 +17,7 @@ export class PackagesComponent {
   order!: Order;
   orders!: Order[];
   selectedOrders!: Order[] | null;
+  statuses!: any[];
   submitted: boolean = false;
   orderDialog: boolean = false;
   constructor(private apiService: ApiService, private router: Router, private statusService: PackageStatusService,
@@ -56,7 +57,7 @@ export class PackagesComponent {
               productName: '',
               status: '',
               trackingCode: '',
-              estDelivery: '',
+              estimatedDelivery: '',
               carrier: '',
               source: '',
               dateAdded: ''
@@ -92,7 +93,7 @@ export class PackagesComponent {
         productName: '',
         status: '',
         trackingCode: '',
-        estDelivery: '',
+        estimatedDelivery: '',
         carrier: '',
         source: '',
         dateAdded: ''
@@ -107,19 +108,13 @@ export class PackagesComponent {
       productName: '',
       status: '',
       trackingCode: '',
-      estDelivery: '',
+      estimatedDelivery: '',
       carrier: '',
       source: '',
       dateAdded: ''
     };
     this.submitted = false;
     this.orderDialog = true;
-  }
-
-  ngOnInit(): void {
-    this.apiService.getAllUserOrders().subscribe((fetchedData: any) => {
-      this.orders = fetchedData.data;
-    });
   }
 
   clear(table: Table) {
@@ -139,4 +134,16 @@ export class PackagesComponent {
     return this.statusService.formatDate(date);
   }
   
+  ngOnInit(): void {
+    this.apiService.getAllUserOrders().subscribe((fetchedData: any) => {
+      this.orders = fetchedData.data;
+    });
+
+    this.statuses = [
+      { label: 'Pre Transit', value: 0 },
+      { label: 'In Transit', value: 1 },
+      { label: 'Delivered', value: 2 },
+      { label: 'Returned', value: 3 }
+    ]
+  }
 }

@@ -24,7 +24,6 @@ import { PasswordModule } from 'primeng/password';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ToastModule } from 'primeng/toast';
 import { TableModule } from 'primeng/table';
-import { BreadcrumbModule } from 'primeng/breadcrumb';
 import { ToolbarModule } from 'primeng/toolbar';
 import { DialogModule } from 'primeng/dialog';
 
@@ -94,7 +93,6 @@ import { PackageDetailComponent } from './components/packages/package-detail/pac
     ConfirmDialogModule,
     ToastModule,
     TableModule,
-    BreadcrumbModule,
     GoogleMapsModule,
     ToolbarModule,
     DialogModule,

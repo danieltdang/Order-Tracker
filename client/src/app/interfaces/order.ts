@@ -4,7 +4,7 @@ export interface Order {
     productName: string,
     status: string,
     trackingCode: string,
-    estDelivery: string,
+    estimatedDelivery: string,
     carrier: string,
     source: string,
     dateAdded: string
