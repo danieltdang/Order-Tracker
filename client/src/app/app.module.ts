@@ -27,6 +27,7 @@ import { TableModule } from 'primeng/table';
 import { ToolbarModule } from 'primeng/toolbar';
 import { DialogModule } from 'primeng/dialog';
 import { AccordionModule } from 'primeng/accordion';
+import { SkeletonModule } from 'primeng/skeleton';
 
 import { GoogleMapsModule } from '@angular/google-maps';
 
@@ -100,6 +101,7 @@ import { NotFoundComponent } from './layout/not-found/not-found.component';
     ToolbarModule,
     DialogModule,
     AccordionModule,
+    SkeletonModule,
   ],
   providers: [
     provideClientHydration(),

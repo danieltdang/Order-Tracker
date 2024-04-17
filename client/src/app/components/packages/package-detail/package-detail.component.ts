@@ -12,6 +12,8 @@ import { Router } from '@angular/router';
 export class PackageDetailComponent implements OnInit {
   packageID: string | undefined;
   order : any;
+  details!: any[];
+  isLoading = true;
 
   constructor(private route: ActivatedRoute, private apiService: ApiService, private statusService: PackageStatusService,
               private router: Router) { }
@@ -30,11 +32,24 @@ export class PackageDetailComponent implements OnInit {
       this.apiService.getOrderByID(params['id']).subscribe({
         next: (fetchedData: any) => {
           this.order = fetchedData;
+          this.isLoading = false;
         },
         error: (error) => {
-          this.router.navigate(['/app/packages']);
+          // indicates that the package does not exist or the user is not authorized to view it
+          this.order.orderID = this.packageID;
         }
       });
     });
+
+    this.details = [
+      { label: 'Status', value: this.getStatus(this.order?.status) },
+      { label: 'Tracking Code', value: this.order?.trackingCode },
+      { label: 'Carrier', value: this.order?.carrier },
+      { label: 'Source', value: this.order?.source },
+      { label: 'Sender Location', value: this.order?.senderLocation },
+      { label: 'Receiver Location', value: this.order?.receiverLocation },
+      { label: 'Date Added', value: this.order?.dateAdded },
+      { label: 'Estimated Delivery', value: this.order?.estimatedDelivery },
+    ]
   }  
 }
