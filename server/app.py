@@ -351,7 +351,7 @@ def change_password():
 # ORDEREVENT RELATED ENDPOINTS #
 ################################
 
-@app.route('/api/users/<uuid/orders/<order_id>/events', methods = ["GET", "POST", "DELETE"])
+@app.route('/api/users/<uuid>/orders/<order_id>/events', methods = ["GET", "POST", "DELETE"])
 def order_events(uuid, order_id):
     if request.method == "GET":
         orderEvents = [dict(orderEvent) for orderEvent in util.getOrderEventsForOrder(order_id)]
