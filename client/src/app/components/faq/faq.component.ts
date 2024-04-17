@@ -18,14 +18,4 @@ export class FaqComponent {
     { question: 'Can I track orders internationally with this app?', answer: 'Yes, you can track international orders...' },
     { question: 'What happens if there\'s an issue with an order? Does the app provide any support or assistance?', answer: 'If there\'s an issue with an order, you can...' },
   ];
-
-  activeQuestionIndex: number | null = null;
-
-  toggleQuestion(index: number): void {
-    if (this.activeQuestionIndex === index) {
-      this.activeQuestionIndex = null;
-    } else {
-      this.activeQuestionIndex = index;
-    }
-  }  
 }

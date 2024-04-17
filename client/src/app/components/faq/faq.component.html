@@ -1,18 +1,12 @@
-<div class="faq-header">
-    <h1 class="faq-heading">FAQ</h1>
-    <p class="faq-subtitle">Frequently Asked Questions from our Users!</p>
-  </div>
-  
-  <div class="faq">
-    <div class="faq-item" *ngFor="let faq of faqList; let i = index">
-      <div class="faq-question" (click)="toggleQuestion(i)">
-        <span>{{ faq.question }}</span>
-        <i class="fa fa-angle-down" *ngIf="activeQuestionIndex !== i"></i>
-        <i class="fa fa-angle-up" *ngIf="activeQuestionIndex === i"></i>
-      </div>
-      <div class="faq-answer" *ngIf="activeQuestionIndex === i">
+<div class="mb-3">
+  <h1 class="block text-900 m-0 font-semibold mb-2">FAQ</h1>
+  <p class="">Frequently Asked Questions from our Users!</p>
+</div>
+
+<p-accordion>
+  <p-accordionTab *ngFor="let faq of faqList; let i = index" [header]="faq.question">
+      <p>
         {{ faq.answer }}
-      </div>
-    </div>
-  </div>
-  
+      </p>
+  </p-accordionTab>
+</p-accordion>
