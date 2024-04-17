@@ -9,12 +9,12 @@
 
 <h1 *ngIf="!isLoading" class="my-3">
   <span *ngIf="!isLoading">{{ order?.productName }}</span>
-  <span class="text-color-secondary font-normal">(Package #{{ order?.orderID }})</span>
+  <span class="text-color-secondary font-normal"> (Package #{{ order?.orderID }})</span>
 </h1>
 
 <div *ngIf="isLoading" class="flex flex-row my-3">
   <p-skeleton width="12rem" height="2.5rem" ></p-skeleton>
-  <h1 class="m-0 ml-1 text-color-secondary font-normal">(Package #{{ packageID }})</h1>
+  <h1 class="m-0 ml-1 text-color-secondary font-normal"> (Package #{{ packageID }})</h1>
 </div>
 <div class="grid">
   <div class="col-8">
