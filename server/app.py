@@ -64,6 +64,9 @@ def user_id(uuid):
 
     # Delete a specific user
     elif request.method == "DELETE":
+
+        print(f"Removing user {uuid}")
+
         if util.removeUser(uuid):
             return jsonify({
                 "message": f"User {uuid} successfully removed",

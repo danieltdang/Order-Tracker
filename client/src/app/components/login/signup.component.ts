@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import axios from 'axios';
-import { storeData } from '../../storage/util';
 import { Router } from '@angular/router';
+import { ApiService } from '../../services/api.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-signup',
@@ -15,31 +15,20 @@ export class SignupComponent {
   pass1: string | undefined;
   pass2: string | undefined;
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private apiService: ApiService, private authService: AuthService) {}
 
 
   async signup() {
-    const data = {
-      firstName: this.firstName,
-      lastName: this.lastName,
-      email: this.email,
-      password: this.pass1
-    };
 
-    if (this.pass1 !== this.pass2) {
-      alert('Passwords do not match');
-    } else {
-
+    if (this.firstName && this.lastName && this.email && this.pass1 && this.pass2 && this.pass1 === this.pass2) {
       try {
-        const result = await axios.post('http://localhost:5001/auth/register', data);
+        const result = await this.apiService.registerUser(this.firstName, this.lastName, this.email, this.pass1)
 
         if (result.status == 200) {
 
-          console.log(result.data);
-
-          await storeData('userToken', result.data.userToken);
-          await storeData('userID', result.data.uuid);
-
+          this.authService.setToken(result.data.userToken);
+          this.authService.setUUID(result.data.uuid);
+          
           this.router.navigate(['/app']);
         } else {
           alert('Signup failed');

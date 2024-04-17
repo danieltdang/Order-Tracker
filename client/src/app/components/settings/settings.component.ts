@@ -2,12 +2,11 @@ import { Component } from '@angular/core';
 import { Theme } from "../../interfaces/theme";
 import { ThemeService } from '../../theme-service';
 import axios from 'axios';
-import { getData, clearData } from '../../storage/util';
 import { Router } from '@angular/router';
-
+import { AuthService } from '../../services/auth.service'
+import { ApiService } from '../../services/api.service';
 
 import { ConfirmationService, MessageService, ConfirmEventType } from 'primeng/api';
-import { get } from 'http';
 
 @Component({
   selector: 'app-settings',
@@ -23,7 +22,7 @@ export class SettingsComponent {
   confirmPass1: string | undefined;
   confirmPass2: string | undefined;
 
-  constructor(private themeService: ThemeService, private confirmationService: ConfirmationService, private messageService: MessageService, private router: Router) { }
+  constructor(private themeService: ThemeService, private confirmationService: ConfirmationService, private messageService: MessageService, private router: Router, private authService: AuthService, private apiService: ApiService) { }
 
   changeTheme() {
     if (this.selectedTheme) {
@@ -43,32 +42,17 @@ export class SettingsComponent {
       rejectIcon:"none",
 
       accept: async () => {
-        const userToken = await getData('userToken');
-        const userID = await getData('userID');
-
-        let headers = {
-          'Authorization': userToken
-        }
-
-        let payload = {
-          "uuid": userID,
-          "oldPassword": this.currPass,
-          "newPassword": this.confirmPass1
-        }
-
-        if (this.confirmPass1 !== this.confirmPass2) {
-          alert('Passwords do not match');
-        } else {
+  
+        if (this.currPass && this.confirmPass1 && this.confirmPass2 && this.confirmPass1 === this.confirmPass2) {
           try {
-            const result = await axios.post("http://localhost:5001/auth/change-password", payload, { headers: headers });
+            const result = await this.apiService.changePassword(this.currPass, this.confirmPass1);
 
             if (result.status == 200) {
               this.messageService.add({ severity: 'info', summary: 'Confirmed', detail: 'Password changed' });
             } else {
               alert('Password change failed');
             }
-          }
-          catch (err) {
+          } catch (err) {
             console.error('Error during password change:', err);
             alert('Password change failed');
           }
@@ -89,18 +73,12 @@ export class SettingsComponent {
         rejectIcon:"none",
 
         accept: async () => {
-          const userToken = await getData('userToken');
-          const userID = await getData('userID');
-
-          let headers = {
-            'Authorization': userToken
-          }
-
+       
         try {
-          const result = await axios.delete('http://localhost:5001/api/users/' + userID, { headers: headers });
+          const result = await this.apiService.deleteUser();
 
           if (result.status == 200) {
-            await clearData();
+            this.authService.logout();
             this.router.navigate(['/']);
             this.messageService.add({ severity: 'info', summary: 'Confirmed', detail: 'Account deleted' });
           } else {

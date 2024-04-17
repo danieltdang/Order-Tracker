@@ -1,20 +1,18 @@
 import { Injectable } from '@angular/core';
+import axios from 'axios';
+import { AuthService } from './auth.service';
 import { HttpClient } from '@angular/common/http';
-
-import { Order } from '../interfaces/order';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ApiService {
-  constructor(private http: HttpClient) { }
-
   private ip = 'http://127.0.0.1:5001';
-  private uuid = localStorage?.getItem("userID") || '12345';
 
+  constructor(private AuthService: AuthService, private https: HttpClient) {}
 
   public getData() {
-    return this.http.get(this.ip + '/api/data');
+    return axios.get(this.ip + '/api/data');
   }
 
   /*
@@ -23,22 +21,18 @@ export class ApiService {
   ##########################
   */
 
-  public getAllUsers() {
-    return this.http.get(`${this.ip}/api/users`);
+  public async getAllUsers() {
+    return await axios.get(`${this.ip}/api/users`);
   }
 
-  public createUser(firstName: string, lastName: string, uuid: string) {
-    const formData: FormData = new FormData();
-    formData.append('firstName', firstName);
-    formData.append('lastName', lastName);
-    formData.append('uuid', uuid);
+  public async createUser(firstName: string, lastName: string, uuid: string) {
+    const payload = {
+      firstName: firstName,
+      lastName: lastName,
+      uuid: uuid
+    }
 
-    return this.http.post(`${this.ip}/api/users`, formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data'
-      },
-      observe: 'response'
-    });
+    return await axios.post(`${this.ip}/api/users`, payload);
   }
 
   /*
@@ -47,31 +41,27 @@ export class ApiService {
   ###########################
   */
   public getAllUserOrders() {
-    return this.http.get(`${this.ip}/api/users/${this.uuid}/orders`);
+    return this.https.get(`${this.ip}/api/users/${this.AuthService.getUUID()}/orders`);
   }
 
-  public createUserOrder(order: Order) {
-    const formData: FormData = new FormData();
-    formData.append('uuid', this.uuid);
-    formData.append('orderID', order.orderID);
-    formData.append('prodName', order.productName);
-    formData.append('status', order.status);
-    formData.append('trackCode', order.trackingCode);
-    formData.append('estDelivery', order.estimatedDelivery);
-    formData.append('carrier', order.carrier);
-    formData.append('source', order.source);
-    formData.append('dateAdded', order.dateAdded);
+  public createUserOrder(uuid: string, orderID: string, prodName: string, status: string, trackCode: string, estDelivery: string, carrier: string, source: string, dateAdded: string) {
+    const payload = {
+      uuid: uuid,
+      orderID: orderID,
+      prodName: prodName,
+      status: status,
+      trackCode: trackCode,
+      estDelivery: estDelivery,
+      carrier: carrier,
+      source: source,
+      dateAdded: dateAdded
+    }
 
-    return this.http.post(`${this.ip}/api/users/${this.uuid}/orders`, formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data'
-      },
-      observe: 'response'
-    });
+    return axios.post(`${this.ip}/api/users/${this.AuthService.getUUID()}/orders`, payload);
   }
 
   public getOrderByID(order_id: string) {
-    return this.http.get(`${this.ip}/api/users/${this.uuid}/orders/${order_id}`);
+    return this.https.get(`${this.ip}/api/users/${this.AuthService.getUUID()}/orders/${order_id}`);
   }
 
   /*
@@ -81,24 +71,20 @@ export class ApiService {
   */
 
   public getUserEmails() {
-    return this.http.get(`${this.ip}/api/users/${this.uuid}/emails`);
+    return this.https.get(`${this.ip}/api/users/${this.AuthService.getUUID()}/emails`);
   }
 
   public getOrderEmails(order_id: string) {
-    return this.http.get(`${this.ip}/api/users/${this.uuid}/orders/${order_id}/emails`);
+    return axios.get(`${this.ip}/api/users/${this.AuthService.getUUID()}/orders/${order_id}/emails`);
   }
 
   public createOrderEmail(order_id: string, content: string, dateReceived: string) {
-    const formData: FormData = new FormData();
-    formData.append('content', content);
-    formData.append('dateReceived', dateReceived);
+    const payload = {
+      content: content,
+      dateReceived: dateReceived
+    }
 
-    return this.http.post(`${this.ip}/api/orders/${order_id}/emails`, formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data'
-      },
-      observe: 'response'
-    });
+    return axios.post(`${this.ip}/api/orders/${order_id}/emails`, payload);
   }
 
   /*
@@ -107,31 +93,46 @@ export class ApiService {
   ############################
   */
 
-  public registerUser(firstName: string, lastName: string, email: string, password: string) {
-    const formData: FormData = new FormData();
-    formData.append('firstName', firstName);
-    formData.append('lastName', lastName);
-    formData.append('email', email);
-    formData.append('password', password);
+  public async registerUser(firstName: string, lastName: string, email: string, password: string) {
+   
+    const Payload = {
+      firstName: firstName,
+      lastName: lastName,
+      email: email,
+      password: password
+    }
 
-    return this.http.post(`${this.ip}/auth/register`, formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data'
-      },
-      observe: 'response'
-    });
+    return await axios.post(`${this.ip}/auth/register`, Payload);
   }
 
-  public loginUser(email: string, password: string) {
-    const formData: FormData = new FormData();
-    formData.append('email', email);
-    formData.append('password', password);
+  public async loginUser(email: string, password: string) {
+    const payload = {
+      email: email,
+      password: password
+    }
 
-    return this.http.post(`${this.ip}/auth/login`, formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data'
-      },
-      observe: 'response'
-    });
+    return await axios.post(`${this.ip}/auth/login`, payload);
+  }
+
+  public async changePassword(oldPassword: string, newPassword: string) {
+    const payload = {
+      uuid: this.AuthService.getUUID(),
+      oldPassword: oldPassword,
+      newPassword: newPassword
+    }
+
+    const headers = {
+      "Authorization": this.AuthService.getToken()
+    }
+
+    return await axios.post(`${this.ip}/auth/change-password`, payload, { headers: headers });
+  }
+
+  public async deleteUser() {
+    const headers = {
+      "Authorization": this.AuthService.getToken()
+    }
+
+    return await axios.delete(`${this.ip}/api/users/${this.AuthService.getUUID()}`, { headers: headers });
   }
 }

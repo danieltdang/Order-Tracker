@@ -1,7 +1,7 @@
 import { Component, HostListener, OnInit, ViewEncapsulation } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { MenuItem } from 'primeng/api';
-import {clearData} from '../../storage/util';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-navbar',
@@ -14,7 +14,7 @@ export class SidebarComponent implements OnInit {
   mobileMenuActive: boolean = false;
 
   // Subscribe to router events to detect navigation changes
-  constructor(private router: Router) {
+  constructor(private router: Router, private authService: AuthService) {
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
         this.updateActiveMenu();
@@ -54,11 +54,10 @@ export class SidebarComponent implements OnInit {
     }
   }
 
-  async signOut() {
-    await clearData();
+  signOut() {
     this.router.navigate(['/']);
+    this.authService.logout();
   }
-  
 
   ngOnInit() {
     this.items = [

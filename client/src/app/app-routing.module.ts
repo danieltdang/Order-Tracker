@@ -15,25 +15,27 @@ import { PackageDetailComponent } from './components/packages/package-detail/pac
 import { SettingsComponent } from './components/settings/settings.component';
 import { FaqComponent } from './components/faq/faq.component';
 
+import { AuthGuard } from './auth.guard';
+
 const routes: Routes = [
   { path: '',
     component: LoginLayoutComponent,
     children: [
       { path: '', component: LoginComponent },
-      { path: 'signup', component: SignupComponent },
-      { path: 'forgot', component: ForgotComponent },
+      { path: 'signup', component: SignupComponent},
+      { path: 'forgot', component: ForgotComponent},
     ]
   },
   {
     path: 'app',
     component: MainLayoutComponent,
     children: [
-      { path: 'dashboard', component: DashboardComponent },
-      { path: 'email-hub', component: EmailHubComponent },
-      { path: 'packages', component: PackagesComponent },
-      { path: 'packages/:id', component: PackageDetailComponent },
-      { path: 'settings', component: SettingsComponent },
-      { path: 'faq', component: FaqComponent },
+      { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard]},
+      { path: 'email-hub', component: EmailHubComponent, canActivate: [AuthGuard]},
+      { path: 'packages', component: PackagesComponent, canActivate: [AuthGuard]},
+      { path: 'packages/:id', component: PackageDetailComponent, canActivate: [AuthGuard]},
+      { path: 'settings', component: SettingsComponent, canActivate: [AuthGuard]},
+      { path: 'faq', component: FaqComponent, canActivate: [AuthGuard]},
       // Redirect / to dashboard as fallback within the MainLayout
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
     ],
