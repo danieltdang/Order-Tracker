@@ -90,6 +90,14 @@ export class ApiService {
     return this.https.get(`${this.ip}/api/users/${this.AuthService.getUUID()}/orders/${order_id}`);
   }
 
+  public deleteUserOrder(order_id: string) {
+    const headers = {
+      "Authorization": this.AuthService.getToken()
+    }
+
+    return axios.delete(`${this.ip}/api/users/${this.AuthService.getUUID()}/orders/${order_id}`, { headers: headers });
+  }
+
   /*
   ###########################
   # EMAIL RELATED ENDPOINTS #

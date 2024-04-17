@@ -49,23 +49,27 @@ export class PackagesComponent {
     this.orderDialog = true;
   }
 
-  deleteOrder(order: Order) {
+  async deleteOrder(order: Order) {
     this.confirmationService.confirm({
         message: 'Are you sure you want to delete ' + order.productName + '?',
         header: 'Confirm',
         icon: 'pi pi-exclamation-triangle',
-        accept: () => {
-            this.orders = this.orders.filter((val: any) => val.id !== order.orderID);
-            this.order = {
-              orderID: '',
-              productName: '',
-              status: '',
-              trackingCode: '',
-              estimatedDelivery: '',
-              carrier: '',
-              source: '',
-              dateAdded: ''
-            };
+        accept: async () => {
+            const result = await this.apiService.deleteUserOrder(order.orderID);
+
+            if (result.status === 200) {
+              this.orders = this.orders.filter((val: any) => val.id !== order.orderID);
+              this.order = {
+                orderID: '',
+                productName: '',
+                status: '',
+                trackingCode: '',
+                estimatedDelivery: '',
+                carrier: '',
+                source: '',
+                dateAdded: ''
+              };
+            }
             this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Order Deleted', life: 3000 });
         }
     });
@@ -97,7 +101,7 @@ export class PackagesComponent {
         if (result.status === 201) {
           this.orders[this.findIndexById(this.order.orderID)] = this.order;
           this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Order Updated', life: 3000 });
-        } {
+        } else if (result.status === 400) {
           this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Order Not Updated', life: 3000 });
         }
       } else {
@@ -107,7 +111,7 @@ export class PackagesComponent {
         if (result.status === 201) {
           this.orders.push(this.order);
           this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Order Created', life: 3000 });
-        } else {
+        } else if (result.status === 400) {
           this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Order Not Created', life: 3000 });
         }
       }

@@ -164,9 +164,9 @@ def user_order(uuid, order_id):
             }), 404
         return jsonify(dict(order))
     elif request.method == "DELETE":
-        if util.removeOrder(order):
+        if util.removeOrder(order_id):
             return jsonify({
-                "message": f"Order #{order} successfully removed",
+                "message": f"Order #{order_id} successfully removed",
                 "status": 200
             }), 200
         else:
