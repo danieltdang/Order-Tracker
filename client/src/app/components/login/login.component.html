@@ -7,12 +7,17 @@
     </div>
 
     <div>
-        <label for="email1" class="block text-900 font-medium mb-2">Email</label>
-        <input [(ngModel)]="email" id="email1" type="text" placeholder="Email address" pInputText class="p-inputtext w-full mb-3">
+        <div class="mb-3">
+            <label for="email1" class="block text-900 font-medium mb-2">Email</label>
+            <input [(ngModel)]="email" id="email1" type="text" placeholder="Email address" pInputText class="p-inputtext w-full ">
+            <small class="p-error" *ngIf="loginFailed">Email or password is invalid.</small>
+        </div>
 
-        <label for="password1" class="block text-900 font-medium mb-2">Password</label>
-        <p-password [(ngModel)]="password" inputStyleClass="w-full" styleClass="w-full mb-3" id="password1" placeholder="Password" [feedback]="false" [toggleMask]="true"></p-password>
-
+        <div class="mb-3">
+            <label for="password1" class="block text-900 font-medium mb-2">Password</label>
+            <p-password [(ngModel)]="password" inputStyleClass="w-full" styleClass="w-full" id="password1" placeholder="Password" [feedback]="false" [toggleMask]="true"></p-password>
+            <small class="p-error" *ngIf="loginFailed">Email or password is invalid.</small>
+        </div>
         <div class="flex align-items-center justify-content-between mb-6">
             <div class="flex align-items-center">
                 <p-checkbox id="rememberme1" [binary]="true" styleClass="mr-2"></p-checkbox>

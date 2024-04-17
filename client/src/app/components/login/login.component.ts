@@ -11,6 +11,7 @@ import { AuthService } from '../../services/auth.service';
 export class LoginComponent {
   email: string | undefined;
   password: string | undefined;
+  loginFailed: boolean = false;
 
   constructor(private router: Router, private apiService: ApiService, private authService: AuthService) {}
 
@@ -25,11 +26,13 @@ export class LoginComponent {
 
           this.router.navigate(['/app']);
         } else {
-          alert('Login failed');
+          this.loginFailed = true;
         }
-      } catch (err) {
-        console.error('Error during login:', err);
-        alert('Login failed');}
+      } 
+      catch (err) {
+        //console.error('Error during login:', err);
+        this.loginFailed = true;
+      }
     }
   }
 }
