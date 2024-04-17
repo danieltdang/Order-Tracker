@@ -67,7 +67,9 @@ export class PackagesComponent {
                 estimatedDelivery: '',
                 carrier: '',
                 source: '',
-                dateAdded: ''
+                dateAdded: '',
+                senderLocation: '',
+                receiverLocation: ''
               };
             }
             this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Order Deleted', life: 3000 });
@@ -126,7 +128,9 @@ export class PackagesComponent {
         estimatedDelivery: '',
         carrier: '',
         source: '',
-        dateAdded: ''
+        dateAdded: '',
+        senderLocation: '',
+        receiverLocation: ''
       };
     }
   }
@@ -140,7 +144,9 @@ export class PackagesComponent {
       estimatedDelivery: '',
       carrier: '',
       source: '',
-      dateAdded: ''
+      dateAdded: '',
+      senderLocation: '',
+      receiverLocation: ''
     };
     this.dateAdded = new Date();
     this.estimatedDelivery = new Date();

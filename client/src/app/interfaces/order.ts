@@ -6,5 +6,7 @@ export interface Order {
     estimatedDelivery: string,
     carrier: string,
     source: string,
-    dateAdded: string
+    dateAdded: string,
+    senderLocation: string,
+    receiverLocation: string,
 }
