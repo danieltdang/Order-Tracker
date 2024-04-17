@@ -217,8 +217,8 @@ def user_emails(uuid):
             "status": 200
         })
 
-@app.route('/api/orders/<order_id>/emails', methods = ["GET", "POST", "DELETE"])
-def order_emails(order_id):
+@app.route('/api/users/<uuid>/orders/<order_id>/emails', methods = ["GET", "POST", "DELETE"])
+def order_emails(uuid, order_id):
     if request.method == "GET":
         emails = [dict(email) for email in util.getEmailsForOrder(order_id)]
 
@@ -259,8 +259,8 @@ def order_emails(order_id):
             })
 
 
-@app.route('/api/orders/<order_id>/emails/<email_id>', methods = ["DELETE"])
-def user_email_by_ID(order_id, email_id):
+@app.route('/api/users/<uuid>/emails/<email_id>', methods = ["DELETE"])
+def user_email_by_ID(uuid, email_id):
     if request.method == "DELETE":
         if util.removeEmailByID(email_id):
             return jsonify({
