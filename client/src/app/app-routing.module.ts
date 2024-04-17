@@ -15,10 +15,13 @@ import { PackageDetailComponent } from './components/packages/package-detail/pac
 import { SettingsComponent } from './components/settings/settings.component';
 import { FaqComponent } from './components/faq/faq.component';
 
+import { NotFoundComponent } from './layout/not-found/not-found.component';
+
 import { AuthGuard } from './auth.guard';
 
 const routes: Routes = [
-  { path: '',
+  { 
+    path: '',
     component: LoginLayoutComponent,
     children: [
       { path: '', component: LoginComponent },
@@ -40,6 +43,8 @@ const routes: Routes = [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
     ],
   },
+  { path: 'not-found' , component: NotFoundComponent },
+  { path: '**', redirectTo: 'not-found'},
 ];
 
 @NgModule({
