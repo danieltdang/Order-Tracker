@@ -115,10 +115,10 @@ def user():
 # ORDER RELATED ENDPOINTS #
 ###########################
 
-@app.route('/api/users/<user>/orders', methods = ["GET", "POST"])
-def user_all_orders(user):
+@app.route('/api/users/<uuid>/orders', methods = ["GET", "POST"])
+def user_all_orders(uuid):
     if request.method == "GET":
-        orders = [dict(order) for order in util.getOrdersForUser(user)]
+        orders = [dict(order) for order in util.getOrdersForUser(uuid)]
 
         return jsonify({
             "data": orders,
@@ -130,7 +130,7 @@ def user_all_orders(user):
 
         try:
             util.addOrder(
-                user,
+                uuid,
                 request.body['prodName'],
                 request.body['status'],
                 request.body['trackCode'],
@@ -148,7 +148,7 @@ def user_all_orders(user):
             }), 400
 
         return jsonify({
-            "message": f"Successfully added order for user {user}",
+            "message": f"Successfully added order for user {uuid}",
             "status": 201
         }), 201
 
