@@ -5,6 +5,7 @@ import uuid
 import sqlite3 as sql
 from datetime import datetime, timedelta
 from dotenv import load_dotenv
+from flask import Request
 
 DB_PATH = 'database.db'
 
@@ -111,3 +112,11 @@ export = {
     "verifyToken": verifyToken,
     "signToken": signToken
 }
+
+def is_req_valid(uuid, req: Request):
+    authorization = req.headers.get('Authorization')
+
+    if not authorization or verifyToken(uuid, authorization):
+        return False
+    else:
+        return True

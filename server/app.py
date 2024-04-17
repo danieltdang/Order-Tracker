@@ -33,20 +33,11 @@ def user_id(uuid):
             "status": 400
         })
     
-    authorization = request.headers.get('Authorization')
-
-    if not authorization:
-        return jsonify({
-            "message": "Authorization token not provided",
-            "status": 401
-        })
-    
-
-    if not auth.verifyToken(uuid, authorization):
+    if auth.is_req_valid(uuid, request):
         return jsonify({
             "message": "Invalid authorization token",
             "status": 401
-        })
+        }), 401
 
     # Get information of specific user
     if request.method == "GET":
