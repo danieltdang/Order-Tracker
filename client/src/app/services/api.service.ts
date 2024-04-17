@@ -66,6 +66,26 @@ export class ApiService {
     return axios.post(`${this.ip}/api/users/${this.AuthService.getUUID()}/orders`, payload, {headers: headers});
   }
 
+  public updateUserOrder(order: Order) {
+    const payload = {
+      senderLocation: "",
+      receiverLocation: "",
+      prodName: order.productName,
+      status: order.status,
+      trackCode: order.trackingCode,
+      estDelivery: order.estimatedDelivery,
+      carrier: order.carrier,
+      source: order.source,
+      dateAdded: order.dateAdded
+    }
+
+    const headers = {
+      "Authorization": this.AuthService.getToken()
+    }
+
+    return axios.put(`${this.ip}/api/users/${this.AuthService.getUUID()}/orders/${order.orderID}`, payload, {headers: headers});
+  }
+
   public getOrderByID(order_id: string) {
     return this.https.get(`${this.ip}/api/users/${this.AuthService.getUUID()}/orders/${order_id}`);
   }

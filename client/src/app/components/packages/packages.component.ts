@@ -91,8 +91,15 @@ export class PackagesComponent {
       this.order.estimatedDelivery = this.formatDateToString(this.estimatedDelivery);
 
       if (this.order.orderID) {
-        this.orders[this.findIndexById(this.order.orderID)] = this.order;
-        this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Order Updated', life: 3000 });
+
+        const result = await this.apiService.updateUserOrder(this.order);
+
+        if (result.status === 201) {
+          this.orders[this.findIndexById(this.order.orderID)] = this.order;
+          this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Order Updated', life: 3000 });
+        } {
+          this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Order Not Updated', life: 3000 });
+        }
       } else {
 
         const result = await this.apiService.createUserOrder(this.order);
@@ -100,6 +107,8 @@ export class PackagesComponent {
         if (result.status === 201) {
           this.orders.push(this.order);
           this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Order Created', life: 3000 });
+        } else {
+          this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Order Not Created', life: 3000 });
         }
       }
 

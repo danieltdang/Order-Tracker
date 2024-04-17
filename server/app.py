@@ -131,8 +131,6 @@ def user_all_orders(user):
         try:
             util.addOrder(
                 user,
-                request.body['senderLocation'],
-                request.body['receiverLocation'],
                 request.body['prodName'],
                 request.body['status'],
                 request.body['trackCode'],
@@ -140,6 +138,8 @@ def user_all_orders(user):
                 request.body['carrier'],
                 request.body['source'],
                 request.body['dateAdded'],
+                request.body['senderLocation'],
+                request.body['receiverLocation'],
             )
         except sqlite3.Error:
             return jsonify({
@@ -161,53 +161,45 @@ def user_order(uuid, order_id):
             return jsonify({
                 "message": "Order not found",
                 "status": 404
-            })
+            }), 404
         return jsonify(dict(order))
     elif request.method == "DELETE":
         if util.removeOrder(order):
             return jsonify({
                 "message": f"Order #{order} successfully removed",
                 "status": 200
-            })
+            }), 200
         else:
             return jsonify({
                 "message": "Order not found",
                 "status": 404
-            })
+            }), 404
     elif request.method == "PUT":
-        senderLocation = request.form['senderLocation']
-        receiverLocation = request.form['receiverLocation']
-        prodName = request.form['prodName']
-        status = request.form['status']
-        trackCode = request.form['trackCode']
-        estDelivery = request.form['estDelivery']
-        carrier = request.form['carrier']
-        source = request.form['source']
-        dateAdded = request.form['dateAdded']
+        request.body = request.get_json()
 
         try:
             util.updateOrder(
                 order_id,
-                prodName,
-                status,
-                trackCode,
-                estDelivery,
-                carrier,
-                source,
-                dateAdded,
-                senderLocation,
-                receiverLocation
+                request.body['prodName'],
+                request.body['status'],
+                request.body['trackCode'],
+                request.body['estDelivery'],
+                request.body['carrier'],
+                request.body['source'],
+                request.body['dateAdded'],
+                request.body['senderLocation'],
+                request.body['receiverLocation'],
             )
         except sqlite3.Error:
             return jsonify({
                 "message": "Error occured when updating order.",
                 "status": 400
-            })
+            }), 400
 
         return jsonify({
             "message": f"Successfully updated order {order_id}",
             "status": 201
-        })
+        }), 201
 
 
 
