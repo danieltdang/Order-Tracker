@@ -49,6 +49,7 @@ import { DropdownComponent } from './components/dashboard/dropdown/dropdown.comp
 import { SignupComponent } from './components/login/signup.component';
 import { ForgotComponent } from './components/login/forgot.component';
 import { PackageDetailComponent } from './components/packages/package-detail/package-detail.component';
+import { NotFoundComponent } from './layout/not-found/not-found.component';
 
 @NgModule({
   declarations: [
@@ -68,6 +69,7 @@ import { PackageDetailComponent } from './components/packages/package-detail/pac
     SignupComponent,
     ForgotComponent,
     PackageDetailComponent,
+    NotFoundComponent,
   ],
   imports: [
     BrowserModule,
