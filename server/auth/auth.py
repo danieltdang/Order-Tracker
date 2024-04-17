@@ -23,7 +23,7 @@ def register_user(first_name, last_name, email, first_password):
         cur.execute("""SELECT * FROM "User" WHERE email = ?""", (email,))
 
         if cur.fetchone() is not None:
-            return
+            return None
         
         user_uuid = str(uuid.uuid4())
 
@@ -35,7 +35,10 @@ def register_user(first_name, last_name, email, first_password):
         
         con.commit()
 
-        return (user_uuid, signToken(user_uuid))
+        return {
+            "uuid": user_uuid,
+            "token": signToken(user_uuid)
+        }
     finally:
         con.close()
 
@@ -48,14 +51,17 @@ def login_user(email, password):
         user = cur.fetchone()
 
         if user is None:
-            return ("", "")
+            return None
 
         if bcrypt.checkpw(password.encode('utf-8'), user[4]):           
-            return (user[0], signToken(user[0]))
+            return {
+                "uuid": user[0],
+                "token": signToken(user[0])
+            }
     finally:
         con.close()
 
-    return ("", "")
+    return None
 
 def change_password(uuid, old_password, new_password):
     con = sql.connect(DB_PATH)

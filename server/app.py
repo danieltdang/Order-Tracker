@@ -301,19 +301,19 @@ def register_user():
     email = request.body.get('email')
     password = request.body.get('password')
     
-    response = auth.register_user(first_name, last_name, email, password)
+    res = auth.register_user(first_name, last_name, email, password)
     
-    if (response[0] != ""):
+    if (res):
         return jsonify({
-            "uuid": response[0],
-            "userToken": response[1],
+            "uuid": res['uuid'],
+            "userToken": res['token'],
             "status": 200
-        })
+        }), 200
     
     return jsonify({
         "message": "Internal server error",
         "status": 500
-    })
+    }), 500
 
 @app.route('/auth/login', methods = ["POST"])
 def login_user():
@@ -326,21 +326,20 @@ def login_user():
         return jsonify({
             "message": "Email or password not provided",
             "status": 400
-        })
+        }), 400
     
-    response = auth.login_user(email, password)
-
-    if (response[0] != ""):
+    res = auth.login_user(email, password)
+    
+    if (res):
         return jsonify({
-            "uuid": response[0],
-            "userToken": response[1],
-            "status": 200
-        })
-    
+            "uuid": res['uuid'],
+            "userToken": res['token'],
+        }), 200;
+
     return jsonify({
         "message": "Invalid credentials",
         "status": 401
-    })
+    }), 401
 
 @app.route('/auth/change-password', methods = ["POST"])
 def change_password():
