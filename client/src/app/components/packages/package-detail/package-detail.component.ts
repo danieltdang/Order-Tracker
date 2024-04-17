@@ -3,7 +3,6 @@ import { ActivatedRoute } from '@angular/router';
 import { PackageStatusService } from '../package-status.service';
 import { ApiService } from '../../../services/api.service';
 import { Router } from '@angular/router';
-import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-package-detail',
@@ -15,7 +14,7 @@ export class PackageDetailComponent implements OnInit {
   order : any;
 
   constructor(private route: ActivatedRoute, private apiService: ApiService, private statusService: PackageStatusService,
-              private router: Router, private messageService: MessageService) { }
+              private router: Router) { }
 
   getStatus(status: number) {
     return this.statusService.getStatus(status);
@@ -33,14 +32,7 @@ export class PackageDetailComponent implements OnInit {
           this.order = fetchedData;
         },
         error: (error) => {
-          if (error.status === 404) {
-            console.log(`Package #${this.packageID} does not exist`)
-            this.router.navigate(['/app/packages']);
-            this.messageService.add({ severity: 'error', summary: 'Error', detail: `Package #${this.packageID} does not exist`, life: 3000 });
-          } else {
-            this.router.navigate(['/app/packages']);
-            this.messageService.add({ severity: 'error', summary: 'Error', detail: `An unexpected error occurred`, life: 3000 });
-          }
+          this.router.navigate(['/app/packages']);
         }
       });
     });

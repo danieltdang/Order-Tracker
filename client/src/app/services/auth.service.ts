@@ -18,7 +18,7 @@ export class AuthService {
 
     // Get User Token
     public getToken(): string | null {
-        if (!this.userToken) {
+        if (!this.userToken && typeof window !== 'undefined' && window.localStorage) {
             this.userToken = localStorage.getItem('userToken');
         }
         return this.userToken;
