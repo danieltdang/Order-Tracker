@@ -26,6 +26,7 @@ import { ToastModule } from 'primeng/toast';
 import { TableModule } from 'primeng/table';
 import { ToolbarModule } from 'primeng/toolbar';
 import { DialogModule } from 'primeng/dialog';
+import { AccordionModule } from 'primeng/accordion';
 
 import { GoogleMapsModule } from '@angular/google-maps';
 
@@ -96,6 +97,7 @@ import { PackageDetailComponent } from './components/packages/package-detail/pac
     GoogleMapsModule,
     ToolbarModule,
     DialogModule,
+    AccordionModule,
   ],
   providers: [
     provideClientHydration(),
