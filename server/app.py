@@ -10,6 +10,9 @@ import time
 app = Flask(__name__)
 CORS(app, supports_credentials=True, expose_headers=["Authorization"])
 
+def validate_request(uuid, request):
+    return uuid and validate_request(uuid, request)
+
 ##########################
 # MISC ENDPOINTS #
 ##########################
@@ -28,17 +31,11 @@ def health():
 @app.route('/api/users/<uuid>', methods = ["GET", "DELETE"])
 def user_id(uuid):
     # authenticate
-    if auth.is_req_valid(uuid, request):
+    if validate_request(uuid, request):
         return jsonify({
             "message": "Invalid authorization token",
             "status": 401
         }), 401
-    
-    if not uuid:
-        return jsonify({
-            "message": "User id not provided",
-            "status": 400
-        })
     
     # Get information of specific user
     if request.method == "GET":
@@ -106,7 +103,7 @@ def user():
 @app.route('/api/users/<uuid>/orders', methods = ["GET", "POST"])
 def user_all_orders(uuid):
     # authenticate
-    if auth.is_req_valid(uuid, request):
+    if validate_request(uuid, request):
         return jsonify({
             "message": "Invalid authorization token",
             "status": 401
@@ -151,7 +148,7 @@ def user_all_orders(uuid):
 @app.route('/api/users/<uuid>/orders/<order_id>', methods = ["GET", "DELETE", "PUT"])
 def user_order(uuid, order_id):
     # authenticate
-    if auth.is_req_valid(uuid, request):
+    if validate_request(uuid, request):
         return jsonify({
             "message": "Invalid authorization token",
             "status": 401
@@ -212,7 +209,7 @@ def user_order(uuid, order_id):
 @app.route('/api/users/<uuid>/emails', methods = ["GET"])
 def user_emails(uuid):
     # authenticate
-    if auth.is_req_valid(uuid, request):
+    if validate_request(uuid, request):
         return jsonify({
             "message": "Invalid authorization token",
             "status": 401
@@ -229,7 +226,7 @@ def user_emails(uuid):
 @app.route('/api/users/<uuid>/orders/<order_id>/emails', methods = ["GET", "POST", "DELETE"])
 def order_emails(uuid, order_id):
     # authenticate
-    if auth.is_req_valid(uuid, request):
+    if validate_request(uuid, request):
         return jsonify({
             "message": "Invalid authorization token",
             "status": 401
@@ -278,7 +275,7 @@ def order_emails(uuid, order_id):
 @app.route('/api/users/<uuid>/emails/<email_id>', methods = ["DELETE"])
 def user_email_by_ID(uuid, email_id):
     # authenticate
-    if auth.is_req_valid(uuid, request):
+    if validate_request(uuid, request):
         return jsonify({
             "message": "Invalid authorization token",
             "status": 401
@@ -366,7 +363,7 @@ def change_password():
         }), 400
     
     # authenticate
-    if auth.is_req_valid(uuid, request):
+    if validate_request(uuid, request):
         return jsonify({
             "message": "Invalid authorization token",
             "status": 401
@@ -390,7 +387,7 @@ def change_password():
 @app.route('/api/users/<uuid>/orders/<order_id>/events', methods = ["GET", "POST", "DELETE"])
 def order_events(uuid, order_id):
     # authenticate
-    if auth.is_req_valid(uuid, request):
+    if validate_request(uuid, request):
         return jsonify({
             "message": "Invalid authorization token",
             "status": 401
