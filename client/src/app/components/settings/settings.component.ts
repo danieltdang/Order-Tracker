@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Theme } from "../../interfaces/theme";
-import { ThemeService } from '../../theme-service';
+import { ThemeService } from '../../services/theme-service';
 import axios from 'axios';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service'
@@ -27,7 +27,8 @@ export class SettingsComponent {
   changeTheme() {
     if (this.selectedTheme) {
       this.themeService.switchTheme(this.selectedTheme.name);
-    }
+      this.themeService.setTheme(this.selectedTheme);
+    }    
   }
 
   async passwordConfirm(event: Event) {
@@ -96,11 +97,7 @@ export class SettingsComponent {
 }
 
   ngOnInit() {
-    this.themes = [
-      { name: 'lara-dark-blue', displayName: 'Dark Theme' },
-      { name: 'lara-light-blue', displayName: 'Light Theme' },
-    ];
-
-    this.selectedTheme = this.themes[0];
+    this.themes = this.themeService.getThemes();
+    this.selectedTheme = this.themeService.getTheme();
   }
 }
