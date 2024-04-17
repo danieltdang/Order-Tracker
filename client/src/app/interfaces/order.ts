@@ -1,5 +1,4 @@
 export interface Order {
-    uuid: string,
     orderID: string,
     productName: string,
     status: string,

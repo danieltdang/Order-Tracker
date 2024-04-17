@@ -57,7 +57,6 @@ export class PackagesComponent {
         accept: () => {
             this.orders = this.orders.filter((val: any) => val.id !== order.orderID);
             this.order = {
-              uuid: '',
               orderID: '',
               productName: '',
               status: '',
@@ -84,7 +83,7 @@ export class PackagesComponent {
     return `${month}-${day}-${year}`;
   }
 
-  saveOrder() {
+  async saveOrder() {
     this.submitted = true;
 
     if (this.order.productName?.trim()) {
@@ -95,14 +94,18 @@ export class PackagesComponent {
         this.orders[this.findIndexById(this.order.orderID)] = this.order;
         this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Order Updated', life: 3000 });
       } else {
-        this.orders.push(this.order);
-        this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Order Created', life: 3000 });
+
+        const result = await this.apiService.createUserOrder(this.order);
+
+        if (result.status === 201) {
+          this.orders.push(this.order);
+          this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Order Created', life: 3000 });
+        }
       }
 
       this.orders = [...this.orders];
       this.orderDialog = false;
       this.order = {
-        uuid: '',
         orderID: '',
         productName: '',
         status: '',
@@ -117,7 +120,6 @@ export class PackagesComponent {
 
   openNew() {
     this.order = {
-      uuid: '',
       orderID: '',
       productName: '',
       status: '',

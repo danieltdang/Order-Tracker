@@ -3,6 +3,8 @@ import axios from 'axios';
 import { AuthService } from './auth.service';
 import { HttpClient } from '@angular/common/http';
 
+import { Order } from '../interfaces/order';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -44,20 +46,24 @@ export class ApiService {
     return this.https.get(`${this.ip}/api/users/${this.AuthService.getUUID()}/orders`);
   }
 
-  public createUserOrder(uuid: string, orderID: string, prodName: string, status: string, trackCode: string, estDelivery: string, carrier: string, source: string, dateAdded: string) {
+  public createUserOrder(order: Order) {
     const payload = {
-      uuid: uuid,
-      orderID: orderID,
-      prodName: prodName,
-      status: status,
-      trackCode: trackCode,
-      estDelivery: estDelivery,
-      carrier: carrier,
-      source: source,
-      dateAdded: dateAdded
+      senderLocation: "",
+      receiverLocation: "",
+      prodName: order.productName,
+      status: order.status,
+      trackCode: order.trackingCode,
+      estDelivery: order.estimatedDelivery,
+      carrier: order.carrier,
+      source: order.source,
+      dateAdded: order.dateAdded
     }
 
-    return axios.post(`${this.ip}/api/users/${this.AuthService.getUUID()}/orders`, payload);
+    const headers = {
+      "Authorization": this.AuthService.getToken()
+    }
+
+    return axios.post(`${this.ip}/api/users/${this.AuthService.getUUID()}/orders`, payload, {headers: headers});
   }
 
   public getOrderByID(order_id: string) {

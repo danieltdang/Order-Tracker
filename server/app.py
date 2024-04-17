@@ -125,39 +125,32 @@ def user_all_orders(user):
             "status": 200
         })
     elif request.method == "POST":
-        senderLocation = request.form['senderLocation']
-        receiverLocation = request.form['receiverLocation']
-        prodName = request.form['prodName']
-        status = request.form['status']
-        trackCode = request.form['trackCode']
-        estDelivery = request.form['estDelivery']
-        carrier = request.form['carrier']
-        source = request.form['source']
-        dateAdded = request.form['dateAdded']
+
+        request.body = request.get_json()
 
         try:
             util.addOrder(
                 user,
-                prodName,
-                status,
-                trackCode,
-                estDelivery,
-                carrier,
-                source,
-                dateAdded,
-                senderLocation,
-                receiverLocation,
+                request.body['senderLocation'],
+                request.body['receiverLocation'],
+                request.body['prodName'],
+                request.body['status'],
+                request.body['trackCode'],
+                request.body['estDelivery'],
+                request.body['carrier'],
+                request.body['source'],
+                request.body['dateAdded'],
             )
         except sqlite3.Error:
             return jsonify({
                 "message": "Error occured when adding order.",
                 "status": 400
-            })
+            }), 400
 
         return jsonify({
             "message": f"Successfully added order for user {user}",
             "status": 201
-        })
+        }), 201
 
 
 @app.route('/api/users/<uuid>/orders/<order_id>', methods = ["GET", "DELETE", "PUT"])
