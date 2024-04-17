@@ -64,35 +64,35 @@ def user_id(uuid):
                 "status": 404
             })
 
-@app.route('/api/users', methods = ["GET", "POST"])
-def user():
-    # Creating a new user
-    if request.method == "POST":
-        fn = request.form['firstName']
-        ln = request.form['lastName']
-        uuid = request.form['uuid']
+# @app.route('/api/users', methods = ["GET", "POST"])
+# def user():
+#     # Creating a new user
+#     if request.method == "POST":
+#         fn = request.form['firstName']
+#         ln = request.form['lastName']
+#         uuid = request.form['uuid']
 
-        try:
-            util.addUser(fn, ln, uuid)
-        except sqlite3.IntegrityError:
-            return jsonify({
-                "message": f"User with id {uuid} already exists.",
-                "status": 409
-            })
+#         try:
+#             util.addUser(fn, ln, uuid)
+#         except sqlite3.IntegrityError:
+#             return jsonify({
+#                 "message": f"User with id {uuid} already exists.",
+#                 "status": 409
+#             })
 
-        return jsonify({
-            "message": "Success",
-            "status": 201
-        })
+#         return jsonify({
+#             "message": "Success",
+#             "status": 201
+#         })
 
-    # Getting all users
-    elif request.method == "GET":
-        users = [dict(u) for u in util.getAllUsers()]
+#     # Getting all users
+#     elif request.method == "GET":
+#         users = [dict(u) for u in util.getAllUsers()]
 
-        return jsonify({
-            "data": users,
-            "status": 200
-        })
+#         return jsonify({
+#             "data": users,
+#             "status": 200
+#         })
 
 
 
