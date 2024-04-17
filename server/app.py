@@ -358,7 +358,6 @@ def change_password():
         }), 400
     
     userToken = request.headers.get('Authorization')
-    print("Received token:", userToken)
 
     if (not auth.verifyToken(uuid, request.headers.get('Authorization'))):
         return jsonify({

@@ -50,7 +50,4 @@ export class AuthService {
         localStorage.removeItem('userToken');
         localStorage.removeItem('uuid');
     }
-
-
-
 }
