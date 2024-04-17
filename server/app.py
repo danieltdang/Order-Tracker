@@ -27,10 +27,6 @@ def health():
 
 @app.route('/api/users/<uuid>', methods = ["GET", "DELETE"])
 def user_id(uuid):
-
-    uuid = str(uuid)
-    print(uuid)
-    
     if not uuid:
         return jsonify({
             "message": "User id not provided",
