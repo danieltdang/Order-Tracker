@@ -34,9 +34,9 @@
           <div class="col-6 p-0">
             <span class="text-gray-400">{{ detail.label }}</span>
           </div>
-          <div class="p-0">
+          <div class="col-6 p-0">
             <span *ngIf="!isLoading">{{ detail.value }}</span>
-            <p-skeleton width="6rem" height="1rem" *ngIf="isLoading"></p-skeleton>
+            <p-skeleton width="100%" height="1rem" *ngIf="isLoading"></p-skeleton>
           </div>
         </div>
       </div>
