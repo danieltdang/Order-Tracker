@@ -11,7 +11,7 @@ app = Flask(__name__)
 CORS(app, supports_credentials=True, expose_headers=["Authorization"])
 
 def validate_request(uuid, request):
-    return uuid and validate_request(uuid, request)
+    return uuid and auth.is_req_valid(uuid, request)
 
 ##########################
 # MISC ENDPOINTS #
