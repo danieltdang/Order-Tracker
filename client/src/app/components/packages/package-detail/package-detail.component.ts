@@ -33,23 +33,22 @@ export class PackageDetailComponent implements OnInit {
         next: (fetchedData: any) => {
           this.order = fetchedData;
           this.isLoading = false;
+
+          this.details = [
+            { label: 'Status', value: this.getStatus(this.order?.status) },
+            { label: 'Tracking Code', value: this.order?.trackingCode },
+            { label: 'Carrier', value: this.order?.carrier },
+            { label: 'Source', value: this.order?.source },
+            { label: 'Sender Location', value: this.order?.senderLocation },
+            { label: 'Receiver Location', value: this.order?.receiverLocation },
+            { label: 'Date Added', value: this.formatDate(this.order?.dateAdded) },
+            { label: 'Estimated Delivery', value: this.formatDate(this.order?.estimatedDelivery) },
+          ];
         },
         error: (error) => {
           // indicates that the package does not exist or the user is not authorized to view it
-          this.order.orderID = this.packageID;
         }
       });
     });
-
-    this.details = [
-      { label: 'Status', value: this.getStatus(this.order?.status) },
-      { label: 'Tracking Code', value: this.order?.trackingCode },
-      { label: 'Carrier', value: this.order?.carrier },
-      { label: 'Source', value: this.order?.source },
-      { label: 'Sender Location', value: this.order?.senderLocation },
-      { label: 'Receiver Location', value: this.order?.receiverLocation },
-      { label: 'Date Added', value: this.order?.dateAdded },
-      { label: 'Estimated Delivery', value: this.order?.estimatedDelivery },
-    ]
-  }  
+  } 
 }
