@@ -4,6 +4,7 @@ import { AuthService } from './auth.service';
 import { HttpClient } from '@angular/common/http';
 
 import { Order } from '../interfaces/order';
+import { Email } from '../interfaces/email';
 
 @Injectable({
   providedIn: 'root'
@@ -112,13 +113,27 @@ export class ApiService {
     return axios.get(`${this.ip}/api/users/${this.AuthService.getUUID()}/orders/${order_id}/emails`);
   }
 
-  public createOrderEmail(order_id: string, content: string, dateReceived: string) {
+  public createOrderEmail(email: Email) {
     const payload = {
-      content: content,
-      dateReceived: dateReceived
+      content: email.content,
+      dateReceived: email.dateReceived
     }
 
-    return axios.post(`${this.ip}/api/orders/${order_id}/emails`, payload);
+    return axios.post(`${this.ip}/api/orders/${email.order}/emails`, payload);
+  }
+
+  public deleteOrderEmail(email_id: string) {
+    // /api/users/<uuid>/emails/<email_id>
+    return axios.delete(`${this.ip}/api/users/${this.AuthService.getUUID()}/emails/${email_id}`);
+  }
+
+  public updateOrderEmail(email: Email) {
+    const payload = {
+      content: email.content,
+      dateReceived: email.dateReceived
+    }
+
+    return axios.put(`${this.ip}/api/users/${this.AuthService.getUUID()}/emails/${email.emailID}`, payload);
   }
 
   /*

@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { Table } from 'primeng/table';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ApiService } from '../../services/api.service';
-import { PackageStatusService } from './package-status.service';
+import { PackageStatusService } from '../../services/package-status.service';
 import { Router } from '@angular/router';
 
 import { Order } from '../../interfaces/order';
@@ -40,7 +40,7 @@ export class PackagesComponent {
     }
 
     return index;
-}
+  }
 
   editOrder(order: Order) {
     this.order = { ...order };
