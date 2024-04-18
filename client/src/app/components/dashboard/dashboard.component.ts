@@ -107,7 +107,7 @@ export class DashboardComponent implements OnInit {
     }
   
     this.chartLabels = newLabels; // Assign the new array to chartLabels
-    this.chartData = this.generate2DRandom(5, this.chartLabels.length);
+    this.chartData = this.generate2DRandom(6, this.chartLabels.length);
     //console.log('Updated chart labels:', this.chartLabels);
     //console.log('Updated chart data:', this.chartData);
     this.cdr.detectChanges();
