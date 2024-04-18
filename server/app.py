@@ -2,7 +2,7 @@ from flask import Flask, jsonify, request
 from flask_cors import CORS
 import datetime
 import json
-import sqlite3
+import psycopg2
 import util
 import auth.auth as auth
 import time
@@ -133,7 +133,7 @@ def user_all_orders(uuid):
                 request.body['senderLocation'],
                 request.body['receiverLocation'],
             )
-        except sqlite3.Error:
+        except psycopg2.DatabaseError:
             return jsonify({
                 "message": "Error occured when adding order.",
                 "status": 400
@@ -189,7 +189,7 @@ def user_order(uuid, order_id):
                 request.body['senderLocation'],
                 request.body['receiverLocation'],
             )
-        except sqlite3.Error:
+        except psycopg2.DatabaseError:
             return jsonify({
                 "message": "Error occured when updating order.",
                 "status": 400

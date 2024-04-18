@@ -6,7 +6,7 @@ con = psycopg2.connect(
     user="qkhplpdv",
     password="MPRLThmEO3gFiPHKrX9ajpKo-hSKOLOa"
     )
-
+print("Connected to at isilo.db.elephantsql.com")
 cur = con.cursor()
 
 # Enable foreign key support
