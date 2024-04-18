@@ -3,8 +3,8 @@ import psycopg2
 con = psycopg2.connect(
     host="localhost",
     database="database",
-    user="group8",
-    password="group8"
+    user="postgres",
+    password="postgres"
     )
 
 cur = con.cursor()
