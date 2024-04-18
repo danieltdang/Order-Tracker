@@ -5,17 +5,63 @@ import { HttpClient } from '@angular/common/http';
 
 import { Order } from '../interfaces/order';
 import { Email } from '../interfaces/email';
+import { OrderEvent } from '../interfaces/events';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ApiService {
   private ip = 'http://127.0.0.1:5001';
+  private headers = {
+    "Authorization": this.AuthService.getToken()
+  }
 
   constructor(private AuthService: AuthService, private https: HttpClient) {}
 
   public getData() {
     return axios.get(this.ip + '/api/data');
+  }
+
+  public getBaseUrl() {
+    return `${this.ip}/api/users/${this.AuthService.getUUID()}`
+  }
+
+  public post(endpoint: string, payload: Object) {
+    return axios.post(
+      `${this.getBaseUrl()}/${endpoint}`,
+      payload,
+      {
+        headers: this.headers
+      }
+    );
+  }
+
+  public get(endpoint: string) {
+    return axios.get(
+      `${this.getBaseUrl()}/${endpoint}`,
+      {
+        headers: this.headers
+      }
+    );
+  }
+
+  public put(endpoint: string, payload: Object) {
+    return axios.put(
+      `${this.getBaseUrl()}/${endpoint}`,
+      payload,
+      {
+        headers: this.headers
+      }
+    );
+  }
+
+  public delete(endpoint: string) {
+    return axios.delete(
+      `${this.getBaseUrl()}/${endpoint}`,
+      {
+        headers: this.headers
+      }
+    );
   }
 
   /*
@@ -44,7 +90,7 @@ export class ApiService {
   ###########################
   */
   public getAllUserOrders() {
-    return this.https.get(`${this.ip}/api/users/${this.AuthService.getUUID()}/orders`);
+    return this.https.get(`/orders`);
   }
 
   public createUserOrder(order: Order) {
@@ -119,7 +165,7 @@ export class ApiService {
       dateReceived: email.dateReceived
     }
 
-    return axios.post(`${this.ip}/api/orders/${email.order}/emails`, payload);
+    return axios.post(`${this.ip}/api/users/${this.AuthService.getUUID()}/orders/${email.order}/emails`, payload);
   }
 
   public deleteOrderEmail(email_id: string) {
@@ -134,6 +180,37 @@ export class ApiService {
     }
 
     return axios.put(`${this.ip}/api/users/${this.AuthService.getUUID()}/emails/${email.emailID}`, payload);
+  }
+
+  /*
+  ##################################
+  # ORDER EVENTS RELATED ENDPOINTS #
+  ##################################
+  */
+
+  public getOrderEvents(orderId: string) {
+    return this.https.get(
+      `${this.ip}/api/users/${this.AuthService.getUUID()}/orders/${orderId}/events`
+    );
+  }
+
+  public createOrderEvent(event: OrderEvent) {
+    const payload = {
+      description: event.description,
+      date: event.date
+    }
+
+    return axios.post(
+      `${this.ip}/api/users/${this.AuthService.getUUID()}/orders/${event.orderID}/events`,
+      payload
+    );
+  }
+
+  public deleteOrderEvents(order_id: string) {
+    // /api/users/<uuid>/emails/<email_id>
+    return axios.delete(
+      `${this.ip}/api/users/${this.AuthService.getUUID()}/orders/${order_id}/events`
+    );
   }
 
   /*
