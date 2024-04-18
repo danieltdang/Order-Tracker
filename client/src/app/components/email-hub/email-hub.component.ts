@@ -26,11 +26,14 @@ export class EmailHubComponent {
               private confirmationService: ConfirmationService, private messageService: MessageService
   ) {}
 
-  ngOnInit(): void {
-    this.apiService.getUserEmails().subscribe((fetchedData: any) => {
-      this.emails = fetchedData.data;
-      console.log(this.emails);
-    });
+  ngOnInit() {
+    this.apiService.getUserEmails()
+    .then((res) => {
+      this.emails = res.data 
+    })
+    .catch((e) => {
+      throw e
+    })
 
     this.statuses = [
       { label: 'Pre Transit', value: 0 },
