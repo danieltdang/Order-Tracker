@@ -22,6 +22,8 @@ export class SettingsComponent {
   confirmPass1: string | undefined;
   confirmPass2: string | undefined;
 
+  tempPremium: boolean = false;
+
   constructor(private themeService: ThemeService, private confirmationService: ConfirmationService, private messageService: MessageService, private router: Router, private authService: AuthService, private apiService: ApiService) { }
 
   changeTheme() {

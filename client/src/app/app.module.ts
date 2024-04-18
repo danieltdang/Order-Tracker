@@ -28,6 +28,7 @@ import { ToolbarModule } from 'primeng/toolbar';
 import { DialogModule } from 'primeng/dialog';
 import { AccordionModule } from 'primeng/accordion';
 import { SkeletonModule } from 'primeng/skeleton';
+import { TagModule } from 'primeng/tag';
 
 import { GoogleMapsModule } from '@angular/google-maps';
 
@@ -104,6 +105,7 @@ import { EmailViewerComponent } from './components/email-hub/email-viewer/email-
     DialogModule,
     AccordionModule,
     SkeletonModule,
+    TagModule,
   ],
   providers: [
     provideClientHydration(),

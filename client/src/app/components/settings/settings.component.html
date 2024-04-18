@@ -14,28 +14,31 @@
         <div class="mb-2">
           View and edit your account details.
         </div>
-        <div class="flex flex-row">
-          <div class="col-6 p-0">
-            <span class="text-gray-400">Email</span>
+        <div class="flex flex-column gap-1">
+          <div class="flex flex-row">
+            <div class="col-6 p-0">
+              <span class="text-gray-400">Email</span>
+            </div>
+            <div class="p-0">
+              <span>example&#64;email.com</span>
+            </div>
           </div>
-          <div class="p-0">
-            <span>example&#64;email.com</span>
+          <div class="flex flex-row">
+            <div class="col-6 p-0">
+              <span class="text-gray-400">Name</span>
+            </div>
+            <div class="p-0">
+              <span>Example User</span>
+            </div>
           </div>
-        </div>
-        <div class="flex flex-row">
-          <div class="col-6 p-0">
-            <span class="text-gray-400">Name</span>
-          </div>
-          <div class="p-0">
-            <span>Example User</span>
-          </div>
-        </div>
-        <div class="flex flex-row">
-          <div class="col-6 p-0">
-            <span class="text-gray-400">Username</span>
-          </div>
-          <div class="p-0">
-            <span>&#64;example_user</span>
+          <div class="flex flex-row">
+            <div class="col-6 p-0">
+              <span class="text-gray-400">Status</span>
+            </div>
+            <div class="p-0">
+              <p-tag *ngIf="tempPremium" [rounded]="true" icon="pi pi-check" severity="success" value="Premium"></p-tag>
+              <p-tag *ngIf="!tempPremium" [rounded]="true" icon="pi pi-times" severity="danger" value="Not Premium"></p-tag>
+            </div>
           </div>
         </div>
       </div>
