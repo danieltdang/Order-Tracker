@@ -1,10 +1,10 @@
 import psycopg2
 
 con = psycopg2.connect(
-    host="localhost",
-    database="database",
-    user="postgres",
-    password="postgres"
+    host="isilo.db.elephantsql.com",
+    database="qkhplpdv",
+    user="qkhplpdv",
+    password="MPRLThmEO3gFiPHKrX9ajpKo-hSKOLOa"
     )
 
 cur = con.cursor()
