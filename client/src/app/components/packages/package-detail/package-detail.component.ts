@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { PackageStatusService } from '../package-status.service';
+import { PackageStatusService } from '../../../services/package-status.service';
 import { ApiService } from '../../../services/api.service';
 import { Router } from '@angular/router';
 

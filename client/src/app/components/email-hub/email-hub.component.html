@@ -1,13 +1,102 @@
-<div class="grid">
-    <div class="col-4" *ngFor="let email of allEmails">
-        <p-card header="Package #{{ email.order}}" subheader="Received: {{ email.dateReceived }}" class="card">
-            <!--<ng-template pTemplate="header">
-                <img alt="Card" src="https://primefaces.org/cdn/primeng/images/usercard.png" />
-            </ng-template>-->
-            <p [innerHTML]="email.content"></p>
-            <ng-template pTemplate="footer">
-                <p-button label="Go to order" icon="pi pi-arrow-up-right" (click)="goToOrder(email.order)"></p-button>
-            </ng-template>
-        </p-card>
-    </div>
+<div class="surface-card col-12 mb-3 shadow-2 p-3 pb-0 border-round">
+    <p-table
+        #dt1
+        [value]="emails"
+        [(selection)]="selectedEmails"
+        [paginator]="true" 
+        [rows]="25"
+        [paginator]="true"
+        paginatorStyleClass="border-none"
+        [showCurrentPageReport]="true"
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+        [globalFilterFields]="['source', 'productName', 'trackingCode', 'carrier']"
+        selectionMode="single"
+        (onRowSelect)="onRowSelect($event)"
+    >
+        <ng-template pTemplate="caption">
+            <div class="flex justify-content-between">
+                <div>
+                    <span class="p-input-icon-left mr-2">
+                        <i class="pi pi-search"></i>
+                        <input pInputText class="p-inputtext" type="text" (input)="dt1.filterGlobal($any($event.target).value, 'contains')" placeholder="Search keyword" />
+                    </span>
+                    <button pButton label="Clear" class="p-button-outlined" icon="pi pi-filter-slash" (click)="clear(dt1)"></button>
+                </div>
+                <div>
+                    <p-toast></p-toast>
+                    <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
+                </div>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+                <th class="white-space-nowrap" pSortableColumn="subject">Subject <p-sortIcon field="source"></p-sortIcon></th>
+                <th class="white-space-nowrap" pSortableColumn="orderID">Order ID <p-sortIcon field="productName"></p-sortIcon></th>
+                <th class="white-space-nowrap" pSortableColumn="status">Status <p-sortIcon field="status"></p-sortIcon></th>
+                <th class="white-space-nowrap" pSortableColumn="source">Source <p-sortIcon field="trackingCode"></p-sortIcon></th>
+                <th class="white-space-nowrap" pSortableColumn="dateReceived">Date Received <p-sortIcon field="dateAdded"></p-sortIcon></th>
+                <th class="white-space-nowrap text-center">Actions</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-email>
+            <tr [pSelectableRow]="email">
+                <td>Subject data missing</td>
+                <td>{{ email?.order }}</td>
+                <td>{{ getStatus(email?.status) }}</td>
+                <td>Source data missing</td>
+                <td>{{ formatDate(email?.dateReceived) }}</td>
+                <td class="white-space-nowrap">
+                    <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-info mr-2" (click)="editEmail(email)"></button>
+                    <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger" (click)="deleteEmail(email)"></button>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
 </div>
+
+<p-dialog [(visible)]="emailDialog" [style]="{ width: '450px' }" header="Email Details" [modal]="true" styleClass="p-fluid">
+    <ng-template pTemplate="content">
+        <div class="field">
+            <label for="name">Subject</label>
+            <input class="p-inputtext" type="text" pInputText id="name" [(ngModel)]="email.subject" required autofocus />
+            <small class="p-error" *ngIf="submitted && !email.subject">Subject is required.</small>
+        </div>
+
+        <div class="field">
+            <label for="name">Order ID</label>
+            <input class="p-inputtext" type="text" pInputText id="tracking" [(ngModel)]="email.order" required autofocus />
+            <small class="p-error" *ngIf="submitted && !email.order">Order ID is required.</small>
+        </div>
+
+        <div class="field">
+            <label for="orderStatus">Status</label>
+            <p-dropdown [(ngModel)]="email.status" inputId="orderStatus" [options]="statuses">
+                <ng-template pTemplate="selectedOrder">
+                    <span>{{email.status}}</span>
+                </ng-template>
+                <ng-template let-option pTemplate="email">
+                    <span>{{option.label}}</span>
+                </ng-template>
+            </p-dropdown>
+            <small class="p-error" *ngIf="submitted && email.status === null">Status is required.</small>
+        </div>
+
+        <div class="field">
+            <label for="name">Source</label>
+            <input class="p-inputtext" type="text" pInputText id="carrier" [(ngModel)]="email.source" required autofocus />
+            <small class="p-error" *ngIf="submitted && !email.source">Source is required.</small>
+        </div>
+
+        <div class="field">
+            <label for="name">Date Received</label>
+            <p-calendar appendTo="body" [(ngModel)]="dateReceived" dateFormat="MM d, yy" [iconDisplay]="'input'" [showIcon]="true"></p-calendar>
+            <small class="p-error" *ngIf="submitted && !email.dateReceived">Date Received is required.</small>
+        </div>
+    </ng-template>
+    <ng-template pTemplate="footer">
+        <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+        <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" (click)="saveEmail()"></button>
+    </ng-template>
+</p-dialog>
+
+<p-confirmDialog [style]="{ width: '450px' }"></p-confirmDialog>
