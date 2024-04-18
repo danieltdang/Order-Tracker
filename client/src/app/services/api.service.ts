@@ -39,13 +39,13 @@ export class ApiService {
     );
   }
 
-  public get(endpoint: string) {
-    return axios.get(
+  public async get(endpoint: string) {
+    return (await axios.get(
       `${this.getBaseUrl()}/${endpoint}`,
       {
         headers: this.headers
       }
-    );
+    )).data;
   }
 
   public put(endpoint: string, payload: Object) {

@@ -172,9 +172,14 @@ export class PackagesComponent {
   }
   
   ngOnInit(): void {
-    this.apiService.getAllUserOrders().subscribe((fetchedData: any) => {
-      this.orders = fetchedData.data;
-    });
+    this.apiService.getAllUserOrders()
+      .then((res) => {
+        this.orders = res.data.data[0];
+        console.log(this.orders)
+      })
+      .catch((e) => {
+        throw e
+      })
 
     this.statuses = [
       { label: 'Pre Transit', value: 0 },

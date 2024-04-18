@@ -29,9 +29,9 @@ export class PackageDetailComponent implements OnInit {
   ngOnInit(): void {
     this.route.params.subscribe(params => {
       this.packageID = params['id'];
-      this.apiService.getOrderByID(params['id']).subscribe({
-        next: (fetchedData: any) => {
-          this.order = fetchedData;
+      this.apiService.getOrderByID(params['id'])
+        .then((res) => {
+          this.order = res.data.data[0];
           this.isLoading = false;
 
           this.details = [
@@ -44,9 +44,8 @@ export class PackageDetailComponent implements OnInit {
             { label: 'Date Added', value: this.formatDate(this.order?.dateAdded) },
             { label: 'Estimated Delivery', value: this.formatDate(this.order?.estimatedDelivery) },
           ];
-        },
-        error: (error) => {
-          // indicates that the package does not exist or the user is not authorized to view it
+        })
+        .catch((e) => {
           this.details = [
             { label: 'Status', value: this.getStatus(this.order?.status) },
             { label: 'Tracking Code', value: this.order?.trackingCode },
@@ -57,8 +56,8 @@ export class PackageDetailComponent implements OnInit {
             { label: 'Date Added', value: this.formatDate(this.order?.dateAdded) },
             { label: 'Estimated Delivery', value: this.formatDate(this.order?.estimatedDelivery) },
           ];
-        }
-      });
+          throw e
+        })
     });
   } 
 }
