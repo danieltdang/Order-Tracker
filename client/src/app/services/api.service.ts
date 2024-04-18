@@ -68,8 +68,8 @@ export class ApiService {
 
   public updateUserOrder(order: Order) {
     const payload = {
-      senderLocation: "",
-      receiverLocation: "",
+      senderLocation: order.senderLocation,
+      receiverLocation: order.receiverLocation,
       prodName: order.productName,
       status: order.status,
       trackCode: order.trackingCode,
