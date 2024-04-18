@@ -1,12 +1,19 @@
-import sqlite3 as sql
+import psycopg2
 
-con = sql.connect('database.db')
+con = psycopg2.connect(
+    host="localhost",
+    database="database",
+    user="group8",
+    password="group8"
+    )
+
+cur = con.cursor()
 
 # Enable foreign key support
-con.execute('PRAGMA foreign_keys = ON')
+#cur.execute('PRAGMA foreign_keys = ON')
 
-con.execute("""
-CREATE TABLE IF NOT EXISTS "User"(
+cur.execute("""
+CREATE TABLE IF NOT EXISTS "User" (
     uuid TEXT PRIMARY KEY,
     firstName TEXT,
     lastName TEXT,
@@ -19,9 +26,9 @@ CREATE TABLE IF NOT EXISTS "User"(
 # but an order can only have
 # one associated user
 
-con.execute("""
-CREATE TABLE IF NOT EXISTS "Order"(
-    user TEXT,
+cur.execute("""
+CREATE TABLE IF NOT EXISTS "Order" (
+    "user" TEXT,
     orderID INTEGER PRIMARY KEY,
     senderLocation TEXT,
     receiverLocation TEXT,
@@ -32,7 +39,7 @@ CREATE TABLE IF NOT EXISTS "Order"(
     carrier TEXT,
     source TEXT,
     dateAdded TEXT,
-    FOREIGN KEY (user) REFERENCES "User"(uuid)
+    FOREIGN KEY ("user") REFERENCES "User"(uuid)
 )
 """)
 
@@ -40,11 +47,14 @@ CREATE TABLE IF NOT EXISTS "Order"(
 # but an email can only have
 # one associated order
 
-con.execute("""
-CREATE TABLE IF NOT EXISTS "Email"(
+cur.execute("""
+CREATE TABLE IF NOT EXISTS Email (
+    subject TEXT,
+    STATUS INTEGER,
     "order" INTEGER,
     "emailID" INTEGER PRIMARY KEY,
     content TEXT,
+    source TEXT,
     dateReceived TEXT,
     FOREIGN KEY ("order") REFERENCES "Order"(orderID)
 )
@@ -52,15 +62,16 @@ CREATE TABLE IF NOT EXISTS "Email"(
 
 # An order can also have many order events
 
-con.execute("""
+cur.execute("""
 CREATE TABLE IF NOT EXISTS "OrderEvent"(
     "order" INTEGER,
     "orderEventID" INTEGER PRIMARY KEY,
-    desc TEXT,
+    description TEXT,
     date TEXT,
     FOREIGN KEY ("order") REFERENCES "Order"(orderID)
 )
 """)
 
 con.commit()
+cur.close()
 con.close()

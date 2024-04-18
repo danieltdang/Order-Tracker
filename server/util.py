@@ -1,9 +1,17 @@
 import sqlite3 as sql
+import psycopg2
+def get_db_connection():
+    con = psycopg2.connect(
+        host="localhost",
+        database="database",
+        user="group8",
+        password="group8"
+    )
 
-DB_PATH = 'database.db'
+    return con
 
 def addUser(firstName, lastName, uuid):
-    con = sql.connect(DB_PATH)
+    con = get_db_connection()
     cur = con.cursor()
 
     try:
@@ -19,7 +27,7 @@ def addUser(firstName, lastName, uuid):
         con.close()
 
 def removeUser(uuid):
-    con = sql.connect(DB_PATH)
+    con = get_db_connection()
     cur = con.cursor()
 
     try:
@@ -44,7 +52,7 @@ def removeUser(uuid):
         con.close()
 
 def getUserInfo(uuid):
-    con = sql.connect(DB_PATH)
+    con = get_db_connection()
     con.row_factory = sql.Row
     cur = con.cursor()
 
@@ -62,7 +70,7 @@ def getUserInfo(uuid):
         con.close()
 
 def getAllUsers():
-    con = sql.connect(DB_PATH)
+    con = get_db_connection()
     con.row_factory = sql.Row
     cur = con.cursor()
 
@@ -93,7 +101,7 @@ def addOrder(
     senderLocation, 
     receiverLocation
 ):
-    con = sql.connect(DB_PATH)
+    con = get_db_connection()
     cur = con.cursor()
 
     # orderID omitted as it will auto increment
@@ -136,7 +144,7 @@ def addOrder(
         return order_id
 
 def getOrdersForUser(uuid):
-    con = sql.connect(DB_PATH)
+    con = get_db_connection()
     con.row_factory = sql.Row
     cur = con.cursor()
 
@@ -154,7 +162,7 @@ def getOrdersForUser(uuid):
         con.close()
 
 def getOrderInfo(user, order_id):
-    con = sql.connect(DB_PATH)
+    con = get_db_connection()
     con.row_factory = sql.Row
     cur = con.cursor()
 
@@ -172,7 +180,7 @@ def getOrderInfo(user, order_id):
         con.close()
 
 def removeOrder(order):
-    con = sql.connect(DB_PATH)
+    con = get_db_connection()
     cur = con.cursor()
 
     try:
@@ -201,7 +209,7 @@ def updateOrder(
     senderLocation, 
     receiverLocation
 ):
-    con = sql.connect(DB_PATH)
+    con = get_db_connection()
     cur = con.cursor()
 
     # orderID omitted as it will auto increment
@@ -244,23 +252,29 @@ def updateOrder(
 
 
 
-def addEmail(order, content, dateReceived):
-    con = sql.connect(DB_PATH)
+def addEmail(subject, status, order, content, source, dateReceived):
+    con = get_db_connection()
     cur = con.cursor()
 
     try:
         cur.execute("""
             INSERT OR IGNORE INTO "Email"
             (
+                subject,
+                STATUS,
                 "order",
                 content,
+                source,
                 dateReceived
             )
             VALUES (?,?,?)
         """, 
             (
+                subject,
+                status,
                 order,
                 content,
+                source,
                 dateReceived,
             )
         )
@@ -271,7 +285,7 @@ def addEmail(order, content, dateReceived):
         con.close()
 
 def getEmailsForUser(uuid):
-    con = sql.connect(DB_PATH)
+    con = get_db_connection()
     con.row_factory = sql.Row
     cur = con.cursor()
 
@@ -292,7 +306,7 @@ def getEmailsForUser(uuid):
         con.close()
 
 def getEmailsForOrder(order_id):
-    con = sql.connect(DB_PATH)
+    con = get_db_connection()
     con.row_factory = sql.Row
     cur = con.cursor()
 
@@ -312,7 +326,7 @@ def getEmailsForOrder(order_id):
         con.close()
 
 def removeEmailForOrder(order):
-    con = sql.connect(DB_PATH)
+    con = get_db_connection()
     cur = con.cursor()
 
     try:
@@ -330,7 +344,7 @@ def removeEmailForOrder(order):
         return True
     
 def removeEmailsByID(email_id):
-    con = sql.connect(DB_PATH)
+    con = get_db_connection()
     cur = con.cursor()
 
     try:
@@ -352,7 +366,7 @@ def removeEmailsByID(email_id):
 
 
 def addOrderEvent(order, desc, date):
-    con = sql.connect(DB_PATH)
+    con = get_db_connection()
     cur = con.cursor()
 
     try:
@@ -360,7 +374,7 @@ def addOrderEvent(order, desc, date):
             INSERT OR IGNORE INTO "OrderEvent"
             (
                 "order",
-                desc,
+                description,
                 date
             )
             VALUES (?,?,?)
@@ -378,7 +392,7 @@ def addOrderEvent(order, desc, date):
         con.close()
 
 def getOrderEventsForOrder(order_id):
-    con = sql.connect(DB_PATH)
+    con = get_db_connection()
     con.row_factory = sql.Row
     cur = con.cursor()
 
@@ -398,7 +412,7 @@ def getOrderEventsForOrder(order_id):
         con.close()
 
 def removeOrderEventsForOrder(order):
-    con = sql.connect(DB_PATH)
+    con = get_db_connection()
     cur = con.cursor()
 
     try:
