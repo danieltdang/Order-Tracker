@@ -12,11 +12,56 @@ import { OrderEvent } from '../interfaces/events';
 })
 export class ApiService {
   private ip = 'http://127.0.0.1:5001';
+  private headers = {
+    "Authorization": this.AuthService.getToken()
+  }
 
   constructor(private AuthService: AuthService, private https: HttpClient) {}
 
   public getData() {
     return axios.get(this.ip + '/api/data');
+  }
+
+  public getBaseUrl() {
+    return `${this.ip}/api/users/${this.AuthService.getUUID()}`
+  }
+
+  public post(endpoint: string, payload: Object) {
+    return axios.post(
+      `${this.getBaseUrl()}/${endpoint}`,
+      payload,
+      {
+        headers: this.headers
+      }
+    );
+  }
+
+  public get(endpoint: string) {
+    return axios.get(
+      `${this.getBaseUrl()}/${endpoint}`,
+      {
+        headers: this.headers
+      }
+    );
+  }
+
+  public put(endpoint: string, payload: Object) {
+    return axios.put(
+      `${this.getBaseUrl()}/${endpoint}`,
+      payload,
+      {
+        headers: this.headers
+      }
+    );
+  }
+
+  public delete(endpoint: string) {
+    return axios.delete(
+      `${this.getBaseUrl()}/${endpoint}`,
+      {
+        headers: this.headers
+      }
+    );
   }
 
   /*
@@ -45,7 +90,7 @@ export class ApiService {
   ###########################
   */
   public getAllUserOrders() {
-    return this.https.get(`${this.ip}/api/users/${this.AuthService.getUUID()}/orders`);
+    return this.https.get(`/orders`);
   }
 
   public createUserOrder(order: Order) {
