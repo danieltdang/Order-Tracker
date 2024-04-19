@@ -53,7 +53,6 @@ import { SignupComponent } from './components/login/signup.component';
 import { ForgotComponent } from './components/login/forgot.component';
 import { PackageDetailComponent } from './components/packages/package-detail/package-detail.component';
 import { NotFoundComponent } from './layout/not-found/not-found.component';
-import { EmailViewerComponent } from './components/email-hub/email-viewer/email-viewer.component';
 
 @NgModule({
   declarations: [
@@ -74,7 +73,6 @@ import { EmailViewerComponent } from './components/email-hub/email-viewer/email-
     ForgotComponent,
     PackageDetailComponent,
     NotFoundComponent,
-    EmailViewerComponent,
   ],
   imports: [
     BrowserModule,
