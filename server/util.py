@@ -1,16 +1,25 @@
-import sqlite3 as sql
+import psycopg2
+from psycopg2.extras import DictCursor
 
-DB_PATH = 'database.db'
+def get_db_connection():
+    con = psycopg2.connect(
+        host="isilo.db.elephantsql.com",
+        database="qkhplpdv",
+        user="qkhplpdv",
+        password="MPRLThmEO3gFiPHKrX9ajpKo-hSKOLOa"
+    )
+    print("Connected to at isilo.db.elephantsql.com")
+    return con
 
 def addUser(firstName, lastName, uuid):
-    con = sql.connect(DB_PATH)
+    con = get_db_connection()
     cur = con.cursor()
 
     try:
         cur.execute("""
             INSERT INTO "User"
             (uuid, firstName, lastName)
-            VALUES (?, ?, ?)
+            VALUES (%s, %s, %s)
         """, (uuid, firstName, lastName))
         
         # Get inserted user and commit insert
@@ -19,12 +28,12 @@ def addUser(firstName, lastName, uuid):
         con.close()
 
 def removeUser(uuid):
-    con = sql.connect(DB_PATH)
+    con = get_db_connection()
     cur = con.cursor()
 
     try:
         cur.execute("""
-            SELECT COUNT(*) FROM "User" WHERE "User".uuid = ?
+            SELECT COUNT(*) FROM "User" WHERE "User".uuid = %s
         """, (uuid,))
         
         if cur.fetchone()[0] == 0:
@@ -32,7 +41,7 @@ def removeUser(uuid):
         
         cur.execute("""
             DELETE FROM "User"
-            WHERE "User".uuid = ?
+            WHERE "User".uuid = %s
         """, (uuid,))
         
         # Get inserted user and commit insert
@@ -44,14 +53,13 @@ def removeUser(uuid):
         con.close()
 
 def getUserInfo(uuid):
-    con = sql.connect(DB_PATH)
-    con.row_factory = sql.Row
-    cur = con.cursor()
+    con = get_db_connection()
+    cur = con.cursor(cursor_factory=DictCursor)
 
     try:
         cur.execute("""
             SELECT * FROM "User"
-            WHERE "User".uuid = ?
+            WHERE "User".uuid = %s
         """, (uuid,))
         user = cur.fetchone()
 
@@ -62,9 +70,8 @@ def getUserInfo(uuid):
         con.close()
 
 def getAllUsers():
-    con = sql.connect(DB_PATH)
-    con.row_factory = sql.Row
-    cur = con.cursor()
+    con = get_db_connection()
+    cur = con.cursor(cursor_factory=DictCursor)
 
     try:
         cur.execute("""
@@ -93,26 +100,26 @@ def addOrder(
     senderLocation, 
     receiverLocation
 ):
-    con = sql.connect(DB_PATH)
+    con = get_db_connection()
     cur = con.cursor()
 
     # orderID omitted as it will auto increment
     try:
         cur.execute("""
-            INSERT OR IGNORE INTO "Order"
+            INSERT INTO "Order"
             (
                 "user",
-                productName,
+                productname,
                 status,
-                trackingCode,
-                estimatedDelivery,
+                trackingcode,
+                estimateddelivery,
                 carrier,
                 source,
-                dateAdded,
-                senderLocation,
-                receiverLocation
+                dateadded,
+                senderlocation,
+                receiverlocation
             )
-            VALUES (?,?,?,?,?,?,?,?,?,?)
+            VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
         """, 
             (
                 user,
@@ -136,17 +143,16 @@ def addOrder(
         return order_id
 
 def getOrdersForUser(uuid):
-    con = sql.connect(DB_PATH)
-    con.row_factory = sql.Row
-    cur = con.cursor()
+    con = get_db_connection()
+    cur = con.cursor(cursor_factory=DictCursor)
 
     try:
         cur.execute("""
             SELECT * FROM "Order"
-            WHERE "Order".user = ?
+            WHERE "Order".user = %s
         """, (uuid,))
         orders = cur.fetchall()
-
+        
         return orders
     except:
         raise Exception(f"Error occured when trying to retrieve orders for user '{uuid}'.")
@@ -154,14 +160,13 @@ def getOrdersForUser(uuid):
         con.close()
 
 def getOrderInfo(user, order_id):
-    con = sql.connect(DB_PATH)
-    con.row_factory = sql.Row
-    cur = con.cursor()
+    con = get_db_connection()
+    cur = con.cursor(cursor_factory=DictCursor)
 
     try:
         cur.execute("""
             SELECT * FROM "Order"
-            WHERE "Order".user = ? AND "Order".orderID = ?
+            WHERE "Order".user = %s AND "Order".orderID = %s
         """, (user, order_id))
         order = cur.fetchone()
 
@@ -172,13 +177,13 @@ def getOrderInfo(user, order_id):
         con.close()
 
 def removeOrder(order):
-    con = sql.connect(DB_PATH)
+    con = get_db_connection()
     cur = con.cursor()
 
     try:
         cur.execute("""
             DELETE FROM "Order"
-            WHERE "Order".orderID = ?
+            WHERE "Order".orderID = %s
         """, 
             (order,)
         )
@@ -201,23 +206,23 @@ def updateOrder(
     senderLocation, 
     receiverLocation
 ):
-    con = sql.connect(DB_PATH)
+    con = get_db_connection()
     cur = con.cursor()
 
     # orderID omitted as it will auto increment
     try:
         cur.execute("""
             UPDATE "Order"
-            SET productName = ?,
-                status = ?,
-                trackingCode = ?,
-                estimatedDelivery = ?,
-                carrier = ?,
-                source = ?,
-                dateAdded = ?,
-                senderLocation = ?,
-                receiverLocation = ?
-            WHERE "Order"."orderID" = ?
+            SET productname = %s,
+                status = %s,
+                trackingcode = %s,
+                estimateddelivery = %s,
+                carrier = %s,
+                source = %s,
+                dateadded = %s,
+                senderlocation = %s,
+                receiverlocation = %s
+            WHERE "Order"."orderid" = %s
         """, 
             (
                 prodName,
@@ -276,29 +281,31 @@ def getOrderStats(uuid):
 
 
 
-def addEmail(order, subject, content, status, source, dateReceived):
-    con = sql.connect(DB_PATH)
+def addEmail(subject, status, order, content, source, dateReceived):
+    con = get_db_connection()
     cur = con.cursor()
 
     try:
         cur.execute("""
-            INSERT OR IGNORE INTO "Email"
+            INSERT INTO "Email"
             (
+                subject,
+                status,
                 "order",
                 subject,
                 content,
                 source,
-                status,
-                dateReceived
+                datereceived
             )
-            VALUES (?,?,?,?,?,?)
+            VALUES (%s,%s,%s,%s,%s,%s)
         """, 
             (
+                subject,
+                status,
                 order,
                 subject,
                 content,
                 source,
-                status,
                 dateReceived,
             )
         )
@@ -309,23 +316,16 @@ def addEmail(order, subject, content, status, source, dateReceived):
         con.close()
 
 def getEmailsForUser(uuid):
-    con = sql.connect(DB_PATH)
-    con.row_factory = sql.Row
-    cur = con.cursor()
+    con = get_db_connection()
+    cur = con.cursor(cursor_factory=DictCursor)
 
     try:
         cur.execute("""
-            SELECT
-                "Email"."order",
-                "Email".content,
-                "Email".dateReceived,
-                "Email".subject,
-                "Email".source,
-                "Email".status, 
-                "Email".emailID
+            SELECT "Email"."order", "Email".content, "Email".dateReceived, "Email"."emailID", "Email".subject, "Email".status, "Email".source
             FROM "Email"
             JOIN "Order" ON "Email"."order" = "Order".orderID
-            WHERE "Order".user = ?
+            JOIN "User" ON "Order"."user" = "User".uuid
+            WHERE "User".uuid = %s
         """, (uuid,))
         emails = cur.fetchall()
 
@@ -336,26 +336,18 @@ def getEmailsForUser(uuid):
         con.close()
 
 def getEmailsForOrder(order_id):
-    con = sql.connect(DB_PATH)
-    con.row_factory = sql.Row
-    cur = con.cursor()
+    con = get_db_connection()
+    cur = con.cursor(cursor_factory=DictCursor)
 
     try:
         cur.execute("""
-            SELECT
-                "Email"."order",
-                "Email".content,
-                "Email".dateReceived,
-                "Email".subject,
-                "Email".source,
-                "Email".status, 
-                "Email".emailID
+            SELECT "Email"."order", "Email".content, "Email".dateReceived, "Email"."emailID", "Email".subject, "Email".status, "Email".source
             FROM "Email"
             JOIN "Order" ON "Email"."order" = "Order".orderID
-            WHERE "Order".orderID = ?
+            WHERE "Order".orderID = %s
         """, (order_id,))
         emails = cur.fetchall()
-
+        
         return emails
     except:
         raise Exception(f"Error occured when trying to retrieve emails for order '{order_id}'.")
@@ -363,13 +355,13 @@ def getEmailsForOrder(order_id):
         con.close()
 
 def removeEmailForOrder(order):
-    con = sql.connect(DB_PATH)
+    con = get_db_connection()
     cur = con.cursor()
 
     try:
         cur.execute("""
             DELETE FROM "Email"
-            WHERE "Email"."order" = ?
+            WHERE "Email"."order" = %s
         """, 
             (order,)
         )
@@ -379,15 +371,54 @@ def removeEmailForOrder(order):
     finally:
         con.close()
         return True
-    
-def removeEmailsByID(email_id):
-    con = sql.connect(DB_PATH)
+
+def updateEmail(
+    email_id,
+    subject,
+    status,
+    source,
+    order,
+    content,
+    dateReceived,
+):
+    con = get_db_connection()
+    cur = con.cursor()
+
+    try:
+        cur.execute("""
+            UPDATE "Email"
+            SET subject = %s,
+                status = %s,
+                source = %s,
+                "order" = %s,
+                content = %s,
+                datereceived = %s
+            WHERE "Email"."emailID" = %s
+        """, 
+            (
+                subject,
+                status,
+                source,
+                order,
+                content,
+                dateReceived,
+                email_id
+            )
+        )
+        con.commit()
+    except:
+        raise Exception("Error occurred when trying to update email.")
+    finally:
+        con.close()
+
+def removeEmailByID(email_id):
+    con = get_db_connection()
     cur = con.cursor()
 
     try:
         cur.execute("""
             DELETE FROM "Email"
-            WHERE "Email"."emailID" = ?
+            WHERE "Email"."emailID" = %s
         """, 
             (email_id,)
         )
@@ -403,7 +434,7 @@ def removeEmailsByID(email_id):
 
 
 def addOrderEvent(order, desc, date):
-    con = sql.connect(DB_PATH)
+    con = get_db_connection()
     cur = con.cursor()
 
     try:
@@ -411,10 +442,10 @@ def addOrderEvent(order, desc, date):
             INSERT OR IGNORE INTO "OrderEvent"
             (
                 "order",
-                desc,
+                description,
                 date
             )
-            VALUES (?,?,?)
+            VALUES (%s,%s,%s)
         """, 
             (
                 order,
@@ -429,16 +460,15 @@ def addOrderEvent(order, desc, date):
         con.close()
 
 def getOrderEventsForOrder(order_id):
-    con = sql.connect(DB_PATH)
-    con.row_factory = sql.Row
-    cur = con.cursor()
+    con = get_db_connection()
+    cur = con.cursor(cursor_factory=DictCursor)
 
     try:
         cur.execute("""
             SELECT "OrderEvent".desc, "OrderEvent".date
             FROM "OrderEvent"
             JOIN "Order" ON "OrderEvent"."order" = "Order".orderID
-            WHERE "Order".orderID = ?
+            WHERE "Order".orderID = %s
         """, (order_id,))
         emails = cur.fetchall()
 
@@ -449,13 +479,13 @@ def getOrderEventsForOrder(order_id):
         con.close()
 
 def removeOrderEventsForOrder(order):
-    con = sql.connect(DB_PATH)
+    con = get_db_connection()
     cur = con.cursor()
 
     try:
         cur.execute("""
             DELETE FROM "OrderEvent"
-            WHERE "OrderEvent"."order" = ?
+            WHERE "OrderEvent"."order" = %s
         """, 
             (order,)
         )

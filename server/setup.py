@@ -1,12 +1,19 @@
-import sqlite3 as sql
+import psycopg2
 
-con = sql.connect('database.db')
+con = psycopg2.connect(
+    host="isilo.db.elephantsql.com",
+    database="qkhplpdv",
+    user="qkhplpdv",
+    password="MPRLThmEO3gFiPHKrX9ajpKo-hSKOLOa"
+    )
+print("Connected to at isilo.db.elephantsql.com")
+cur = con.cursor()
 
 # Enable foreign key support
-con.execute('PRAGMA foreign_keys = ON')
+#cur.execute('PRAGMA foreign_keys = ON')
 
-con.execute("""
-CREATE TABLE IF NOT EXISTS "User"(
+cur.execute("""
+CREATE TABLE IF NOT EXISTS "User" (
     uuid TEXT PRIMARY KEY,
     firstName TEXT,
     lastName TEXT,
@@ -19,10 +26,10 @@ CREATE TABLE IF NOT EXISTS "User"(
 # but an order can only have
 # one associated user
 
-con.execute("""
-CREATE TABLE IF NOT EXISTS "Order"(
-    user TEXT,
-    orderID INTEGER PRIMARY KEY,
+cur.execute("""
+CREATE TABLE IF NOT EXISTS "Order" (
+    "user" TEXT,
+    orderID SERIAL PRIMARY KEY,
     senderLocation TEXT,
     receiverLocation TEXT,
     productName TEXT,
@@ -32,7 +39,7 @@ CREATE TABLE IF NOT EXISTS "Order"(
     carrier TEXT,
     source TEXT,
     dateAdded TEXT,
-    FOREIGN KEY (user) REFERENCES "User"(uuid)
+    FOREIGN KEY ("user") REFERENCES "User"(uuid)
 )
 """)
 
@@ -40,13 +47,14 @@ CREATE TABLE IF NOT EXISTS "Order"(
 # but an email can only have
 # one associated order
 
-con.execute("""
-CREATE TABLE IF NOT EXISTS "Email"(
-    "order" INTEGER,
-    "emailID" INTEGER PRIMARY KEY,
+cur.execute("""
+CREATE TABLE IF NOT EXISTS Email (
     subject TEXT,
-    status TEXT,
+    STATUS INTEGER,
+    "order" INTEGER,
+    "emailID" SERIAL PRIMARY KEY,
     content TEXT,
+    source TEXT,
     dateReceived TEXT,
     source TEXT,
     FOREIGN KEY ("order") REFERENCES "Order"(orderID)
@@ -55,15 +63,32 @@ CREATE TABLE IF NOT EXISTS "Email"(
 
 # An order can also have many order events
 
-con.execute("""
+cur.execute("""
 CREATE TABLE IF NOT EXISTS "OrderEvent"(
     "order" INTEGER,
-    "orderEventID" INTEGER PRIMARY KEY,
-    desc TEXT,
+    "orderEventID" SERIAL PRIMARY KEY,
+    description TEXT,
     date TEXT,
     FOREIGN KEY ("order") REFERENCES "Order"(orderID)
 )
 """)
 
+cur.execute("""
+CREATE ROLE base_user
+""")
+
+cur.execute("""
+CREATE ROLE premium_user
+""")
+
+cur.execute("""
+GRANT SELECT ON "Email" TO premium_user;
+""")
+
+cur.execute("""
+REVOKE ALL ON "Email" FROM base_user;
+""")
+
 con.commit()
+cur.close()
 con.close()

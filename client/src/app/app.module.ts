@@ -29,6 +29,7 @@ import { DialogModule } from 'primeng/dialog';
 import { AccordionModule } from 'primeng/accordion';
 import { SkeletonModule } from 'primeng/skeleton';
 import { TagModule } from 'primeng/tag';
+import { InputTextareaModule } from 'primeng/inputtextarea';
 
 import { GoogleMapsModule } from '@angular/google-maps';
 
@@ -106,6 +107,7 @@ import { EmailViewerComponent } from './components/email-hub/email-viewer/email-
     AccordionModule,
     SkeletonModule,
     TagModule,
+    InputTextareaModule,
   ],
   providers: [
     provideClientHydration(),

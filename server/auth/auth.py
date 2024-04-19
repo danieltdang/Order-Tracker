@@ -2,12 +2,21 @@ import jwt
 import bcrypt
 import os
 import uuid
-import sqlite3 as sql
 from datetime import datetime, timedelta
 from dotenv import load_dotenv
 from flask import Request
+import psycopg2
+import binascii
 
-DB_PATH = 'database.db'
+def get_db_connection():
+    con = psycopg2.connect(
+        host="isilo.db.elephantsql.com",
+        database="qkhplpdv",
+        user="qkhplpdv",
+        password="MPRLThmEO3gFiPHKrX9ajpKo-hSKOLOa"
+    )
+    print("Connected to at isilo.db.elephantsql.com")
+    return con
 
 load_dotenv()
 
@@ -17,11 +26,11 @@ def register_user(first_name, last_name, email, first_password):
 
     hashed_password = bcrypt.hashpw(first_password.encode('utf-8'), bcrypt.gensalt())
 
-    con = sql.connect(DB_PATH)
+    con = get_db_connection()
     cur = con.cursor()
 
     try:
-        cur.execute("""SELECT * FROM "User" WHERE email = ?""", (email,))
+        cur.execute("""SELECT * FROM "User" WHERE email = %s""", (email,))
 
         if cur.fetchone() is not None:
             return None
@@ -31,7 +40,7 @@ def register_user(first_name, last_name, email, first_password):
         cur.execute("""
             INSERT INTO "User"
             (uuid, firstName, lastName, email, password)
-            VALUES (?, ?, ?, ?, ?)
+            VALUES (%s, %s, %s, %s, %s)
         """, (user_uuid, first_name, last_name, email, hashed_password))
         
         con.commit()
@@ -44,17 +53,25 @@ def register_user(first_name, last_name, email, first_password):
         con.close()
 
 def login_user(email, password):
-    con = sql.connect(DB_PATH)
+    con = get_db_connection()
     cur = con.cursor()
 
     try:
-        cur.execute("""SELECT * FROM "User" WHERE email = ?""", (email,))
+        cur.execute("""SELECT * FROM "User" WHERE email = %s""", (email,))
         user = cur.fetchone()
 
         if user is None:
             return None
+        
+        # Decode the hexadecimal string (stored as bytes literal in database) back to bytes
+        hashed_password = user[4]
 
-        if bcrypt.checkpw(password.encode('utf-8'), user[4]):           
+        # Remove any leading 'b' characters and decode from hex
+        if hashed_password.startswith('b'):
+            hashed_password = hashed_password[1:]
+        hashed_password = bytes.fromhex(hashed_password.replace('\\x', ''))
+
+        if bcrypt.checkpw(password.encode('utf-8'), hashed_password):        
             return {
                 "uuid": user[0],
                 "token": signToken(user[0])
@@ -65,19 +82,23 @@ def login_user(email, password):
     return None
 
 def change_password(uuid, old_password, new_password):
-    con = sql.connect(DB_PATH)
+    con = get_db_connection()
     cur = con.cursor()
 
     try:
-        cur.execute("""SELECT * FROM "User" WHERE uuid = ?""", (uuid,))
+        cur.execute("""SELECT * FROM "User" WHERE uuid = %s""", (uuid,))
         user = cur.fetchone()
 
         if user is None:
             return False
                 
-        if bcrypt.checkpw(old_password.encode('utf-8'), user[4]):
-            hashed_password = bcrypt.hashpw(new_password.encode('utf-8'), bcrypt.gensalt())
-            cur.execute("""UPDATE "User" SET password = ? WHERE uuid = ?""", (hashed_password, uuid))
+        # Convert hashed password from string to bytes
+        hashed_password = bytes.fromhex(user[4].replace('\\x', ''))
+
+        if bcrypt.checkpw(old_password.encode('utf-8'), hashed_password):
+            # Hash the new password
+            new_hashed_password = bcrypt.hashpw(new_password.encode('utf-8'), bcrypt.gensalt())
+            cur.execute("""UPDATE "User" SET password = %s WHERE uuid = %s""", (new_hashed_password, uuid))
             con.commit()
             return True
         else: 
@@ -85,6 +106,7 @@ def change_password(uuid, old_password, new_password):
         
     finally:
         con.close()
+
 
 
 def verifyToken(uuid, token):

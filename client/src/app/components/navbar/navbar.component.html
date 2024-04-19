@@ -10,7 +10,7 @@
         </div>
         
         <div class="subheader">
-            Hello Example User!
+            Hello {{ name }}!
         </div>
 
         <div class="content" [ngClass]="{'active':  mobileMenuActive}">
@@ -25,7 +25,7 @@
                 </div>
                 <div class="userContainer">
                     <p-avatar label="E" styleClass="mr-2" size="normal" shape="circle"/>
-                    Example User
+                    {{ name }}
                 </div>
             </div>
         </div>
