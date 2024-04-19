@@ -94,7 +94,7 @@
         <div class="field">
             <label for="name">Date Received</label>
             <p-calendar appendTo="body" [(ngModel)]="dateReceived" dateFormat="MM d, yy" [iconDisplay]="'input'" [showIcon]="true"></p-calendar>
-            <small class="p-error" *ngIf="submitted && !email.datereceived">Date Received is required.</small>
+            <small class="p-error" *ngIf="submitted && !dateReceived">Date Received is required.</small>
         </div>
 
         <div class="field">

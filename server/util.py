@@ -337,8 +337,47 @@ def removeEmailForOrder(order):
     finally:
         con.close()
         return True
-    
-def removeEmailsByID(email_id):
+
+def updateEmail(
+    email_id,
+    subject,
+    status,
+    source,
+    order,
+    content,
+    dateReceived,
+):
+    con = get_db_connection()
+    cur = con.cursor()
+
+    try:
+        cur.execute("""
+            UPDATE "Email"
+            SET subject = %s,
+                status = %s,
+                source = %s,
+                "order" = %s,
+                content = %s,
+                datereceived = %s
+            WHERE "Email"."emailID" = %s
+        """, 
+            (
+                subject,
+                status,
+                source,
+                order,
+                content,
+                dateReceived,
+                email_id
+            )
+        )
+        con.commit()
+    except:
+        raise Exception("Error occurred when trying to update email.")
+    finally:
+        con.close()
+
+def removeEmailByID(email_id):
     con = get_db_connection()
     cur = con.cursor()
 

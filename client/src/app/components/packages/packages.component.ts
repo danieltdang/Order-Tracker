@@ -180,10 +180,10 @@ export class PackagesComponent {
     }
 
     this.statuses = [
-      { label: 'Pre Transit', value: 0 },
+      { label: 'Pre-Transit', value: 0 },
       { label: 'In Transit', value: 1 },
-      { label: 'Delivered', value: 2 },
-      { label: 'Returned', value: 3 }
-    ]
+      { label: 'Out for Delivery', value: 2 },
+      { label: 'Delivered', value: 3 }
+    ];
   }
 }

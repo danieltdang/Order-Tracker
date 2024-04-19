@@ -177,7 +177,7 @@ export class ApiService {
       dateReceived: email.datereceived
     }
 
-    return await this.put(`emails/${email.emailID}`, payload);
+    return await axios.put(`${this.ip}/api/users/${this.AuthService.getUUID()}/emails/${email.emailID}`, payload);
   }
 
   /*

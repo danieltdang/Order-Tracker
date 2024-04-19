@@ -279,7 +279,7 @@ def order_emails(uuid, order_id):
             })
 
 
-@app.route('/api/users/<uuid>/emails/<email_id>', methods = ["DELETE"])
+@app.route('/api/users/<uuid>/emails/<email_id>', methods = ["DELETE", "PUT"])
 def user_email_by_ID(uuid, email_id):
     # authenticate
     if validate_request(uuid, request):
@@ -299,6 +299,27 @@ def user_email_by_ID(uuid, email_id):
                 "message": "Email not found",
                 "status": 404
             })
+    elif request.method == "PUT":
+        request.body = request.get_json()
+
+        try:
+            util.updateEmail(
+                email_id,
+                request.body['subject'],
+                request.body['status'],
+                request.body['source'],
+                request.body['order'],
+                request.body['content'],
+                request.body['dateReceived'],
+            )
+        except psycopg2.DatabaseError:
+            return jsonify({
+                "message": "Error occured when updating email.",
+            }), 400
+
+        return jsonify({
+            "message": f"Successfully updated email {email_id}",
+        }), 201
 
 
 ###########################
