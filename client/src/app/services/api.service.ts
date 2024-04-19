@@ -93,20 +93,20 @@ export class ApiService {
   ###########################
   */
   public async getAllUserOrders() {
-    return await this.get('orders')
+    return await axios.get(`${this.ip}/api/users/${this.AuthService.getUUID()}/orders`);
   }
 
   public async createUserOrder(order: Order) {
     const payload = {
-      senderLocation: order.senderLocation,
-      receiverLocation: order.receiverLocation,
-      prodName: order.productName,
+      senderLocation: order.senderlocation,
+      receiverLocation: order.receiverlocation,
+      prodName: order.productname,
       status: order.status,
-      trackCode: order.trackingCode,
-      estDelivery: order.estimatedDelivery,
+      trackCode: order.trackingcode,
+      estDelivery: order.estimateddelivery,
       carrier: order.carrier,
       source: order.source,
-      dateAdded: order.dateAdded,
+      dateAdded: order.dateadded,
     }
 
     return await axios.post('orders', payload)
@@ -114,18 +114,18 @@ export class ApiService {
 
   public async updateUserOrder(order: Order) {
     const payload = {
-      senderLocation: order.senderLocation,
-      receiverLocation: order.receiverLocation,
-      prodName: order.productName,
+      senderLocation: order.senderlocation,
+      receiverLocation: order.receiverlocation,
+      prodName: order.productname,
       status: order.status,
-      trackCode: order.trackingCode,
-      estDelivery: order.estimatedDelivery,
+      trackCode: order.trackingcode,
+      estDelivery: order.estimateddelivery,
       carrier: order.carrier,
       source: order.source,
-      dateAdded: order.dateAdded
+      dateAdded: order.dateadded
     }
 
-    return await this.post(`orders/${order.orderID}`, payload)
+    return await this.post(`orders/${order.orderid}`, payload)
   }
 
   public async getOrderByID(order_id: string) {

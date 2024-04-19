@@ -152,7 +152,7 @@ def getOrdersForUser(uuid):
             WHERE "Order".user = %s
         """, (uuid,))
         orders = cur.fetchall()
-
+        
         return orders
     except:
         raise Exception(f"Error occured when trying to retrieve orders for user '{uuid}'.")

@@ -60,14 +60,14 @@
     <ng-template pTemplate="content">
         <div class="field">
             <label for="name">Name</label>
-            <input class="p-inputtext" type="text" pInputText id="name" [(ngModel)]="order.productName" required autofocus />
-            <small class="p-error" *ngIf="submitted && !order.productName">Name is required.</small>
+            <input class="p-inputtext" type="text" pInputText id="name" [(ngModel)]="order.productname" required autofocus />
+            <small class="p-error" *ngIf="submitted && !order.productname">Name is required.</small>
         </div>
 
         <div class="field">
             <label for="name">Tracking Code</label>
-            <input class="p-inputtext" type="text" pInputText id="tracking" [(ngModel)]="order.trackingCode" required autofocus />
-            <small class="p-error" *ngIf="submitted && !order.trackingCode">Tracking Code is required.</small>
+            <input class="p-inputtext" type="text" pInputText id="tracking" [(ngModel)]="order.trackingcode" required autofocus />
+            <small class="p-error" *ngIf="submitted && !order.trackingcode">Tracking Code is required.</small>
         </div>
 
         <div class="field">
@@ -98,13 +98,13 @@
         <div class="field">
             <label for="name">Date Added</label>
             <p-calendar appendTo="body" [(ngModel)]="dateAdded" dateFormat="MM d, yy" [iconDisplay]="'input'" [showIcon]="true"></p-calendar>
-            <small class="p-error" *ngIf="submitted && !order.dateAdded">Date Added is required.</small>
+            <small class="p-error" *ngIf="submitted && !order.dateadded">Date Added is required.</small>
         </div>
 
         <div class="field">
             <label for="name">Estimated Delivery</label>
             <p-calendar appendTo="body" [(ngModel)]="estimatedDelivery" dateFormat="MM d, yy" [iconDisplay]="'input'" [showIcon]="true"></p-calendar>
-            <small class="p-error" *ngIf="submitted && !order.estimatedDelivery">Estimated Delivery is required.</small>
+            <small class="p-error" *ngIf="submitted && !order.estimateddelivery">Estimated Delivery is required.</small>
         </div>
     </ng-template>
     <ng-template pTemplate="footer">

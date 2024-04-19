@@ -33,7 +33,7 @@ export class PackagesComponent {
   findIndexById(id: string): number {
     let index = -1;
     for (let i = 0; i < this.orders.length; i++) {
-        if (this.orders[i].orderID === id) {
+        if (this.orders[i].orderid === id) {
             index = i;
             break;
         }
@@ -44,32 +44,32 @@ export class PackagesComponent {
 
   editOrder(order: Order) {
     this.order = { ...order };
-    this.dateAdded = new Date(order.dateAdded);
-    this.estimatedDelivery = new Date(order.estimatedDelivery);
+    this.dateAdded = new Date(order.dateadded);
+    this.estimatedDelivery = new Date(order.estimateddelivery);
     this.orderDialog = true;
   }
 
   async deleteOrder(order: Order) {
     this.confirmationService.confirm({
-        message: 'Are you sure you want to delete ' + order.productName + '?',
+        message: 'Are you sure you want to delete ' + order.productname + '?',
         header: 'Confirm',
         icon: 'pi pi-exclamation-triangle',
         accept: async () => {
-            const result = await this.apiService.deleteUserOrder(order.orderID);
+            const result = await this.apiService.deleteUserOrder(order.orderid);
 
             if (result.status === 200) {
-              this.orders = this.orders.filter((val: any) => val.id !== order.orderID);
+              this.orders = this.orders.filter((val: any) => val.id !== order.orderid);
               this.order = {
-                orderID: '',
-                productName: '',
+                orderid: '',
+                productname: '',
                 status: '',
-                trackingCode: '',
-                estimatedDelivery: '',
+                trackingcode: '',
+                estimateddelivery: '',
                 carrier: '',
                 source: '',
-                dateAdded: '',
-                senderLocation: '',
-                receiverLocation: ''
+                dateadded: '',
+                senderlocation: '',
+                receiverlocation: ''
               };
             }
             this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Order Deleted', life: 3000 });
@@ -92,16 +92,16 @@ export class PackagesComponent {
   async saveOrder() {
     this.submitted = true;
 
-    if (this.order.productName?.trim()) {
-      this.order.dateAdded = this.formatDateToString(this.dateAdded);
-      this.order.estimatedDelivery = this.formatDateToString(this.estimatedDelivery);
+    if (this.order.productname?.trim()) {
+      this.order.dateadded = this.formatDateToString(this.dateAdded);
+      this.order.estimateddelivery = this.formatDateToString(this.estimatedDelivery);
 
-      if (this.order.orderID) {
+      if (this.order.orderid) {
 
         const result = await this.apiService.updateUserOrder(this.order);
 
         if (result.status === 201) {
-          this.orders[this.findIndexById(this.order.orderID)] = this.order;
+          this.orders[this.findIndexById(this.order.orderid)] = this.order;
           this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Order Updated', life: 3000 });
         } else if (result.status === 400) {
           this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Order Not Updated', life: 3000 });
@@ -121,32 +121,32 @@ export class PackagesComponent {
       this.orders = [...this.orders];
       this.orderDialog = false;
       this.order = {
-        orderID: '',
-        productName: '',
+        orderid: '',
+        productname: '',
         status: '',
-        trackingCode: '',
-        estimatedDelivery: '',
+        trackingcode: '',
+        estimateddelivery: '',
         carrier: '',
         source: '',
-        dateAdded: '',
-        senderLocation: '',
-        receiverLocation: ''
+        dateadded: '',
+        senderlocation: '',
+        receiverlocation: ''
       };
     }
   }
 
   openNew() {
     this.order = {
-      orderID: '',
-      productName: '',
+      orderid: '',
+      productname: '',
       status: '',
-      trackingCode: '',
-      estimatedDelivery: '',
+      trackingcode: '',
+      estimateddelivery: '',
       carrier: '',
       source: '',
-      dateAdded: '',
-      senderLocation: '',
-      receiverLocation: ''
+      dateadded: '',
+      senderlocation: '',
+      receiverlocation: ''
     };
     this.dateAdded = new Date();
     this.estimatedDelivery = new Date();
@@ -173,12 +173,11 @@ export class PackagesComponent {
   
   async ngOnInit(): Promise<void> {
     const result = await this.apiService.getAllUserOrders()
-    if (result.status === 201) {
-        console.log(result);
+    if (result.status === 200) {
         this.orders = result.data.data[0];
         console.log(this.orders);
     } else {
-        this.orders = [];
+      
     }
 
     this.statuses = [

@@ -111,7 +111,6 @@ def user_all_orders(uuid):
     
     if request.method == "GET":
         orders = [dict(order) for order in util.getOrdersForUser(uuid)]
-
         return jsonify({
             "data": orders,
             "status": 200
