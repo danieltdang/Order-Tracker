@@ -21,6 +21,7 @@ export class EmailHubComponent {
   statuses!: any[];
   submitted: boolean = false;
   emailDialog: boolean = false;
+  emailViewer: boolean = false;
 
   constructor(private apiService: ApiService, private router: Router, private statusService: PackageStatusService,
               private confirmationService: ConfirmationService, private messageService: MessageService
@@ -50,6 +51,7 @@ export class EmailHubComponent {
 
   onRowSelect(event: any) {
     //this.router.navigate(['app/packages', event.data.orderID]);
+    this.emailViewer = true;
     console.log(event.data.emailID);
   }
 
