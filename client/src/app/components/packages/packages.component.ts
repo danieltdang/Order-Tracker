@@ -26,6 +26,16 @@ export class PackagesComponent {
   constructor(private apiService: ApiService, private router: Router, private statusService: PackageStatusService,
               private messageService: MessageService, private confirmationService: ConfirmationService) { }
 
+
+  updateOrders() {
+    this.apiService.getAllUserOrders().then((result) => {
+      if (result.status === 200) {
+        this.orders = result.data.data;
+      } else {
+      }
+    });
+  }
+  
   getOrderId(index : number, order : any) {
     return order.orderID;
   }
@@ -58,7 +68,7 @@ export class PackagesComponent {
             const result = await this.apiService.deleteUserOrder(order.orderid);
 
             if (result.status === 200) {
-              this.orders = this.orders.filter((val: any) => val.id !== order.orderid);
+              this.updateOrders();
               this.order = {
                 orderid: '',
                 productname: '',
@@ -91,17 +101,16 @@ export class PackagesComponent {
 
   async saveOrder() {
     this.submitted = true;
-
-    if (this.order.productname?.trim()) {
+    console.log(this.order)
+    if (this.order.productname !== "" && this.order.status !== "" && this.order.trackingcode !== "" && this.order.carrier !== "" && this.order.source !== "" && this.dateAdded && this.estimatedDelivery) {
       this.order.dateadded = this.formatDateToString(this.dateAdded);
       this.order.estimateddelivery = this.formatDateToString(this.estimatedDelivery);
 
       if (this.order.orderid) {
-
         const result = await this.apiService.updateUserOrder(this.order);
 
         if (result.status === 201) {
-          this.orders[this.findIndexById(this.order.orderid)] = this.order;
+          this.updateOrders();
           this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Order Updated', life: 3000 });
         } else if (result.status === 400) {
           this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Order Not Updated', life: 3000 });
@@ -109,16 +118,14 @@ export class PackagesComponent {
       } else {
 
         const result = await this.apiService.createUserOrder(this.order);
-        console.log(result);
         if (result.status === 201) {
-          this.orders.push(this.order);
+          this.updateOrders();
           this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Order Created', life: 3000 });
         } else if (result.status === 400) {
           this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Order Not Created', life: 3000 });
         }
       }
 
-      this.orders = [...this.orders];
       this.orderDialog = false;
       this.order = {
         orderid: '',
@@ -172,12 +179,7 @@ export class PackagesComponent {
   }
   
   async ngOnInit(): Promise<void> {
-    const result = await this.apiService.getAllUserOrders()
-    if (result.status === 200) {
-        this.orders = result.data.data;
-    } else {
-      
-    }
+    this.updateOrders();
 
     this.statuses = [
       { label: 'Pre-Transit', value: 0 },

@@ -39,22 +39,14 @@ export class EmailHubComponent {
     this.apiService.getUserEmails().then((result) => {
       if (result.status === 200) {
         this.emails = result.data.data;
-        console.log(this.emails);
       } else {
       }
     });
   }
 
   async ngOnInit(): Promise<void> {
-    const result = await this.apiService.getUserEmails()
-    if (result.status === 200) {
-        this.emails = result.data.data;
-        console.log(this.emails);
-    } else {
-      
-    }
+    this.updateEmails();
     
-
     this.statuses = [
       { label: 'Pre-Transit', value: 0 },
       { label: 'In Transit', value: 1 },

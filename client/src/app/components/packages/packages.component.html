@@ -98,13 +98,13 @@
         <div class="field">
             <label for="name">Date Added</label>
             <p-calendar appendTo="body" [(ngModel)]="dateAdded" dateFormat="MM d, yy" [iconDisplay]="'input'" [showIcon]="true"></p-calendar>
-            <small class="p-error" *ngIf="submitted && !order.dateadded">Date Added is required.</small>
+            <small class="p-error" *ngIf="submitted && !dateAdded">Date Added is required.</small>
         </div>
 
         <div class="field">
             <label for="name">Estimated Delivery</label>
             <p-calendar appendTo="body" [(ngModel)]="estimatedDelivery" dateFormat="MM d, yy" [iconDisplay]="'input'" [showIcon]="true"></p-calendar>
-            <small class="p-error" *ngIf="submitted && !order.estimateddelivery">Estimated Delivery is required.</small>
+            <small class="p-error" *ngIf="submitted && !estimatedDelivery">Estimated Delivery is required.</small>
         </div>
     </ng-template>
     <ng-template pTemplate="footer">
