@@ -42,11 +42,11 @@
         <ng-template pTemplate="body" let-order>
             <tr [pSelectableRow]="order">
                 <td>{{ order.source }}</td>
-                <td>{{ order.productName }}</td>
+                <td>{{ order.productname }}</td>
                 <td>{{ getStatus(order.status) }}</td>
-                <td>{{ order.trackingCode }}</td>
+                <td>{{ order.trackingcode }}</td>
                 <td>{{ order.carrier }}</td>
-                <td>{{ formatDate(order?.dateAdded) }}</td>
+                <td>{{ formatDate(order?.dateadded) }}</td>
                 <td class="white-space-nowrap">
                     <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-info mr-2" (click)="editOrder(order)"></button>
                     <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger" (click)="deleteOrder(order)"></button>

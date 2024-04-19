@@ -173,8 +173,9 @@ export class PackagesComponent {
   
   async ngOnInit(): Promise<void> {
     const result = await this.apiService.getAllUserOrders()
+    console.log(result.data.data);
     if (result.status === 200) {
-        this.orders = result.data.data[0];
+        this.orders = result.data.data;
         console.log(this.orders);
     } else {
       
