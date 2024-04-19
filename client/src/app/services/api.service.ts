@@ -29,8 +29,11 @@ export class ApiService {
 
 
   /* wrapper functions */
-  public post(endpoint: string, payload: Object) {
-    return axios.post(
+  /*
+  these funcs avoid the boilerplate of adding the baseurl and auth headers
+  */
+  public async post(endpoint: string, payload: Object) {
+    return await axios.post(
       `${this.getBaseUrl()}/${endpoint}`,
       payload,
       {
@@ -40,16 +43,16 @@ export class ApiService {
   }
 
   public async get(endpoint: string) {
-    return (await axios.get(
+    return await axios.get(
       `${this.getBaseUrl()}/${endpoint}`,
       {
         headers: this.headers
       }
-    )).data;
+    );
   }
 
-  public put(endpoint: string, payload: Object) {
-    return axios.put(
+  public async put(endpoint: string, payload: Object) {
+    return await axios.put(
       `${this.getBaseUrl()}/${endpoint}`,
       payload,
       {
@@ -58,33 +61,13 @@ export class ApiService {
     );
   }
 
-  public delete(endpoint: string) {
-    return axios.delete(
+  public async delete(endpoint: string) {
+    return await axios.delete(
       `${this.getBaseUrl()}/${endpoint}`,
       {
         headers: this.headers
       }
     );
-  }
-
-  /*
-  ##########################
-  # USER RELATED ENDPOINTS #
-  ##########################
-  */
-
-  public async getAllUsers() {
-    return await axios.get(`${this.ip}/api/users`);
-  }
-
-  public async createUser(firstName: string, lastName: string, uuid: string) {
-    const payload = {
-      firstName: firstName,
-      lastName: lastName,
-      uuid: uuid
-    }
-
-    return await axios.post(`${this.ip}/api/users`, payload);
   }
 
   /*
