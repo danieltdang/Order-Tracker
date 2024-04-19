@@ -255,16 +255,16 @@ def addEmail(subject, status, order, content, source, dateReceived):
 
     try:
         cur.execute("""
-            INSERT OR IGNORE INTO "Email"
+            INSERT INTO "Email"
             (
                 subject,
-                STATUS,
+                status,
                 "order",
                 content,
                 source,
-                dateReceived
+                datereceived
             )
-            VALUES (%s,%s,%s)
+            VALUES (%s,%s,%s,%s,%s,%s)
         """, 
             (
                 subject,
@@ -287,7 +287,7 @@ def getEmailsForUser(uuid):
 
     try:
         cur.execute("""
-            SELECT "Email"."order", "Email".content, "Email".dateReceived 
+            SELECT "Email"."order", "Email".content, "Email".dateReceived, "Email"."emailID", "Email".subject, "Email".status, "Email".source
             FROM "Email"
             JOIN "Order" ON "Email"."order" = "Order".orderID
             JOIN "User" ON "Order"."user" = "User".uuid
@@ -307,13 +307,13 @@ def getEmailsForOrder(order_id):
 
     try:
         cur.execute("""
-            SELECT "Email"."order", "Email".content, "Email".dateReceived 
+            SELECT "Email"."order", "Email".content, "Email".dateReceived, "Email"."emailID", "Email".subject, "Email".status, "Email".source
             FROM "Email"
             JOIN "Order" ON "Email"."order" = "Order".orderID
             WHERE "Order".orderID = %s
         """, (order_id,))
         emails = cur.fetchall()
-
+        
         return emails
     except:
         raise Exception(f"Error occured when trying to retrieve emails for order '{order_id}'.")

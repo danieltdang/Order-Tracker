@@ -175,7 +175,6 @@ export class PackagesComponent {
     const result = await this.apiService.getAllUserOrders()
     if (result.status === 200) {
         this.orders = result.data.data;
-        console.log(this.orders);
     } else {
       
     }

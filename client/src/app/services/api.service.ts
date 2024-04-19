@@ -143,7 +143,7 @@ export class ApiService {
   */
 
   public async getUserEmails() {
-    return await axios.get('emails')
+    return await axios.get(`${this.ip}/api/users/${this.AuthService.getUUID()}/emails`)
   }
 
   public async getOrderEmails(order_id: string) {
@@ -152,21 +152,29 @@ export class ApiService {
 
   public async createOrderEmail(email: Email) {
     const payload = {
+      subject: email.subject,
+      status: email.status,
+      order: email.order,
       content: email.content,
-      dateReceived: email.dateReceived
+      source: email.source,
+      dateReceived: email.datereceived
     }
 
-    return await axios.post(`orders/${email.order}/emails`, payload)
+    return await axios.post(`${this.ip}/api/users/${this.AuthService.getUUID()}/orders/${email.order}/emails`, payload)
   }
 
   public async deleteOrderEmail(email_id: string) {
-    return await axios.delete(`emails/${email_id}`);
+    return await axios.delete(`${this.ip}/api/users/${this.AuthService.getUUID()}/emails/${email_id}`);
   }
 
   public async updateOrderEmail(email: Email) {
     const payload = {
+      subject: email.subject,
+      status: email.status,
+      order: email.order,
       content: email.content,
-      dateReceived: email.dateReceived
+      source: email.source,
+      dateReceived: email.datereceived
     }
 
     return await this.put(`emails/${email.emailID}`, payload);

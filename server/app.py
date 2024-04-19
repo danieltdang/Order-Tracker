@@ -238,14 +238,23 @@ def order_emails(uuid, order_id):
             "status": 200
         })
     elif request.method == "POST":
-        content = request.form['content']
-        dateReceived = request.form['dateReceived']
+        request.body = request.get_json()
+        
+        subject = request.body['subject']
+        status = request.body['status']
+        source = request.body['source']
+        order = order_id
+        content = request.body['content']
+        dateReceived = request.body['dateReceived']
 
         try:
             util.addEmail(
-                order_id,
+                subject,
+                status,
+                order,
                 content,
-                dateReceived,
+                source,
+                dateReceived
             )
 
             return jsonify({

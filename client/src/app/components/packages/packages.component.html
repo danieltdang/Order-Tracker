@@ -80,7 +80,7 @@
                     <span>{{option.label}}</span>
                 </ng-template>
             </p-dropdown>
-            <small class="p-error" *ngIf="submitted && order.status === null">Status is required.</small>
+            <small class="p-error" *ngIf="submitted && !order.status">Status is required.</small>
         </div>
 
         <div class="field">

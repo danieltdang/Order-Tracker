@@ -5,5 +5,5 @@ export interface Email {
     emailID: string;
     content: string;
     source: string;
-    dateReceived: string;
+    datereceived: string;
 }
