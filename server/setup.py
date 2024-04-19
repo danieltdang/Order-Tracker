@@ -44,8 +44,11 @@ con.execute("""
 CREATE TABLE IF NOT EXISTS "Email"(
     "order" INTEGER,
     "emailID" INTEGER PRIMARY KEY,
+    subject TEXT,
+    status TEXT,
     content TEXT,
     dateReceived TEXT,
+    source TEXT,
     FOREIGN KEY ("order") REFERENCES "Order"(orderID)
 )
 """)

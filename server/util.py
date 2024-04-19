@@ -244,7 +244,7 @@ def updateOrder(
 
 
 
-def addEmail(order, content, dateReceived):
+def addEmail(order, subject, content, status, source, dateReceived):
     con = sql.connect(DB_PATH)
     cur = con.cursor()
 
@@ -253,14 +253,20 @@ def addEmail(order, content, dateReceived):
             INSERT OR IGNORE INTO "Email"
             (
                 "order",
+                subject,
                 content,
+                source,
+                status,
                 dateReceived
             )
-            VALUES (?,?,?)
+            VALUES (?,?,?,?,?,?)
         """, 
             (
                 order,
+                subject,
                 content,
+                source,
+                status,
                 dateReceived,
             )
         )
@@ -277,7 +283,14 @@ def getEmailsForUser(uuid):
 
     try:
         cur.execute("""
-            SELECT "Email"."order", "Email".content, "Email".dateReceived 
+            SELECT
+                "Email"."order",
+                "Email".content,
+                "Email".dateReceived,
+                "Email".subject,
+                "Email".source,
+                "Email".status, 
+                "Email".emailID
             FROM "Email"
             JOIN "Order" ON "Email"."order" = "Order".orderID
             JOIN "User" ON "Order"."user" = "User".uuid
@@ -298,7 +311,14 @@ def getEmailsForOrder(order_id):
 
     try:
         cur.execute("""
-            SELECT "Email"."order", "Email".content, "Email".dateReceived 
+            SELECT
+                "Email"."order",
+                "Email".content,
+                "Email".dateReceived,
+                "Email".subject,
+                "Email".source,
+                "Email".status, 
+                "Email".emailID
             FROM "Email"
             JOIN "Order" ON "Email"."order" = "Order".orderID
             WHERE "Order".orderID = ?
