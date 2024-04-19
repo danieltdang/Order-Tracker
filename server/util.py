@@ -244,35 +244,37 @@ def updateOrder(
         con.close()
 
 def getOrderStats(uuid):
-    con = sql.connect(DB_PATH)
-    con.row_factory = sql.Row
+    con = get_db_connection()
     cur = con.cursor()
 
     statuses = []
     try:
-        for i in range(4):
+        # Using an explicit list of status integers to ensure it matches expected stats
+        for status in range(4):
             cur.execute("""
                 SELECT COUNT(*) FROM "Order"
-                WHERE "Order".user = ? AND "Order".status = ?
-            """, (uuid,i))
-            statuses.append(cur.fetchone())
-
+                WHERE "Order"."user" = %s AND "Order"."status" = %s
+            """, (uuid, status))
+            statuses.append(cur.fetchone()[0])
+        
+        # Query for the total count of orders by the user
         cur.execute("""
             SELECT COUNT(*) FROM "Order"
-            WHERE "Order".user = ?
-        """, (uuid,i))
-        statuses.append(cur.fetchone())
+            WHERE "Order"."user" = %s
+        """, (uuid,))
+        statuses.append(cur.fetchone()[0])
 
+        # Query for the count of emails related to user's orders
         cur.execute("""
             SELECT COUNT(*) FROM "Email"
-            JOIN "Order" ON "Email"."order" = "Order".orderID
-            WHERE "Order".user = ?
-        """, (uuid,i))
-        statuses.append(cur.fetchone())
+            JOIN "Order" ON "Email"."order" = "Order".orderid
+            WHERE "Order"."user" = %s
+        """, (uuid,))
+        statuses.append(cur.fetchone()[0])
 
         return statuses
     except:
-        raise Exception(f"Error occured when trying to retrieve order {order_id} from user '{user}'.")
+        raise Exception(f"Error occured when trying to retrieve stats for user '{uuid}'.")
     finally:
         con.close()
 

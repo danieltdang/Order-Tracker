@@ -3,6 +3,8 @@ import { Component, OnInit, ChangeDetectorRef, SimpleChanges } from '@angular/co
 import { Report } from '../../interfaces/report';
 import { Filter } from '../../interfaces/filter';
 
+import { ApiService } from '../../services/api.service';
+
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -26,7 +28,16 @@ export class DashboardComponent implements OnInit {
   reportDates: Date[] | undefined;
   reportStats: number[][] | undefined;
 
-  constructor(private cdr: ChangeDetectorRef) { }
+  constructor(private cdr: ChangeDetectorRef, private apiService: ApiService) { }
+
+  updateStats() {
+    this.apiService.getUserStats().then((result) => {
+      if (result.status === 200) {
+        console.log(result.data);
+      } else {
+      }
+    });
+  }
 
   getStartDateOfTheWeek = (date: Date) => {
     const newDate = new Date();
@@ -244,7 +255,8 @@ export class DashboardComponent implements OnInit {
     return arrays;
   }
 
-  ngOnInit() {
+  async ngOnInit(): Promise<void> {
+    this.updateStats();
     this.reportCards = [
       {
         title: 'Orders',

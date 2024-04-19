@@ -69,6 +69,14 @@ export class ApiService {
       }
     );
   }
+  /*
+  ###################
+  # STATS ENDPOINTS #
+  ###################
+  */
+  public async getUserStats() {
+    return await axios.get(`${this.ip}/api/users/${this.AuthService.getUUID()}/stats`);
+  }
 
   /*
   ###########################

@@ -71,6 +71,7 @@ def order_counts(uuid):
     
     if request.method == "GET":
         stats = util.getOrderStats(uuid)
+        print(stats)
         return jsonify(stats)
 
 
