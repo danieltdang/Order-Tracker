@@ -1,11 +1,8 @@
 from flask import Flask, jsonify, request
 from flask_cors import CORS
-import datetime
-import json
 import sqlite3
 import util
 import auth.auth as auth
-import time
 
 app = Flask(__name__)
 CORS(app, supports_credentials=True, expose_headers=["Authorization"])
