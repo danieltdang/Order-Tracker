@@ -56,6 +56,22 @@ def user_id(uuid):
                 "message": "User not found",
             }), 404
         
+###################
+# STATS ENDPOINTS #
+###################
+
+@app.route('/api/users/<uuid>/stats', methods = ["GET"])
+def order_counts(uuid):
+    if validate_request(uuid, request):
+        return jsonify({
+            "message": "Invalid authorization token",
+        }), 401
+    
+    if request.method == "GET":
+        stats = util.getOrderStats(uuid)
+        return jsonify(stats)
+
+
 ###########################
 # ORDER RELATED ENDPOINTS #
 ###########################
