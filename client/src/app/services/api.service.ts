@@ -98,8 +98,8 @@ export class ApiService {
 
   public async createUserOrder(order: Order) {
     const payload = {
-      senderLocation: "",
-      receiverLocation: "",
+      senderLocation: order.senderLocation,
+      receiverLocation: order.receiverLocation,
       prodName: order.productName,
       status: order.status,
       trackCode: order.trackingCode,
@@ -109,7 +109,7 @@ export class ApiService {
       dateAdded: order.dateAdded,
     }
 
-    return await this.post('orders', payload)
+    return await axios.post('orders', payload)
   }
 
   public async updateUserOrder(order: Order) {

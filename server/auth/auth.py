@@ -6,6 +6,7 @@ from datetime import datetime, timedelta
 from dotenv import load_dotenv
 from flask import Request
 import psycopg2
+import binascii
 
 def get_db_connection():
     con = psycopg2.connect(
@@ -61,8 +62,16 @@ def login_user(email, password):
 
         if user is None:
             return None
+        
+        # Decode the hexadecimal string (stored as bytes literal in database) back to bytes
+        hashed_password = user[4]
 
-        if bcrypt.checkpw(password.encode('utf-8'), user[4]):           
+        # Remove any leading 'b' characters and decode from hex
+        if hashed_password.startswith('b'):
+            hashed_password = hashed_password[1:]
+        hashed_password = bytes.fromhex(hashed_password.replace('\\x', ''))
+
+        if bcrypt.checkpw(password.encode('utf-8'), hashed_password):        
             return {
                 "uuid": user[0],
                 "token": signToken(user[0])

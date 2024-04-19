@@ -109,7 +109,7 @@ export class PackagesComponent {
       } else {
 
         const result = await this.apiService.createUserOrder(this.order);
-
+        console.log(result);
         if (result.status === 201) {
           this.orders.push(this.order);
           this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Order Created', life: 3000 });
@@ -171,15 +171,15 @@ export class PackagesComponent {
     return this.statusService.formatDate(date);
   }
   
-  ngOnInit(): void {
-    this.apiService.getAllUserOrders()
-      .then((res) => {
-        this.orders = res.data.data[0];
-        console.log(this.orders)
-      })
-      .catch((e) => {
-        throw e
-      })
+  async ngOnInit(): Promise<void> {
+    const result = await this.apiService.getAllUserOrders()
+    if (result.status === 201) {
+        console.log(result);
+        this.orders = result.data.data[0];
+        console.log(this.orders);
+    } else {
+        this.orders = [];
+    }
 
     this.statuses = [
       { label: 'Pre Transit', value: 0 },

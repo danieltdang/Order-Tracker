@@ -106,7 +106,7 @@ def addOrder(
     # orderID omitted as it will auto increment
     try:
         cur.execute("""
-            INSERT OR IGNORE INTO "Order"
+            INSERT INTO "Order"
             (
                 "user",
                 productName,
