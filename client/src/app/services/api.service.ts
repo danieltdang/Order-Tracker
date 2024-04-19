@@ -125,15 +125,15 @@ export class ApiService {
       dateAdded: order.dateadded
     }
 
-    return await this.post(`orders/${order.orderid}`, payload)
+    return await axios.post(`orders/${order.orderid}`, payload)
   }
 
   public async getOrderByID(order_id: string) {
-    return await this.get(`orders/${order_id}`)
+    return await axios.get(`${this.ip}/api/users/${this.AuthService.getUUID()}/orders/${order_id}`)
   }
 
   public async deleteUserOrder(order_id: string) {
-    return await this.delete(`orders/${order_id}`)
+    return await axios.delete(`orders/${order_id}`)
   }
 
   /*
@@ -143,11 +143,11 @@ export class ApiService {
   */
 
   public async getUserEmails() {
-    return await this.get('emails')
+    return await axios.get('emails')
   }
 
   public async getOrderEmails(order_id: string) {
-    return await this.get(`orders/${order_id}/emails`)
+    return await axios.get(`orders/${order_id}/emails`)
   }
 
   public async createOrderEmail(email: Email) {
@@ -156,11 +156,11 @@ export class ApiService {
       dateReceived: email.dateReceived
     }
 
-    return await this.post(`orders/${email.order}/emails`, payload)
+    return await axios.post(`orders/${email.order}/emails`, payload)
   }
 
   public async deleteOrderEmail(email_id: string) {
-    return await this.delete(`emails/${email_id}`);
+    return await axios.delete(`emails/${email_id}`);
   }
 
   public async updateOrderEmail(email: Email) {

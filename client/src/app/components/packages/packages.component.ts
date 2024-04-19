@@ -160,7 +160,7 @@ export class PackagesComponent {
   }
 
   onRowSelect(event: any) {
-    this.router.navigate(['app/packages', event.data.orderID]);
+    this.router.navigate(['app/packages', event.data.orderid]);
   }
 
   getStatus(status: number) {
@@ -173,7 +173,6 @@ export class PackagesComponent {
   
   async ngOnInit(): Promise<void> {
     const result = await this.apiService.getAllUserOrders()
-    console.log(result.data.data);
     if (result.status === 200) {
         this.orders = result.data.data;
         console.log(this.orders);
