@@ -171,15 +171,13 @@ export class PackagesComponent {
     return this.statusService.formatDate(date);
   }
   
-  ngOnInit(): void {
-    this.apiService.getAllUserOrders()
-      .then((res) => {
-        this.orders = res.data.data[0];
-        console.log(this.orders)
-      })
-      .catch((e) => {
-        throw e
-      })
+  async ngOnInit() {
+    try {
+      this.orders = (await this.apiService.getAllUserOrders()).data
+    }
+    catch (e) {
+      throw e
+    }
 
     this.statuses = [
       { label: 'Pre Transit', value: 0 },

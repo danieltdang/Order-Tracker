@@ -26,38 +26,37 @@ export class PackageDetailComponent implements OnInit {
     return this.statusService.formatDate(date);
   }
 
-  ngOnInit(): void {
-    this.route.params.subscribe(params => {
+  ngOnInit() {
+    this.route.params.subscribe(async (params) => {
       this.packageID = params['id'];
-      this.apiService.getOrderByID(params['id'])
-        .then((res) => {
-          this.order = res.data.data[0];
-          this.isLoading = false;
+      try {
+        this.order = (await this.apiService.getOrderByID(params['id'])).data
+        this.isLoading = false;
 
-          this.details = [
-            { label: 'Status', value: this.getStatus(this.order?.status) },
-            { label: 'Tracking Code', value: this.order?.trackingCode },
-            { label: 'Carrier', value: this.order?.carrier },
-            { label: 'Source', value: this.order?.source },
-            { label: 'Sender Location', value: this.order?.senderLocation },
-            { label: 'Receiver Location', value: this.order?.receiverLocation },
-            { label: 'Date Added', value: this.formatDate(this.order?.dateAdded) },
-            { label: 'Estimated Delivery', value: this.formatDate(this.order?.estimatedDelivery) },
-          ];
-        })
-        .catch((e) => {
-          this.details = [
-            { label: 'Status', value: this.getStatus(this.order?.status) },
-            { label: 'Tracking Code', value: this.order?.trackingCode },
-            { label: 'Carrier', value: this.order?.carrier },
-            { label: 'Source', value: this.order?.source },
-            { label: 'Sender Location', value: this.order?.senderLocation },
-            { label: 'Receiver Location', value: this.order?.receiverLocation },
-            { label: 'Date Added', value: this.formatDate(this.order?.dateAdded) },
-            { label: 'Estimated Delivery', value: this.formatDate(this.order?.estimatedDelivery) },
-          ];
-          throw e
-        })
+        this.details = [
+          { label: 'Status', value: this.getStatus(this.order?.status) },
+          { label: 'Tracking Code', value: this.order?.trackingCode },
+          { label: 'Carrier', value: this.order?.carrier },
+          { label: 'Source', value: this.order?.source },
+          { label: 'Sender Location', value: this.order?.senderLocation },
+          { label: 'Receiver Location', value: this.order?.receiverLocation },
+          { label: 'Date Added', value: this.formatDate(this.order?.dateAdded) },
+          { label: 'Estimated Delivery', value: this.formatDate(this.order?.estimatedDelivery) },
+        ];
+      }
+      catch (e) {
+        this.details = [
+          { label: 'Status', value: this.getStatus(this.order?.status) },
+          { label: 'Tracking Code', value: this.order?.trackingCode },
+          { label: 'Carrier', value: this.order?.carrier },
+          { label: 'Source', value: this.order?.source },
+          { label: 'Sender Location', value: this.order?.senderLocation },
+          { label: 'Receiver Location', value: this.order?.receiverLocation },
+          { label: 'Date Added', value: this.formatDate(this.order?.dateAdded) },
+          { label: 'Estimated Delivery', value: this.formatDate(this.order?.estimatedDelivery) },
+        ];
+        throw e
+      }
     });
   } 
 }
