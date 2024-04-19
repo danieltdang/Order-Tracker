@@ -109,7 +109,7 @@ export class ApiService {
       dateAdded: order.dateadded,
     }
 
-    return await axios.post('orders', payload)
+    return await axios.post(`${this.ip}/api/users/${this.AuthService.getUUID()}/orders`, payload)
   }
 
   public async updateUserOrder(order: Order) {
@@ -125,7 +125,7 @@ export class ApiService {
       dateAdded: order.dateadded
     }
 
-    return await axios.post(`orders/${order.orderid}`, payload)
+    return await axios.put(`${this.ip}/api/users/${this.AuthService.getUUID()}/orders/${order.orderid}`, payload)
   }
 
   public async getOrderByID(order_id: string) {
@@ -133,7 +133,7 @@ export class ApiService {
   }
 
   public async deleteUserOrder(order_id: string) {
-    return await axios.delete(`orders/${order_id}`)
+    return await axios.delete(`${this.ip}/api/users/${this.AuthService.getUUID()}/orders/${order_id}`)
   }
 
   /*

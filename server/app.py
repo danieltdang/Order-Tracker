@@ -116,7 +116,6 @@ def user_all_orders(uuid):
             "status": 200
         })
     elif request.method == "POST":
-
         request.body = request.get_json()
 
         try:

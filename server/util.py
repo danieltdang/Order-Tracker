@@ -109,15 +109,15 @@ def addOrder(
             INSERT INTO "Order"
             (
                 "user",
-                productName,
+                productname,
                 status,
-                trackingCode,
-                estimatedDelivery,
+                trackingcode,
+                estimateddelivery,
                 carrier,
                 source,
-                dateAdded,
-                senderLocation,
-                receiverLocation
+                dateadded,
+                senderlocation,
+                receiverlocation
             )
             VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
         """, 
@@ -213,16 +213,16 @@ def updateOrder(
     try:
         cur.execute("""
             UPDATE "Order"
-            SET productName = %s,
+            SET productname = %s,
                 status = %s,
-                trackingCode = %s,
-                estimatedDelivery = %s,
+                trackingcode = %s,
+                estimateddelivery = %s,
                 carrier = %s,
                 source = %s,
-                dateAdded = %s,
-                senderLocation = %s,
-                receiverLocation = %s
-            WHERE "Order"."orderID" = %s
+                dateadded = %s,
+                senderlocation = %s,
+                receiverlocation = %s
+            WHERE "Order"."orderid" = %s
         """, 
             (
                 prodName,

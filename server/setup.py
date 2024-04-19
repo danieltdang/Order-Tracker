@@ -29,7 +29,7 @@ CREATE TABLE IF NOT EXISTS "User" (
 cur.execute("""
 CREATE TABLE IF NOT EXISTS "Order" (
     "user" TEXT,
-    orderID INTEGER PRIMARY KEY,
+    orderID SERIAL PRIMARY KEY,
     senderLocation TEXT,
     receiverLocation TEXT,
     productName TEXT,
