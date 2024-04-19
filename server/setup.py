@@ -72,6 +72,22 @@ CREATE TABLE IF NOT EXISTS "OrderEvent"(
 )
 """)
 
+cur.execute("""
+CREATE ROLE base_user
+""")
+
+cur.execute("""
+CREATE ROLE premium_user
+""")
+
+cur.execute("""
+GRANT SELECT ON "Email" TO premium_user;
+""")
+
+cur.execute("""
+REVOKE ALL ON "Email" FROM base_user;
+""")
+
 con.commit()
 cur.close()
 con.close()
