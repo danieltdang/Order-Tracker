@@ -14,7 +14,15 @@ import { PackageStatusService } from '../../services/package-status.service';
   providers: [MessageService, ConfirmationService]
 })
 export class EmailHubComponent {
-  email!: Email;
+  email : Email = {
+    subject: '',
+    status: '',
+    order: '',
+    emailID: '',
+    content: '',
+    source: '',
+    datereceived: '',
+  };
   emails!: Email[];
   selectedEmails!: Email[] | null;
   dateReceived!: Date;
