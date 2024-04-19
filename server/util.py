@@ -243,6 +243,38 @@ def updateOrder(
     finally:
         con.close()
 
+def getOrderStats(uuid):
+    con = sql.connect(DB_PATH)
+    con.row_factory = sql.Row
+    cur = con.cursor()
+
+    statuses = []
+    try:
+        for i in range(4):
+            cur.execute("""
+                SELECT COUNT(*) FROM "Order"
+                WHERE "Order".user = ? AND "Order".status = ?
+            """, (uuid,i))
+            statuses.append(cur.fetchone())
+
+        cur.execute("""
+            SELECT COUNT(*) FROM "Order"
+            WHERE "Order".user = ?
+        """, (uuid,i))
+        statuses.append(cur.fetchone())
+
+        cur.execute("""
+            SELECT COUNT(*) FROM "Email"
+            JOIN "Order" ON "Email"."order" = "Order".orderID
+            WHERE "Order".user = ?
+        """, (uuid,i))
+        statuses.append(cur.fetchone())
+
+        return statuses
+    except:
+        raise Exception(f"Error occured when trying to retrieve order {order_id} from user '{user}'.")
+    finally:
+        con.close()
 
 
 
@@ -260,6 +292,7 @@ def addEmail(subject, status, order, content, source, dateReceived):
                 subject,
                 status,
                 "order",
+                subject,
                 content,
                 source,
                 datereceived
@@ -270,6 +303,7 @@ def addEmail(subject, status, order, content, source, dateReceived):
                 subject,
                 status,
                 order,
+                subject,
                 content,
                 source,
                 dateReceived,

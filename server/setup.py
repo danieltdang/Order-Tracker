@@ -56,6 +56,7 @@ CREATE TABLE IF NOT EXISTS Email (
     content TEXT,
     source TEXT,
     dateReceived TEXT,
+    source TEXT,
     FOREIGN KEY ("order") REFERENCES "Order"(orderID)
 )
 """)
