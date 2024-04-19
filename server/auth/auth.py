@@ -92,9 +92,13 @@ def change_password(uuid, old_password, new_password):
         if user is None:
             return False
                 
-        if bcrypt.checkpw(old_password.encode('utf-8'), user[4]):
-            hashed_password = bcrypt.hashpw(new_password.encode('utf-8'), bcrypt.gensalt())
-            cur.execute("""UPDATE "User" SET password = %s WHERE uuid = %s""", (hashed_password, uuid))
+        # Convert hashed password from string to bytes
+        hashed_password = bytes.fromhex(user[4].replace('\\x', ''))
+
+        if bcrypt.checkpw(old_password.encode('utf-8'), hashed_password):
+            # Hash the new password
+            new_hashed_password = bcrypt.hashpw(new_password.encode('utf-8'), bcrypt.gensalt())
+            cur.execute("""UPDATE "User" SET password = %s WHERE uuid = %s""", (new_hashed_password, uuid))
             con.commit()
             return True
         else: 
@@ -102,6 +106,7 @@ def change_password(uuid, old_password, new_password):
         
     finally:
         con.close()
+
 
 
 def verifyToken(uuid, token):
