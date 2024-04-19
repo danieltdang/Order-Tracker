@@ -52,7 +52,7 @@ CREATE TABLE IF NOT EXISTS Email (
     subject TEXT,
     STATUS INTEGER,
     "order" INTEGER,
-    "emailID" INTEGER PRIMARY KEY,
+    "emailID" SERIAL PRIMARY KEY,
     content TEXT,
     source TEXT,
     dateReceived TEXT,
@@ -65,7 +65,7 @@ CREATE TABLE IF NOT EXISTS Email (
 cur.execute("""
 CREATE TABLE IF NOT EXISTS "OrderEvent"(
     "order" INTEGER,
-    "orderEventID" INTEGER PRIMARY KEY,
+    "orderEventID" SERIAL PRIMARY KEY,
     description TEXT,
     date TEXT,
     FOREIGN KEY ("order") REFERENCES "Order"(orderID)
