@@ -54,6 +54,10 @@
     </p-table>
 </div>
 
+<p-dialog header="Package #{{ email?.order }}" [(visible)]="emailViewer" [modal]="true" [style]="{ width: '50vw' }" [draggable]="false" [resizable]="false">
+    <p [innerHTML]="email?.content"></p>
+</p-dialog>
+
 <p-dialog [(visible)]="emailDialog" [style]="{ width: '450px' }" header="Email Details" [modal]="true" styleClass="p-fluid">
     <ng-template pTemplate="content">
         <div class="field">

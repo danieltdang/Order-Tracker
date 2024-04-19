@@ -21,6 +21,7 @@ export class EmailHubComponent {
   statuses!: any[];
   submitted: boolean = false;
   emailDialog: boolean = false;
+  emailViewer: boolean = false;
 
   constructor(private apiService: ApiService, private router: Router, private statusService: PackageStatusService,
               private confirmationService: ConfirmationService, private messageService: MessageService
@@ -50,6 +51,8 @@ export class EmailHubComponent {
 
   onRowSelect(event: any) {
     //this.router.navigate(['app/packages', event.data.orderID]);
+    this.email = this.emails[this.findIndexById(event.data.emailID)];
+    this.emailViewer = true;
     console.log(event.data.emailID);
   }
 
@@ -155,7 +158,6 @@ export class EmailHubComponent {
       } else {
 
         const result = await this.apiService.createOrderEmail(this.email);
-        console.log(result);
         if (result.status === 200) {
           this.emails.push(this.email);
           this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Email Created', life: 3000 });
