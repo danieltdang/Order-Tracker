@@ -62,15 +62,9 @@ export class SidebarComponent implements OnInit {
     this.authService.logout();
   }
 
-  updateUser() {
-    this.apiService.getUserName().then((result) => {
-      console.log(result);
-      if (result.status === 200) {
-        this.userName = result.data.firstname + " " + result.data.lastname;
-        this.firstLetter = this.userName.charAt(0);
-      } else {
-      }
-    });
+  async updateUser() {
+    this.userName = await this.apiService.getName();
+    this.firstLetter = await this.apiService.getFirstLetter();
   }
 
   async ngOnInit(): Promise<void> {

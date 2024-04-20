@@ -101,15 +101,9 @@ export class SettingsComponent {
     });
   }
 
-  updateUser() {
-    this.apiService.getUserName().then((result) => {
-      console.log(result);
-      if (result.status === 200) {
-        this.userName = result.data.firstname + " " + result.data.lastname;
-        this.userEmail = result.data.email;
-      } else {
-      }
-    });
+  async updateUser() {
+    this.userName = await this.apiService.getName();
+    this.userEmail = await this.apiService.getEmail();
   }
 
   async ngOnInit(): Promise<void> {

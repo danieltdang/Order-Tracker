@@ -15,8 +15,20 @@ export class ApiService {
   private headers = {
     "Authorization": this.AuthService.getToken()
   }
+  private name!: string;
+  private firstLetter!: string;
+  private email!: string;
 
-  constructor(private AuthService: AuthService, private https: HttpClient) {}
+  private async initialize(): Promise<void> {
+    const result = await axios.get(`${this.ip}/api/users/${this.AuthService.getUUID()}/name-email`);
+
+    this.name = result.data.firstname + " " + result.data.lastname;
+    this.firstLetter = this.name.charAt(0);
+    this.email = result.data.email;
+  }
+
+  constructor(private AuthService: AuthService, private https: HttpClient) {
+  }
 
   public getData() {
     return axios.get(this.ip + '/api/data');
@@ -69,6 +81,36 @@ export class ApiService {
       }
     );
   }
+   /*
+  ##################
+  # USER ENDPOINTS #
+  ##################
+  */
+
+  public async getName() {
+    if (!this.name) {
+      await this.initialize();
+    }
+
+    return this.name;
+  }
+
+  public async getFirstLetter() {
+    if (!this.firstLetter) {
+      await this.initialize();
+    }
+
+    return this.firstLetter;
+  }
+
+  public async getEmail() {
+    if (!this.email) {
+      await this.initialize();
+    }
+
+    return this.email;
+  }
+
   /*
   ###################
   # STATS ENDPOINTS #
@@ -76,10 +118,6 @@ export class ApiService {
   */
   public async getUserStats() {
     return await axios.get(`${this.ip}/api/users/${this.AuthService.getUUID()}/stats`);
-  }
-
-  public async getUserName() {
-    return await axios.get(`${this.ip}/api/users/${this.AuthService.getUUID()}/name-email`);
   }
 
   /*
