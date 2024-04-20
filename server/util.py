@@ -8,7 +8,6 @@ def get_db_connection():
         user="qkhplpdv",
         password="MPRLThmEO3gFiPHKrX9ajpKo-hSKOLOa"
     )
-    print("Connected to at isilo.db.elephantsql.com")
     return con
 
 def addUser(firstName, lastName, uuid):

@@ -88,10 +88,6 @@ export class ApiService {
   */
 
   public async getName() {
-    if (!this.name) {
-      await this.initialize();
-    }
-
     return this.name;
   }
 
@@ -104,10 +100,6 @@ export class ApiService {
   }
 
   public async getEmail() {
-    if (!this.email) {
-      await this.initialize();
-    }
-
     return this.email;
   }
 
