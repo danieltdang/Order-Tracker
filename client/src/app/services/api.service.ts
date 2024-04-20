@@ -88,6 +88,10 @@ export class ApiService {
   */
 
   public async getName() {
+    if (!this.name) {
+      await this.initialize();
+    }
+    
     return this.name;
   }
 
