@@ -1,7 +1,5 @@
 from flask import Flask, jsonify, request
 from flask_cors import CORS
-import datetime
-import json
 import psycopg2
 import util
 import auth.auth as auth
