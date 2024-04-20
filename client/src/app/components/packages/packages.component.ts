@@ -30,7 +30,7 @@ export class PackagesComponent {
   updateOrders() {
     this.apiService.getAllUserOrders().then((result) => {
       if (result.status === 200) {
-        this.orders = result.data.data;
+        this.orders = result.data;
       } else {
       }
     });
@@ -93,10 +93,11 @@ export class PackagesComponent {
   }
 
   formatDateToString(date: Date) {
-    const day = date.getDate();
-    const month = date.getMonth() + 1; // Month is zero-indexed in JavaScript, so add 1
-    const year = date.getFullYear();
-    return `${month}-${day}-${year}`;
+    // Create a new Date object to avoid mutating the original date
+    const utcDate = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate() + 1));
+
+    console.log(utcDate.toUTCString())
+    return utcDate.toUTCString();
   }
 
   async saveOrder() {
