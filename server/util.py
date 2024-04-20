@@ -259,7 +259,7 @@ def updateOrder(
     finally:
         con.close()
 
-def getOrderStats(uuid):
+def getOrderStats(uuid, startDate, endDate):
     con = get_db_connection()
     cur = con.cursor()
 
@@ -269,23 +269,26 @@ def getOrderStats(uuid):
         for status in range(4):
             cur.execute("""
                 SELECT COUNT(*) FROM "Order"
-                WHERE "Order"."user" = %s AND "Order"."status" = %s
-            """, (uuid, status))
+                WHERE "Order"."user" = %s AND "Order"."status" = %s AND
+                date("Order".dateAdded) BETWEEN date(%s) AND date(%s)
+            """, (uuid, status, startDate, endDate))
             statuses.append(cur.fetchone()[0])
         
         # Query for the total count of orders by the user
         cur.execute("""
             SELECT COUNT(*) FROM "Order"
-            WHERE "Order"."user" = %s
-        """, (uuid,))
+            WHERE "Order"."user" = %s AND
+            date("Order".dateAdded) BETWEEN date(%s) AND date(%s)
+        """, (uuid, startDate, endDate))
         statuses.append(cur.fetchone()[0])
 
         # Query for the count of emails related to user's orders
         cur.execute("""
             SELECT COUNT(*) FROM "Email"
             JOIN "Order" ON "Email"."order" = "Order".orderid
-            WHERE "Order"."user" = %s
-        """, (uuid,))
+            WHERE "Order"."user" = %s AND
+            date("Order".dateAdded) BETWEEN date(%s) AND date(%s)
+        """, (uuid, startDate, endDate))
         statuses.append(cur.fetchone()[0])
 
         return statuses
