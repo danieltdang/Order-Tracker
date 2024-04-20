@@ -26,6 +26,16 @@ export class PackagesComponent {
   constructor(private apiService: ApiService, private router: Router, private statusService: PackageStatusService,
               private messageService: MessageService, private confirmationService: ConfirmationService) { }
 
+
+  updateOrders() {
+    this.apiService.getAllUserOrders().then((result) => {
+      if (result.status === 200) {
+        this.orders = result.data.data;
+      } else {
+      }
+    });
+  }
+  
   getOrderId(index : number, order : any) {
     return order.orderID;
   }
@@ -33,7 +43,7 @@ export class PackagesComponent {
   findIndexById(id: string): number {
     let index = -1;
     for (let i = 0; i < this.orders.length; i++) {
-        if (this.orders[i].orderID === id) {
+        if (this.orders[i].orderid === id) {
             index = i;
             break;
         }
@@ -44,32 +54,32 @@ export class PackagesComponent {
 
   editOrder(order: Order) {
     this.order = { ...order };
-    this.dateAdded = new Date(order.dateAdded);
-    this.estimatedDelivery = new Date(order.estimatedDelivery);
+    this.dateAdded = new Date(order.dateadded);
+    this.estimatedDelivery = new Date(order.estimateddelivery);
     this.orderDialog = true;
   }
 
   async deleteOrder(order: Order) {
     this.confirmationService.confirm({
-        message: 'Are you sure you want to delete ' + order.productName + '?',
+        message: 'Are you sure you want to delete ' + order.productname + '?',
         header: 'Confirm',
         icon: 'pi pi-exclamation-triangle',
         accept: async () => {
-            const result = await this.apiService.deleteUserOrder(order.orderID);
+            const result = await this.apiService.deleteUserOrder(order.orderid);
 
             if (result.status === 200) {
-              this.orders = this.orders.filter((val: any) => val.id !== order.orderID);
+              this.updateOrders();
               this.order = {
-                orderID: '',
-                productName: '',
+                orderid: '',
+                productname: '',
                 status: '',
-                trackingCode: '',
-                estimatedDelivery: '',
+                trackingcode: '',
+                estimateddelivery: '',
                 carrier: '',
                 source: '',
-                dateAdded: '',
-                senderLocation: '',
-                receiverLocation: ''
+                dateadded: '',
+                senderlocation: '',
+                receiverlocation: ''
               };
             }
             this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Order Deleted', life: 3000 });
@@ -91,17 +101,16 @@ export class PackagesComponent {
 
   async saveOrder() {
     this.submitted = true;
+    console.log(this.order)
+    if (this.order.productname !== "" && this.order.status !== "" && this.order.trackingcode !== "" && this.order.carrier !== "" && this.order.source !== "" && this.dateAdded && this.estimatedDelivery) {
+      this.order.dateadded = this.formatDateToString(this.dateAdded);
+      this.order.estimateddelivery = this.formatDateToString(this.estimatedDelivery);
 
-    if (this.order.productName?.trim()) {
-      this.order.dateAdded = this.formatDateToString(this.dateAdded);
-      this.order.estimatedDelivery = this.formatDateToString(this.estimatedDelivery);
-
-      if (this.order.orderID) {
-
+      if (this.order.orderid) {
         const result = await this.apiService.updateUserOrder(this.order);
 
         if (result.status === 201) {
-          this.orders[this.findIndexById(this.order.orderID)] = this.order;
+          this.updateOrders();
           this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Order Updated', life: 3000 });
         } else if (result.status === 400) {
           this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Order Not Updated', life: 3000 });
@@ -109,44 +118,42 @@ export class PackagesComponent {
       } else {
 
         const result = await this.apiService.createUserOrder(this.order);
-
         if (result.status === 201) {
-          this.orders.push(this.order);
+          this.updateOrders();
           this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Order Created', life: 3000 });
         } else if (result.status === 400) {
           this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Order Not Created', life: 3000 });
         }
       }
 
-      this.orders = [...this.orders];
       this.orderDialog = false;
       this.order = {
-        orderID: '',
-        productName: '',
+        orderid: '',
+        productname: '',
         status: '',
-        trackingCode: '',
-        estimatedDelivery: '',
+        trackingcode: '',
+        estimateddelivery: '',
         carrier: '',
         source: '',
-        dateAdded: '',
-        senderLocation: '',
-        receiverLocation: ''
+        dateadded: '',
+        senderlocation: '',
+        receiverlocation: ''
       };
     }
   }
 
   openNew() {
     this.order = {
-      orderID: '',
-      productName: '',
+      orderid: '',
+      productname: '',
       status: '',
-      trackingCode: '',
-      estimatedDelivery: '',
+      trackingcode: '',
+      estimateddelivery: '',
       carrier: '',
       source: '',
-      dateAdded: '',
-      senderLocation: '',
-      receiverLocation: ''
+      dateadded: '',
+      senderlocation: '',
+      receiverlocation: ''
     };
     this.dateAdded = new Date();
     this.estimatedDelivery = new Date();
@@ -160,7 +167,7 @@ export class PackagesComponent {
   }
 
   onRowSelect(event: any) {
-    this.router.navigate(['app/packages', event.data.orderID]);
+    this.router.navigate(['app/packages', event.data.orderid]);
   }
 
   getStatus(status: number) {
@@ -171,19 +178,14 @@ export class PackagesComponent {
     return this.statusService.formatDate(date);
   }
   
-  async ngOnInit() {
-    try {
-      this.orders = (await this.apiService.getAllUserOrders()).data
-    }
-    catch (e) {
-      throw e
-    }
+  async ngOnInit(): Promise<void> {
+    this.updateOrders();
 
     this.statuses = [
-      { label: 'Pre Transit', value: 0 },
+      { label: 'Pre-Transit', value: 0 },
       { label: 'In Transit', value: 1 },
-      { label: 'Delivered', value: 2 },
-      { label: 'Returned', value: 3 }
-    ]
+      { label: 'Out for Delivery', value: 2 },
+      { label: 'Delivered', value: 3 }
+    ];
   }
 }

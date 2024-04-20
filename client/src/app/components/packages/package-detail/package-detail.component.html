@@ -8,8 +8,8 @@
 </a>
 
 <h1 *ngIf="!isLoading" class="my-3">
-  <span *ngIf="!isLoading">{{ order?.productName }}</span>
-  <span class="text-color-secondary font-normal"> (Package #{{ order?.orderID }})</span>
+  <span *ngIf="!isLoading">{{ order?.productname }}</span>
+  <span class="text-color-secondary font-normal"> (Package #{{ order?.orderid }})</span>
 </h1>
 
 <div *ngIf="isLoading" class="flex flex-row my-3">
@@ -21,7 +21,7 @@
     <h2 class="m-0 mb-3">Package Details</h2>
 
     <div class="surface-card col-12 shadow-2 p-3 mb-3 border-round">
-      <h2 *ngIf="!isLoading" class="m-0">Estimated Delivery: {{ formatDate(order?.estimatedDelivery) }}</h2>
+      <h2 *ngIf="!isLoading" class="m-0">Estimated Delivery: {{ formatDate(order?.estimateddelivery) }}</h2>
       <h2 *ngIf="!isLoading" class="m-0 font-normal">{{ getStatus(order?.status) }}</h2>
       
       <p-skeleton styleClass="mb-1" width="100%" height="2rem" *ngIf="isLoading"></p-skeleton>
@@ -49,7 +49,7 @@
     <div class="surface-card col-12 shadow-2 p-3 border-round mb-3">
       <span *ngIf="!isLoading">
         <h3 class="m-0 font-normal">Order Created</h3>
-        <span>{{ formatDate(order?.dateAdded) }}</span>
+        <span>{{ formatDate(order?.dateadded) }}</span>
       </span>
 
       <span *ngIf="isLoading">

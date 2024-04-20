@@ -9,7 +9,7 @@
         paginatorStyleClass="border-none"
         [showCurrentPageReport]="true"
         currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
-        [globalFilterFields]="['source', 'productName', 'trackingCode', 'carrier']"
+        [globalFilterFields]="['source', 'productname', 'trackingcode', 'carrier']"
         selectionMode="single"
         (onRowSelect)="onRowSelect($event)"
     >
@@ -42,11 +42,11 @@
         <ng-template pTemplate="body" let-order>
             <tr [pSelectableRow]="order">
                 <td>{{ order.source }}</td>
-                <td>{{ order.productName }}</td>
+                <td>{{ order.productname }}</td>
                 <td>{{ getStatus(order.status) }}</td>
-                <td>{{ order.trackingCode }}</td>
+                <td>{{ order.trackingcode }}</td>
                 <td>{{ order.carrier }}</td>
-                <td>{{ formatDate(order?.dateAdded) }}</td>
+                <td>{{ formatDate(order?.dateadded) }}</td>
                 <td class="white-space-nowrap">
                     <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-info mr-2" (click)="editOrder(order)"></button>
                     <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger" (click)="deleteOrder(order)"></button>
@@ -60,14 +60,14 @@
     <ng-template pTemplate="content">
         <div class="field">
             <label for="name">Name</label>
-            <input class="p-inputtext" type="text" pInputText id="name" [(ngModel)]="order.productName" required autofocus />
-            <small class="p-error" *ngIf="submitted && !order.productName">Name is required.</small>
+            <input class="p-inputtext" type="text" pInputText id="name" [(ngModel)]="order.productname" required autofocus />
+            <small class="p-error" *ngIf="submitted && !order.productname">Name is required.</small>
         </div>
 
         <div class="field">
             <label for="name">Tracking Code</label>
-            <input class="p-inputtext" type="text" pInputText id="tracking" [(ngModel)]="order.trackingCode" required autofocus />
-            <small class="p-error" *ngIf="submitted && !order.trackingCode">Tracking Code is required.</small>
+            <input class="p-inputtext" type="text" pInputText id="tracking" [(ngModel)]="order.trackingcode" required autofocus />
+            <small class="p-error" *ngIf="submitted && !order.trackingcode">Tracking Code is required.</small>
         </div>
 
         <div class="field">
@@ -80,7 +80,7 @@
                     <span>{{option.label}}</span>
                 </ng-template>
             </p-dropdown>
-            <small class="p-error" *ngIf="submitted && order.status === null">Status is required.</small>
+            <small class="p-error" *ngIf="submitted && !order.status">Status is required.</small>
         </div>
 
         <div class="field">
@@ -98,13 +98,13 @@
         <div class="field">
             <label for="name">Date Added</label>
             <p-calendar appendTo="body" [(ngModel)]="dateAdded" dateFormat="MM d, yy" [iconDisplay]="'input'" [showIcon]="true"></p-calendar>
-            <small class="p-error" *ngIf="submitted && !order.dateAdded">Date Added is required.</small>
+            <small class="p-error" *ngIf="submitted && !dateAdded">Date Added is required.</small>
         </div>
 
         <div class="field">
             <label for="name">Estimated Delivery</label>
             <p-calendar appendTo="body" [(ngModel)]="estimatedDelivery" dateFormat="MM d, yy" [iconDisplay]="'input'" [showIcon]="true"></p-calendar>
-            <small class="p-error" *ngIf="submitted && !order.estimatedDelivery">Estimated Delivery is required.</small>
+            <small class="p-error" *ngIf="submitted && !estimatedDelivery">Estimated Delivery is required.</small>
         </div>
     </ng-template>
     <ng-template pTemplate="footer">

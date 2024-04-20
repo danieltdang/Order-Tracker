@@ -29,6 +29,7 @@ import { DialogModule } from 'primeng/dialog';
 import { AccordionModule } from 'primeng/accordion';
 import { SkeletonModule } from 'primeng/skeleton';
 import { TagModule } from 'primeng/tag';
+import { InputTextareaModule } from 'primeng/inputtextarea';
 
 import { GoogleMapsModule } from '@angular/google-maps';
 
@@ -52,7 +53,6 @@ import { SignupComponent } from './components/login/signup.component';
 import { ForgotComponent } from './components/login/forgot.component';
 import { PackageDetailComponent } from './components/packages/package-detail/package-detail.component';
 import { NotFoundComponent } from './layout/not-found/not-found.component';
-import { EmailViewerComponent } from './components/email-hub/email-viewer/email-viewer.component';
 
 @NgModule({
   declarations: [
@@ -73,7 +73,6 @@ import { EmailViewerComponent } from './components/email-hub/email-viewer/email-
     ForgotComponent,
     PackageDetailComponent,
     NotFoundComponent,
-    EmailViewerComponent,
   ],
   imports: [
     BrowserModule,
@@ -106,6 +105,7 @@ import { EmailViewerComponent } from './components/email-hub/email-viewer/email-
     AccordionModule,
     SkeletonModule,
     TagModule,
+    InputTextareaModule,
   ],
   providers: [
     provideClientHydration(),

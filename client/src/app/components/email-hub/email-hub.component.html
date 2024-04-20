@@ -9,7 +9,7 @@
         paginatorStyleClass="border-none"
         [showCurrentPageReport]="true"
         currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
-        [globalFilterFields]="['source', 'productName', 'trackingCode', 'carrier']"
+        [globalFilterFields]="['subject', 'order', 'source']"
         selectionMode="single"
         (onRowSelect)="onRowSelect($event)"
     >
@@ -40,11 +40,11 @@
         </ng-template>
         <ng-template pTemplate="body" let-email>
             <tr [pSelectableRow]="email">
-                <td>Subject data missing</td>
+                <td>{{ email?.subject }}</td>
                 <td>{{ email?.order }}</td>
                 <td>{{ getStatus(email?.status) }}</td>
-                <td>Source data missing</td>
-                <td>{{ formatDate(email?.dateReceived) }}</td>
+                <td>{{ email?.source }}</td>
+                <td>{{ formatDate(email?.datereceived) }}</td>
                 <td class="white-space-nowrap">
                     <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-info mr-2" (click)="editEmail(email)"></button>
                     <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger" (click)="deleteEmail(email)"></button>
@@ -53,6 +53,10 @@
         </ng-template>
     </p-table>
 </div>
+
+<p-dialog header="Package #{{ email.order }}" [(visible)]="emailViewer" [modal]="true" [style]="{ width: '50vw' }" [draggable]="false" [resizable]="false">
+    <p [innerHTML]="email.content"></p>
+</p-dialog>
 
 <p-dialog [(visible)]="emailDialog" [style]="{ width: '450px' }" header="Email Details" [modal]="true" styleClass="p-fluid">
     <ng-template pTemplate="content">
@@ -64,7 +68,7 @@
 
         <div class="field">
             <label for="name">Order ID</label>
-            <input class="p-inputtext" type="text" pInputText id="tracking" [(ngModel)]="email.order" required autofocus />
+            <input class="p-inputtext" type="text" pInputText id="tracking" [(ngModel)]="email.order" required />
             <small class="p-error" *ngIf="submitted && !email.order">Order ID is required.</small>
         </div>
 
@@ -78,19 +82,25 @@
                     <span>{{option.label}}</span>
                 </ng-template>
             </p-dropdown>
-            <small class="p-error" *ngIf="submitted && email.status === null">Status is required.</small>
+            <small class="p-error" *ngIf="submitted && !email.status">Status is required.</small>
         </div>
 
         <div class="field">
             <label for="name">Source</label>
-            <input class="p-inputtext" type="text" pInputText id="carrier" [(ngModel)]="email.source" required autofocus />
+            <input class="p-inputtext" type="text" pInputText id="carrier" [(ngModel)]="email.source" required />
             <small class="p-error" *ngIf="submitted && !email.source">Source is required.</small>
         </div>
 
         <div class="field">
             <label for="name">Date Received</label>
             <p-calendar appendTo="body" [(ngModel)]="dateReceived" dateFormat="MM d, yy" [iconDisplay]="'input'" [showIcon]="true"></p-calendar>
-            <small class="p-error" *ngIf="submitted && !email.dateReceived">Date Received is required.</small>
+            <small class="p-error" *ngIf="submitted && !dateReceived">Date Received is required.</small>
+        </div>
+
+        <div class="field">
+            <label for="name">Content</label>
+            <textarea rows="5" class="p-inputtext" type="text" pInputText id="carrier" [(ngModel)]="email.content" required></textarea>
+            <small class="p-error" *ngIf="submitted && !email.content">Content is required.</small>
         </div>
     </ng-template>
     <ng-template pTemplate="footer">

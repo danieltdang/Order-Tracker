@@ -1,6 +1,8 @@
 from flask import Flask, jsonify, request
 from flask_cors import CORS
-import sqlite3
+import datetime
+import json
+import psycopg2
 import util
 import auth.auth as auth
 
@@ -69,6 +71,7 @@ def order_counts(uuid):
     
     if request.method == "GET":
         stats = util.getOrderStats(uuid)
+        print(stats)
         return jsonify(stats)
 
 
@@ -89,7 +92,6 @@ def user_all_orders(uuid):
 
         return jsonify(orders)
     elif request.method == "POST":
-
         request.body = request.get_json()
 
         try:
@@ -105,7 +107,7 @@ def user_all_orders(uuid):
                 request.body['senderLocation'],
                 request.body['receiverLocation'],
             )
-        except sqlite3.Error:
+        except psycopg2.DatabaseError:
             return jsonify({
                 "message": "Error occured when adding order.",
             }), 400
@@ -155,7 +157,7 @@ def user_order(uuid, order_id):
                 request.body['senderLocation'],
                 request.body['receiverLocation'],
             )
-        except sqlite3.Error:
+        except psycopg2.DatabaseError:
             return jsonify({
                 "message": "Error occured when updating order.",
             }), 400
@@ -196,14 +198,23 @@ def order_emails(uuid, order_id):
 
         return jsonify(emails), 200
     elif request.method == "POST":
-        content = request.form['content']
-        dateReceived = request.form['dateReceived']
+        request.body = request.get_json()
+        
+        subject = request.body['subject']
+        status = request.body['status']
+        source = request.body['source']
+        order = order_id
+        content = request.body['content']
+        dateReceived = request.body['dateReceived']
 
         try:
             util.addEmail(
-                order_id,
+                subject,
+                status,
+                order,
                 content,
-                dateReceived,
+                source,
+                dateReceived
             )
 
             return jsonify({
@@ -224,7 +235,7 @@ def order_emails(uuid, order_id):
             }), 404
 
 
-@app.route('/api/users/<uuid>/emails/<email_id>', methods = ["DELETE"])
+@app.route('/api/users/<uuid>/emails/<email_id>', methods = ["DELETE", "PUT"])
 def user_email_by_ID(uuid, email_id):
     # authenticate
     if validate_request(uuid, request):
@@ -241,6 +252,27 @@ def user_email_by_ID(uuid, email_id):
             return jsonify({
                 "message": "Email not found",
             }), 404
+    elif request.method == "PUT":
+        request.body = request.get_json()
+
+        try:
+            util.updateEmail(
+                email_id,
+                request.body['subject'],
+                request.body['status'],
+                request.body['source'],
+                request.body['order'],
+                request.body['content'],
+                request.body['dateReceived'],
+            )
+        except psycopg2.DatabaseError:
+            return jsonify({
+                "message": "Error occured when updating email.",
+            }), 400
+
+        return jsonify({
+            "message": f"Successfully updated email {email_id}",
+        }), 201
 
 
 ###########################

@@ -14,32 +14,44 @@ import { PackageStatusService } from '../../services/package-status.service';
   providers: [MessageService, ConfirmationService]
 })
 export class EmailHubComponent {
-  email!: Email;
+  email : Email = {
+    subject: '',
+    status: '',
+    order: '',
+    emailID: '',
+    content: '',
+    source: '',
+    datereceived: '',
+  };
   emails!: Email[];
   selectedEmails!: Email[] | null;
   dateReceived!: Date;
   statuses!: any[];
   submitted: boolean = false;
   emailDialog: boolean = false;
+  emailViewer: boolean = false;
 
   constructor(private apiService: ApiService, private router: Router, private statusService: PackageStatusService,
               private confirmationService: ConfirmationService, private messageService: MessageService
   ) {}
 
-  async ngOnInit() {
-    try {
-      this.emails = (await this.apiService.getUserEmails()).data;
-    }
-    catch (e) {
-      console.error('Error during initialization:', e);
-    }
-    
+  updateEmails() {
+    this.apiService.getUserEmails().then((result) => {
+      if (result.status === 200) {
+        this.emails = result.data.data;
+      } else {
+      }
+    });
+  }
 
+  async ngOnInit(): Promise<void> {
+    this.updateEmails();
+    
     this.statuses = [
-      { label: 'Pre Transit', value: 0 },
+      { label: 'Pre-Transit', value: 0 },
       { label: 'In Transit', value: 1 },
-      { label: 'Delivered', value: 2 },
-      { label: 'Returned', value: 3 }
+      { label: 'Out for Delivery', value: 2 },
+      { label: 'Delivered', value: 3 }
     ];
   }
 
@@ -49,6 +61,9 @@ export class EmailHubComponent {
 
   onRowSelect(event: any) {
     //this.router.navigate(['app/packages', event.data.orderID]);
+    this.email = this.emails[this.findIndexById(event.data.emailID)];
+    this.emailViewer = true;
+    console.log(event.data.emailID);
   }
 
   getStatus(status: number) {
@@ -72,7 +87,7 @@ export class EmailHubComponent {
       emailID: '',
       content: '',
       source: '',
-      dateReceived: '',
+      datereceived: '',
     };
     this.dateReceived = new Date();
     this.submitted = false;
@@ -81,20 +96,20 @@ export class EmailHubComponent {
 
   editEmail(email: Email) {
     this.email = { ...email };
-    this.dateReceived = new Date(email.dateReceived);
+    this.dateReceived = new Date(email.datereceived);
     this.emailDialog = true;
   }
 
   async deleteEmail(email: Email) {
     this.confirmationService.confirm({
-        message: 'Are you sure you want to delete ' + email.emailID + '?',
+        message: 'Are you sure you want to delete ' + email.subject + '?',
         header: 'Confirm',
         icon: 'pi pi-exclamation-triangle',
         accept: async () => {
             const result = await this.apiService.deleteOrderEmail(email.emailID);
-
+            console.log(result)
             if (result.status === 200) {
-              this.emails = this.emails.filter((val: any) => val.id !== email.emailID);
+              this.updateEmails();
               this.email = {
                 subject: '',
                 status: '',
@@ -102,7 +117,7 @@ export class EmailHubComponent {
                 emailID: '',
                 content: '',
                 source: '',
-                dateReceived: '',
+                datereceived: '',
               };
             }
             this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Email Deleted', life: 3000 });
@@ -136,16 +151,16 @@ export class EmailHubComponent {
   
   async saveEmail() {
     this.submitted = true;
+    console.log(this.email);
 
-    if (this.email.subject?.trim()) {
-      this.email.dateReceived = this.formatDateToString(this.dateReceived);
-
+    if (this.email.content !== "" && this.email.source !== "" && this.email.status && this.email.order !== "" && this.dateReceived && this.email.subject !== "") {
+      this.email.datereceived = this.formatDateToString(this.dateReceived);
+      
       if (this.email.emailID) {
-
         const result = await this.apiService.updateOrderEmail(this.email);
-
+        console.log(result)
         if (result.status === 201) {
-          this.emails[this.findIndexById(this.email.emailID)] = this.email;
+          this.updateEmails();
           this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Email Updated', life: 3000 });
         } else if (result.status === 400) {
           this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Email Not Updated', life: 3000 });
@@ -153,16 +168,14 @@ export class EmailHubComponent {
       } else {
 
         const result = await this.apiService.createOrderEmail(this.email);
-
-        if (result.status === 201) {
-          this.emails.push(this.email);
+        if (result.status === 200) {
+          this.updateEmails();
           this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Email Created', life: 3000 });
         } else if (result.status === 400) {
           this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Email Not Created', life: 3000 });
         }
       }
 
-      this.emails = [...this.emails];
       this.emailDialog = false;
       this.email = {
         subject: '',
@@ -171,7 +184,7 @@ export class EmailHubComponent {
         emailID: '',
         content: '',
         source: '',
-        dateReceived: '',
+        datereceived: '',
       };
     }
   }

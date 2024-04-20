@@ -12,6 +12,7 @@ import { AuthService } from '../../services/auth.service';
 export class SidebarComponent implements OnInit {
   items: MenuItem[] | undefined;
   mobileMenuActive: boolean = false;
+  name = 'Daniel Dang'
 
   // Subscribe to router events to detect navigation changes
   constructor(private router: Router, private authService: AuthService) {
@@ -70,5 +71,7 @@ export class SidebarComponent implements OnInit {
     ];
 
     this.updateActiveMenu();
+
+    // set user's name
   }
 }

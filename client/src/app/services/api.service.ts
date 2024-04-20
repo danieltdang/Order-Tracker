@@ -69,6 +69,14 @@ export class ApiService {
       }
     );
   }
+  /*
+  ###################
+  # STATS ENDPOINTS #
+  ###################
+  */
+  public async getUserStats() {
+    return await axios.get(`${this.ip}/api/users/${this.AuthService.getUUID()}/stats`);
+  }
 
   /*
   ###########################
@@ -76,47 +84,47 @@ export class ApiService {
   ###########################
   */
   public async getAllUserOrders() {
-    return await this.get('orders')
+    return await axios.get(`${this.ip}/api/users/${this.AuthService.getUUID()}/orders`);
   }
 
   public async createUserOrder(order: Order) {
     const payload = {
-      senderLocation: "",
-      receiverLocation: "",
-      prodName: order.productName,
+      senderLocation: order.senderlocation,
+      receiverLocation: order.receiverlocation,
+      prodName: order.productname,
       status: order.status,
-      trackCode: order.trackingCode,
-      estDelivery: order.estimatedDelivery,
+      trackCode: order.trackingcode,
+      estDelivery: order.estimateddelivery,
       carrier: order.carrier,
       source: order.source,
-      dateAdded: order.dateAdded,
+      dateAdded: order.dateadded,
     }
 
-    return await this.post('orders', payload)
+    return await axios.post(`${this.ip}/api/users/${this.AuthService.getUUID()}/orders`, payload)
   }
 
   public async updateUserOrder(order: Order) {
     const payload = {
-      senderLocation: order.senderLocation,
-      receiverLocation: order.receiverLocation,
-      prodName: order.productName,
+      senderLocation: order.senderlocation,
+      receiverLocation: order.receiverlocation,
+      prodName: order.productname,
       status: order.status,
-      trackCode: order.trackingCode,
-      estDelivery: order.estimatedDelivery,
+      trackCode: order.trackingcode,
+      estDelivery: order.estimateddelivery,
       carrier: order.carrier,
       source: order.source,
-      dateAdded: order.dateAdded
+      dateAdded: order.dateadded
     }
 
-    return await this.post(`orders/${order.orderID}`, payload)
+    return await axios.put(`${this.ip}/api/users/${this.AuthService.getUUID()}/orders/${order.orderid}`, payload)
   }
 
   public async getOrderByID(order_id: string) {
-    return await this.get(`orders/${order_id}`)
+    return await axios.get(`${this.ip}/api/users/${this.AuthService.getUUID()}/orders/${order_id}`)
   }
 
   public async deleteUserOrder(order_id: string) {
-    return await this.delete(`orders/${order_id}`)
+    return await axios.delete(`${this.ip}/api/users/${this.AuthService.getUUID()}/orders/${order_id}`)
   }
 
   /*
@@ -126,33 +134,41 @@ export class ApiService {
   */
 
   public async getUserEmails() {
-    return await this.get('emails')
+    return await axios.get(`${this.ip}/api/users/${this.AuthService.getUUID()}/emails`)
   }
 
   public async getOrderEmails(order_id: string) {
-    return await this.get(`orders/${order_id}/emails`)
+    return await axios.get(`orders/${order_id}/emails`)
   }
 
   public async createOrderEmail(email: Email) {
     const payload = {
+      subject: email.subject,
+      status: email.status,
+      order: email.order,
       content: email.content,
-      dateReceived: email.dateReceived
+      source: email.source,
+      dateReceived: email.datereceived
     }
 
-    return await this.post(`orders/${email.order}/emails`, payload)
+    return await axios.post(`${this.ip}/api/users/${this.AuthService.getUUID()}/orders/${email.order}/emails`, payload)
   }
 
   public async deleteOrderEmail(email_id: string) {
-    return await this.delete(`emails/${email_id}`);
+    return await axios.delete(`${this.ip}/api/users/${this.AuthService.getUUID()}/emails/${email_id}`);
   }
 
   public async updateOrderEmail(email: Email) {
     const payload = {
+      subject: email.subject,
+      status: email.status,
+      order: email.order,
       content: email.content,
-      dateReceived: email.dateReceived
+      source: email.source,
+      dateReceived: email.datereceived
     }
 
-    return await this.put(`emails/${email.emailID}`, payload);
+    return await axios.put(`${this.ip}/api/users/${this.AuthService.getUUID()}/emails/${email.emailID}`, payload);
   }
 
   /*
