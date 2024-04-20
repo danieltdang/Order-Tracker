@@ -17,9 +17,11 @@ export class SettingsComponent {
   themes: Theme[] | undefined;
   selectedTheme: Theme | undefined;
 
-  currPass: string | undefined;
-  confirmPass1: string | undefined;
-  confirmPass2: string | undefined;
+  currPass: string = '';
+  confirmPass1: string = '';
+  confirmPass2: string = '';
+  incorrectPass: boolean = false;
+  submitted: boolean = false;
 
   tempPremium: boolean = false;
 
@@ -37,34 +39,33 @@ export class SettingsComponent {
   }
 
   async passwordConfirm(event: Event) {
-    this.confirmationService.confirm({
-      target: event.target as EventTarget,
-      message: 'Are you sure you want to change your password?',
-      header: 'Change Password Confirmation',
-      icon: 'pi pi-info-circle',
-      acceptButtonStyleClass:"p-button-danger p-button-text",
-      rejectButtonStyleClass:"p-button-text p-button-text",
-      acceptIcon:"none",
-      rejectIcon:"none",
+    this.submitted = true;
+    console.log(this.currPass, this.confirmPass1, this.confirmPass2)
+    if (this.currPass !== "" && this.confirmPass1 !== "" && this.confirmPass2 !== "" && this.confirmPass1 === this.confirmPass2) {
+      this.confirmationService.confirm({
+        target: event.target as EventTarget,
+        message: 'Are you sure you want to change your password?',
+        header: 'Change Password Confirmation',
+        icon: 'pi pi-info-circle',
+        acceptButtonStyleClass:"p-button-danger p-button-text",
+        rejectButtonStyleClass:"p-button-text p-button-text",
+        acceptIcon:"none",
+        rejectIcon:"none",
 
-      accept: async () => {
-  
-        if (this.currPass && this.confirmPass1 && this.confirmPass2 && this.confirmPass1 === this.confirmPass2) {
+        accept: async () => {
           try {
             const result = await this.apiService.changePassword(this.currPass, this.confirmPass1);
 
             if (result.status == 200) {
+              this.incorrectPass = false;
               this.messageService.add({ severity: 'info', summary: 'Confirmed', detail: 'Password changed' });
-            } else {
-              alert('Password change failed');
             }
           } catch (err) {
-            console.error('Error during password change:', err);
-            alert('Password change failed');
+            this.incorrectPass = true;
           }
         }
-      }
-    });
+      });
+    }
   }
 
   async deleteConfirm(event: Event) {

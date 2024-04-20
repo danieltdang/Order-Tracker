@@ -78,12 +78,19 @@
           <div>
             <div class="flex flex-column mb-4">
               <label for="password1" class="block text-900 font-medium mb-2">Current Password</label>
-              <p-password id="password1" styleClass="mb-3" placeholder="Current Password" [feedback]="false" [(ngModel)]="currPass" [toggleMask]="true"></p-password>
-      
-              <label for="password2" class="block text-900 font-medium mb-2">New Password</label>
-              <p-password id="password2" placeholder="New Password" [(ngModel)]="confirmPass1" [toggleMask]="true"></p-password>
+              <p-password id="password1" placeholder="Current Password" [feedback]="false" [(ngModel)]="currPass" [toggleMask]="true"></p-password>
+              <small class="p-error" *ngIf="submitted && !currPass">Current Password is required.</small>
+              <small class="p-error" *ngIf="submitted && incorrectPass">Incorrect Current Password entered.</small>
 
-              <p-password id="password3" styleClass="mt-2" placeholder="Retype New Password" [(ngModel)]="confirmPass2" [toggleMask]="true"></p-password>
+              <label for="password2" class="block text-900 font-medium mt-3 mb-2">New Password</label>
+              <p-password id="password2" placeholder="New Password" [(ngModel)]="confirmPass1" [toggleMask]="true"></p-password>
+              <small class="p-error" *ngIf="submitted && !confirmPass1">New Password is required.</small>
+              <small class="p-error" *ngIf="submitted && confirmPass1 !== confirmPass2">New Passwords are not the same.</small>
+
+              <p-password id="password3" styleClass="mt-2" placeholder="Confirm New Password" [(ngModel)]="confirmPass2" [toggleMask]="true"></p-password>
+              <small class="p-error" *ngIf="submitted && !confirmPass2">Confirm New Password is required.</small>
+              <small class="p-error" *ngIf="submitted && confirmPass1 !== confirmPass2">New Passwords are not the same.</small>
+              
             </div>
     
             <p-button (click)="passwordConfirm($event)" size="small" icon="pi pi-check" label="Save Changes"></p-button>
