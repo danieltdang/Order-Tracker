@@ -35,10 +35,10 @@ CREATE TABLE IF NOT EXISTS "Order" (
     productName TEXT,
     status INTEGER,
     trackingCode TEXT,
-    estimatedDelivery TEXT,
+    estimatedDelivery DATE,
     carrier TEXT,
     source TEXT,
-    dateAdded TEXT,
+    dateAdded DATE,
     FOREIGN KEY ("user") REFERENCES "User"(uuid)
 )
 """)
@@ -55,8 +55,7 @@ CREATE TABLE IF NOT EXISTS Email (
     "emailID" SERIAL PRIMARY KEY,
     content TEXT,
     source TEXT,
-    dateReceived TEXT,
-    source TEXT,
+    dateReceived DATE,
     FOREIGN KEY ("order") REFERENCES "Order"(orderID)
 )
 """)
@@ -68,7 +67,7 @@ CREATE TABLE IF NOT EXISTS "OrderEvent"(
     "order" INTEGER,
     "orderEventID" SERIAL PRIMARY KEY,
     description TEXT,
-    date TEXT,
+    date DATE,
     FOREIGN KEY ("order") REFERENCES "Order"(orderID)
 )
 """)
