@@ -68,6 +68,23 @@ def getUserInfo(uuid):
         raise Exception(f"Error occured when trying to retrieve info on user '{uuid}'.")
     finally:
         con.close()
+        
+def getUserNameEmail(uuid):
+    con = get_db_connection()
+    cur = con.cursor(cursor_factory=DictCursor)
+
+    try:
+        cur.execute("""
+            SELECT firstname, lastname, email FROM "User"
+            WHERE "User".uuid = %s
+        """, (uuid,))
+        user = cur.fetchone()
+
+        return user
+    except:
+        raise Exception(f"Error occured when trying to retrieve name email on user '{uuid}'.")
+    finally:
+        con.close()
 
 def getAllUsers():
     con = get_db_connection()

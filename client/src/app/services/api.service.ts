@@ -78,6 +78,10 @@ export class ApiService {
     return await axios.get(`${this.ip}/api/users/${this.AuthService.getUUID()}/stats`);
   }
 
+  public async getUserName() {
+    return await axios.get(`${this.ip}/api/users/${this.AuthService.getUUID()}/name-email`);
+  }
+
   /*
   ###########################
   # ORDER RELATED ENDPOINTS #

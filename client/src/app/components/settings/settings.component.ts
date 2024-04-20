@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { Theme } from "../../interfaces/theme";
 import { ThemeService } from '../../services/theme-service';
-import axios from 'axios';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service'
 import { ApiService } from '../../services/api.service';
@@ -24,7 +23,11 @@ export class SettingsComponent {
 
   tempPremium: boolean = false;
 
-  constructor(private themeService: ThemeService, private confirmationService: ConfirmationService, private messageService: MessageService, private router: Router, private authService: AuthService, private apiService: ApiService) { }
+  userName!: string;
+  userEmail!: string;
+
+  constructor(private themeService: ThemeService, private confirmationService: ConfirmationService, private messageService: MessageService,
+              private router: Router, private authService: AuthService, private apiService: ApiService) { }
 
   changeTheme() {
     if (this.selectedTheme) {
@@ -96,9 +99,22 @@ export class SettingsComponent {
           //this.messageService.add({ severity: 'error', summary: 'Rejected', detail: 'You have rejected' });
         }
     });
-}
+  }
 
-  ngOnInit() {
+  updateUser() {
+    this.apiService.getUserName().then((result) => {
+      console.log(result);
+      if (result.status === 200) {
+        this.userName = result.data.firstname + " " + result.data.lastname;
+        this.userEmail = result.data.email;
+      } else {
+      }
+    });
+  }
+
+  async ngOnInit(): Promise<void> {
+    this.updateUser();
+
     this.themes = this.themeService.getThemes();
     this.selectedTheme = this.themeService.getTheme();
   }

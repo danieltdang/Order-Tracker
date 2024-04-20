@@ -10,7 +10,7 @@
         </div>
         
         <div class="subheader">
-            Hello {{ name }}!
+            Hello {{ userName }}!
         </div>
 
         <div class="content" [ngClass]="{'active':  mobileMenuActive}">
@@ -24,8 +24,8 @@
                     <p-button icon="pi pi-bars" (click)="toggleMobileMenu();"/>
                 </div>
                 <div class="userContainer">
-                    <p-avatar label="E" styleClass="mr-2" size="normal" shape="circle"/>
-                    {{ name }}
+                    <p-avatar label="{{ firstLetter }}" styleClass="mr-2" size="normal" shape="circle"/>
+                    {{ userName }}
                 </div>
             </div>
         </div>

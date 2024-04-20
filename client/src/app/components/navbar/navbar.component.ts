@@ -2,6 +2,7 @@ import { Component, HostListener, OnInit, ViewEncapsulation } from '@angular/cor
 import { NavigationEnd, Router } from '@angular/router';
 import { MenuItem } from 'primeng/api';
 import { AuthService } from '../../services/auth.service';
+import { ApiService } from '../../services/api.service';
 
 @Component({
   selector: 'app-navbar',
@@ -12,10 +13,11 @@ import { AuthService } from '../../services/auth.service';
 export class SidebarComponent implements OnInit {
   items: MenuItem[] | undefined;
   mobileMenuActive: boolean = false;
-  name = 'Daniel Dang'
+  userName!: string;
+  firstLetter!: string;
 
   // Subscribe to router events to detect navigation changes
-  constructor(private router: Router, private authService: AuthService) {
+  constructor(private router: Router, private authService: AuthService, private apiService: ApiService) {
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
         this.updateActiveMenu();
@@ -60,7 +62,19 @@ export class SidebarComponent implements OnInit {
     this.authService.logout();
   }
 
-  ngOnInit() {
+  updateUser() {
+    this.apiService.getUserName().then((result) => {
+      console.log(result);
+      if (result.status === 200) {
+        this.userName = result.data.firstname + " " + result.data.lastname;
+        this.firstLetter = this.userName.charAt(0);
+      } else {
+      }
+    });
+  }
+
+  async ngOnInit(): Promise<void> {
+    this.updateUser();
     this.items = [
       {label: 'Dashboard', icon: 'pi pi-home', routerLink: ['/app/dashboard'], styleClass : 'active'},
       {label: 'Email Hub', icon: 'pi pi-envelope', routerLink: ['/app/email-hub']},
