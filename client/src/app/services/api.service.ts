@@ -194,6 +194,10 @@ export class ApiService {
     return await this.delete(`orders/${order_id}/events`);
   }
 
+  public async refreshUserOrder(order: Order) {
+    return await this.post(`orders/${order.orderid}/refresh`, {});
+  }
+
   /*
   ############################
   # AUTHENTICATION ENDPOINTS #

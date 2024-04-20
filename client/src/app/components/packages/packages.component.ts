@@ -52,6 +52,19 @@ export class PackagesComponent {
     return index;
   }
 
+  refreshOrder(order: Order) {
+    console.log("User has clicked on the refresh button for order: " + order.orderid);
+
+    this.apiService.refreshUserOrder(order).then((result) => {
+      if (result.status === 200) {
+        this.updateOrders();
+        this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Order Refreshed', life: 3000 });
+      } else {
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Order Not Refreshed', life: 3000 });
+      }
+    });
+  }
+
   editOrder(order: Order) {
     this.order = { ...order };
     this.dateAdded = new Date(order.dateadded);

@@ -1,5 +1,6 @@
 import psycopg2
 from psycopg2.extras import DictCursor
+import parser.utils.upsTracking as upsTracking
 
 def get_db_connection():
     con = psycopg2.connect(
@@ -471,10 +472,11 @@ def getOrderEventsForOrder(order_id):
             FROM "OrderEvent"
             JOIN "Order" ON "OrderEvent"."order" = "Order".orderID
             WHERE "Order".orderID = %s
+            ORDER BY "OrderEvent".date DESC
         """, (order_id,))
-        emails = cur.fetchall()
+        events = cur.fetchall()
 
-        return emails
+        return events
     except:
         raise Exception(f"Error occured when trying to retrieve orderEvents for order '{order_id}'.")
     finally:
@@ -497,3 +499,80 @@ def removeOrderEventsForOrder(order):
     finally:
         con.close()
         return True
+    
+# Retrieve tracking code from order
+def retrieveTrackingData(user, order):
+    con = get_db_connection()
+    cur = con.cursor()
+
+    trackingCode, Carrier = None, None
+
+    try:
+        cur.execute("""
+            SELECT trackingcode, carrier FROM "Order"
+            WHERE "Order".user = %s AND "Order".orderID = %s
+        """, (user, order))
+        trackingCode, Carrier = cur.fetchone()
+    except:
+        raise Exception(f"Error occured when trying to retrieve tracking data for order '{order}' from user '{user}'.")
+    finally:
+        con.close()
+        return trackingCode, Carrier
+
+
+def refreshOrder(user, order):
+    trackingCode, Carrier = retrieveTrackingData(user, order)
+    if trackingCode == None:
+        return False
+    
+    if Carrier == "UPS":
+        result = upsTracking.trackUPS(trackingCode)
+    elif Carrier == "FedEx":
+        result = upsTracking.trackFedEx(trackingCode)
+    else:
+        return False
+    
+    # Implement results from Fedex/UPS tracking to update order data
+
+    if result == None:
+        return False
+    
+    # Check if latest activity is different from the one in the database
+
+    events = getOrderEventsForOrder(order)
+
+    # If no events, add all events
+    if len(events) == 0:
+        for event in result["Events"]:
+            addOrderEvent(order, event["description"], event["date"])
+        return True
+    
+    # Check if all events retrieved in results are in the database
+    for event in result["Events"]:
+        for insertedEvents in events:
+            if event["status"] != insertedEvents["description"] and event["date"] != insertedEvents["date"]:
+                addOrderEvent(order, event["description"], event["date"])
+
+    # Update tracking details
+    storedOrder = getOrderInfo(user, order)
+
+    if storedOrder == None:
+        return False
+
+    if storedOrder["status"] != result["Status"] or storedOrder["estimateddelivery"] != result["estimatedDelivery"]:
+        updateOrder(
+            order,
+            storedOrder["productname"],
+            result["Status"],
+            trackingCode,
+            result["estimatedDelivery"],
+            Carrier,
+            storedOrder["source"],
+            storedOrder["dateadded"],
+            result["senderLocation"],
+            result["receiverLocation"]
+        )
+
+    return True
+
+
