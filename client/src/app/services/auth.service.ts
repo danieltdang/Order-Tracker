@@ -1,5 +1,6 @@
 import { Injectable, afterRender } from '@angular/core';
 import { StorageMap } from '@ngx-pwa/local-storage';
+import { Observable, map, of } from 'rxjs';
 
 @Injectable({
     providedIn: 'root'
@@ -56,9 +57,17 @@ export class AuthService {
     }
 
     // Check if user is authed
-    public isAuthenticated(): boolean {
-        console.log("token", this.userToken);
-        return this.getToken() !== null;
+    public isAuthenticated(): Observable<boolean> {
+        if (this.userToken !== null) {
+            return of(true);
+        } else {
+            return this.storage.get('userToken').pipe(
+                map(token => {
+                    this.userToken = token as string;
+                    return this.userToken !== null;
+                })
+            );
+        }
     }
 
     // Clear data
