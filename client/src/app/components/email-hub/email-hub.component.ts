@@ -25,6 +25,7 @@ export class EmailHubComponent {
   };
   emails!: Email[];
   selectedEmails!: Email[] | null;
+  validOrderIDs!: string[];
   dateReceived!: Date;
   statuses!: any[];
   submitted: boolean = false;
@@ -39,7 +40,13 @@ export class EmailHubComponent {
     this.apiService.getUserEmails().then((result) => {
       if (result.status === 200) {
         this.emails = result.data;
-      } else {
+      }
+    });
+
+    this.apiService.getOrderIDs().then((result) => {
+      console.log(result.data)
+      if (result.status === 200) {
+        this.validOrderIDs = result.data;
       }
     });
   }

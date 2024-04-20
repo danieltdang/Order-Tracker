@@ -450,6 +450,24 @@ def removeEmailByID(email_id):
 
 
 
+def getValidOrderIDsForUser(uuid):
+    con = get_db_connection()
+    cur = con.cursor()
+
+    try:
+        cur.execute("""
+            SELECT "Order".orderID
+            FROM "Order"
+            JOIN "User" ON "Order"."user" = "User".uuid
+            WHERE "User".uuid = %s
+        """, (uuid,))
+        order_ids = [order_id_tuple[0] for order_id_tuple in cur.fetchall()]
+
+        return order_ids
+    except:
+        raise Exception(f"Error occured when trying to retrieve orderIDs for user '{uuid}'.")
+    finally:
+        con.close()
 
 def addOrderEvent(order, desc, date):
     con = get_db_connection()

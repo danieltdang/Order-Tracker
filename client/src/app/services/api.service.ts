@@ -211,6 +211,10 @@ export class ApiService {
   ##################################
   */
 
+  public async getOrderIDs() {
+    return await axios.get(`${this.ip}/api/users/${this.AuthService.getUUID()}/orders/ids`);
+  }
+
   public async getOrderEvents(orderId: string) {
     return await this.get(`orders/${orderId}/events`);
   }

@@ -86,7 +86,6 @@ def order_counts(uuid):
     
     if request.method == "GET":
         stats = util.getOrderStats(uuid)
-        print(stats)
         return jsonify(stats)
 
 
@@ -371,6 +370,19 @@ def change_password():
 ################################
 # ORDEREVENT RELATED ENDPOINTS #
 ################################
+
+@app.route('/api/users/<uuid>/orders/ids', methods = ["GET"])
+def valid_order_event_ids(uuid):
+    # authenticate
+    if validate_request(uuid, request):
+        return jsonify({
+            "message": "Invalid authorization token",
+        }), 401
+    
+    if request.method == "GET":
+        orderEvents = util.getValidOrderIDsForUser(uuid)
+
+        return jsonify(orderEvents), 200
 
 @app.route('/api/users/<uuid>/orders/<order_id>/events', methods = ["GET", "POST", "DELETE"])
 def order_events(uuid, order_id):

@@ -67,8 +67,15 @@
         </div>
 
         <div class="field">
-            <label for="name">Order ID</label>
-            <input class="p-inputtext" type="text" pInputText id="tracking" [(ngModel)]="email.order" required />
+            <label for="order">Order ID</label>
+            <p-dropdown [(ngModel)]="email.order" inputId="order" [options]="validOrderIDs">
+                <ng-template pTemplate="selectedOrder">
+                    <span>{{email.order}}</span>
+                </ng-template>
+                <ng-template let-option pTemplate="email">
+                    <span>{{option}}</span>
+                </ng-template>
+            </p-dropdown>
             <small class="p-error" *ngIf="submitted && !email.order">Order ID is required.</small>
         </div>
 
