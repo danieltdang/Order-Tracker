@@ -55,6 +55,23 @@ def user_id(uuid):
             return jsonify({
                 "message": "User not found",
             }), 404
+
+@app.route('/api/users/<uuid>/name-email', methods = ["GET"])       
+def nameEmail(uuid):
+    # authenticate
+    if validate_request(uuid, request):
+        return jsonify({
+            "message": "Invalid authorization token",
+        }), 401
+    
+    # Get information of specific user
+    if request.method == "GET":
+        user = util.getUserNameEmail(uuid)
+        if user == None:
+            return jsonify({
+                "message": "User not found",
+            }), 404
+        return jsonify(dict(user))
         
 ###################
 # STATS ENDPOINTS #
