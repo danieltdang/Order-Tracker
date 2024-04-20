@@ -13,12 +13,10 @@ export class AuthService {
     constructor (private storage: StorageMap) {
         this.storage.get('userToken').subscribe((userToken) => {
             this.userToken = userToken as string;
-            console.log("token", this.userToken);
         });
 
         this.storage.get('uuid').subscribe((uuid) => {
             this.uuid = uuid as string;
-            console.log("uuid", this.uuid);
         });
     }
 
@@ -64,7 +62,7 @@ export class AuthService {
             return this.storage.get('userToken').pipe(
                 map(token => {
                     this.userToken = token as string;
-                    return this.userToken !== null;
+                    return !!this.userToken;
                 })
             );
         }
