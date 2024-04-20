@@ -44,7 +44,7 @@ export class EmailHubComponent {
     });
 
     this.apiService.getOrderIDs().then((result) => {
-      console.log(result.data)
+      //console.log(result.data)
       if (result.status === 200) {
         this.validOrderIDs = result.data;
       }
@@ -70,7 +70,7 @@ export class EmailHubComponent {
     //this.router.navigate(['app/packages', event.data.orderID]);
     this.email = this.emails[this.findIndexById(event.data.emailID)];
     this.emailViewer = true;
-    console.log(event.data.emailID);
+    //console.log(event.data.emailID);
   }
 
   getStatus(status: number) {
@@ -114,7 +114,7 @@ export class EmailHubComponent {
         icon: 'pi pi-exclamation-triangle',
         accept: async () => {
             const result = await this.apiService.deleteOrderEmail(email.emailID);
-            console.log(result)
+            //console.log(result)
             if (result.status === 200) {
               this.updateEmails();
               this.email = {
@@ -141,7 +141,7 @@ export class EmailHubComponent {
     // Create a new Date object to avoid mutating the original date
     const utcDate = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate() + 1));
 
-    console.log(utcDate.toUTCString())
+    //console.log(utcDate.toUTCString())
     return utcDate.toUTCString();
   }
 
@@ -159,14 +159,14 @@ export class EmailHubComponent {
   
   async saveEmail() {
     this.submitted = true;
-    console.log(this.email);
+    //console.log(this.email);
 
     if (this.email.content !== "" && this.email.source !== "" && this.email.status && this.email.order !== "" && this.dateReceived && this.email.subject !== "") {
       this.email.datereceived = this.formatDateToString(this.dateReceived);
       
       if (this.email.emailID) {
         const result = await this.apiService.updateOrderEmail(this.email);
-        console.log(result)
+        //console.log(result)
         if (result.status === 201) {
           this.updateEmails();
           this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Email Updated', life: 3000 });
