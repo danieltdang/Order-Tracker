@@ -112,6 +112,7 @@ export class ApiService {
   ###################
   */
   public async getAllUserStats() {
+
     return await axios.get(`${this.ip}/api/users/${this.AuthService.getUUID()}/stats`);
   }
 
@@ -122,6 +123,15 @@ export class ApiService {
     }
 
     return await axios.get(`${this.ip}/api/users/${this.AuthService.getUUID()}/stats`, { params: payload });
+  }
+
+  public async getUserChartStats(startDate: string[], endDate: string[]) {
+    const payload = {
+      startDate: startDate,
+      endDate: endDate
+    }
+
+    return await axios.get(`${this.ip}/api/users/${this.AuthService.getUUID()}/stats/chart`, { params: payload });
   }
 
   /*
