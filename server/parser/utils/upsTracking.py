@@ -63,6 +63,9 @@ def handleUPS(trackingNumber):
     if result == None:
         return None
 
+    if result.get("trackResponse") == None:
+        return None
+    
     package = result["trackResponse"]["shipment"][0]["package"]
 
     Status = package[0]["activity"][0]["status"]["description"]
