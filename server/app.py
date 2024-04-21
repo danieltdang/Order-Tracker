@@ -85,9 +85,9 @@ def order_counts(uuid):
         }), 401
     
     if request.method == "GET":
-        request.body = request.get_json()
-        start = request.body['startDate']
-        end = request.body['endDate']
+        start = request.args['startDate']
+        end = request.args['endDate']
+        print(start, end)
         stats = util.getOrderStats(uuid, start, end)
         return jsonify(stats)
 

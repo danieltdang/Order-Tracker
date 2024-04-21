@@ -1,5 +1,5 @@
 import { Component, OnInit, ChangeDetectorRef, SimpleChanges } from '@angular/core';
-
+import { DatePipe } from '@angular/common';
 import { Report } from '../../interfaces/report';
 import { Filter } from '../../interfaces/filter';
 
@@ -9,6 +9,7 @@ import { ApiService } from '../../services/api.service';
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css',
+  providers: [DatePipe]
 })
 export class DashboardComponent implements OnInit {
   today = new Date();
@@ -28,15 +29,31 @@ export class DashboardComponent implements OnInit {
   reportDates: Date[] | undefined;
   reportStats: number[][] | undefined;
 
-  constructor(private cdr: ChangeDetectorRef, private apiService: ApiService) { }
+  constructor(private cdr: ChangeDetectorRef, private apiService: ApiService, private datePipe: DatePipe) { }
 
   updateStats() {
-    this.apiService.getUserStats().then((result) => {
+    if (!this.reportDates || this.reportDates.length < 2) {
+      // Ensure there are start and end dates provided
+      return;
+    }
+
+    const startDate = this.datePipe.transform(this.reportDates[0], 'yyyy-MM-dd') ?? '';
+    const endDate = this.datePipe.transform(this.reportDates[1], 'yyyy-MM-dd') ?? '';
+
+    this.apiService.getUserStats(startDate, endDate).then((result) => {
       if (result.status === 200) {
         console.log(result.data);
       } else {
       }
     });
+  }
+
+  formatDateToString(date: Date) {
+    // Create a new Date object to avoid mutating the original date
+    const utcDate = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate() + 1));
+
+    //console.log(utcDate.toUTCString())
+    return utcDate.toUTCString();
   }
 
   getStartDateOfTheWeek = (date: Date) => {
@@ -95,12 +112,12 @@ export class DashboardComponent implements OnInit {
         
         // Generate labels for each day between startDate and adjustedEndDate
         for (let date = new Date(startDate); date <= adjustedEndDate; date.setDate(date.getDate() + 1)) {
-          newLabels.push(this.formatDate(new Date(date)));
+          newLabels.push(this.formatChartDate(new Date(date)));
         }
         break;
       case 'Weekly':
         for (let date = new Date(startDate); date <= endDate; date.setDate(date.getDate() + 7)) {
-          newLabels.push(`Week of ${this.formatDate(new Date(date))}`);
+          newLabels.push(`Week of ${this.formatChartDate(new Date(date))}`);
         }
         break;
       case 'Monthly':
@@ -125,7 +142,7 @@ export class DashboardComponent implements OnInit {
   }
 
   // Helper function to format dates as strings
-  formatDate(date: Date): string {
+  formatChartDate(date: Date): string {
     return `${String(date.getMonth() + 1).padStart(2, '0')}/${String(date.getDate()).padStart(2, '0')}/${date.getFullYear()}`;
   }
 
@@ -256,7 +273,6 @@ export class DashboardComponent implements OnInit {
   }
 
   async ngOnInit(): Promise<void> {
-    this.updateStats();
     this.reportCards = [
       {
         title: 'Orders',
@@ -358,6 +374,8 @@ export class DashboardComponent implements OnInit {
 
     this.updateReportStats();
     this.updateChartLabels();
+
+    this.updateStats();
 
     //console.log(this.reportStats);
   }

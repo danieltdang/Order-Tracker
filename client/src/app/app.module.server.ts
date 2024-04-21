@@ -6,6 +6,7 @@ import { AppComponent } from './app.component';
 import { RouterModule } from '@angular/router';
 
 import { AppRoutingModule } from './app-routing.module';
+import { DatePipe } from '@angular/common';
 
 @NgModule({
   imports: [
@@ -14,5 +15,6 @@ import { AppRoutingModule } from './app-routing.module';
     AppRoutingModule,
   ],
   bootstrap: [AppComponent],
+  providers: [DatePipe]
 })
 export class AppServerModule {}

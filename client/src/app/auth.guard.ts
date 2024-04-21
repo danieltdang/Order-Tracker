@@ -11,7 +11,7 @@ export class PermissionsService {
     constructor(private authService: AuthService, private router: Router) {}
 
     canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
-        console.log('Checking if user is authenticated');
+        //console.log('Checking if user is authenticated');
         return this.authService.isAuthenticated().pipe(
             map(isAuthenticated => {
                 if (!isAuthenticated) {
