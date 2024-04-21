@@ -65,6 +65,7 @@ Werkzeug==3.0.1
 zope.interface==6.2
 ```
 <h3>Client-side (JavaScript/Angular)</h3>
+<pre>
 <code>
 "@angular/animations": "^17.2.0",
     "@angular/cdk": "^17.2.1",
@@ -89,5 +90,6 @@ zope.interface==6.2
     "rxjs": "~7.8.0",
     "tslib": "^2.6.2",
     "zone.js": "~0.14.3"
-<code/>
+</code>
+</pre>
 </details>
