@@ -559,18 +559,35 @@ def refreshOrder(user, order):
             if not found:
                 addOrderEvent(order, newEvent["status"], newEvent["date"])
 
+
+
     # Update tracking details
     storedOrder = getOrderInfo(user, order)
 
     if storedOrder == None:
         print("Stored order is None")
         return False
+    
+    # Update status
+    newStatus = storedOrder["status"]
+    if Carrier == "UPS":
+        print(result["Events"][0]["status"])
+        if result["Events"][0]["status"].strip(" ").lower() == "we have your package":
+            newStatus = 0
+        elif result["Events"][0]["status"].strip(" ").lower() == "departed from facility" or result["Events"][0]["status"].strip(" ").lower() == "arrived from facility":
+            newStatus = 1
+        elif result["Events"][0]["status"].strip(" ").lower() == "loaded on delivery vehicle" or result["Events"][0]["status"].strip(" ").lower() == "out for delivery":
+            newStatus = 2
+        elif result["Events"][0]["status"].strip(" ").lower() == "delivered":
+            newStatus = 3
+        
+
 
     if storedOrder["status"] != result["Status"] or storedOrder["estimateddelivery"] != result["estimatedDelivery"]:
         updateOrder(
             order,
             storedOrder["productname"],
-            storedOrder["status"],
+            newStatus,
             trackingCode,
             result["estimatedDelivery"],
             Carrier,
