@@ -37,3 +37,21 @@ npm ci
 ```bash
 npm run ng serve
 ```
+
+## Information on the Project
+
+<details>
+<summary>Libraries used</summary>
+<h3>Server-side (Python/Flask)</h3>
+as
+d
+as
+d
+a
+<h3>Client-side (JavaScript/Angular)</h3>
+asd
+as
+d
+as
+d
+</details>
