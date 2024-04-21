@@ -6,7 +6,7 @@ def get_db_connection():
         host="localhost",
         database="database",
         user="postgres",
-        password="password"
+        password="password",
     )
     return con
 
@@ -101,8 +101,25 @@ def getAllUsers():
     finally:
         con.close()
 
-
-
+def get_user_role(uuid):
+    con = get_db_connection()
+    cur = con.cursor()
+    
+    try:
+        cur.execute("SELECT has_role(%s, %s)", (uuid, 'base_user'))
+        is_base_user = bool(cur.fetchone()[0])  # Convert the result to boolean
+        
+        if is_base_user:
+            return {'role': 'base_user'}
+        else:
+            cur.execute("SELECT has_role(%s, %s)", (uuid, 'premium_user'))
+            is_premium_user = bool(cur.fetchone()[0])  # Convert the result to boolean
+            if is_premium_user:
+                return {'role': 'premium_user'}
+            else:
+                return {'role': 'unknown'}
+    finally:
+        con.close()
 
 def addOrder(
     user, 

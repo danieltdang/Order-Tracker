@@ -75,7 +75,16 @@ def nameEmail(uuid):
                 "message": "User not found",
             }), 404
         return jsonify(dict(user))
-        
+    
+@app.route('/api/users/<uuid>/role', methods=["GET"])
+def user_role(uuid):
+    user_role = util.get_user_role(uuid)
+    if user_role is None:
+        return jsonify({
+            "message": "User role not found",
+        }), 404
+    return jsonify(user_role)
+
 ###################
 # STATS ENDPOINTS #
 ###################

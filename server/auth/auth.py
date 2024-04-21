@@ -26,9 +26,6 @@ def register_user(first_name, last_name, email, first_password):
 
     hashed_password = bcrypt.hashpw(first_password.encode('utf-8'), bcrypt.gensalt())
 
-    hashed_email = hashlib.sha256(email.encode()).hexdigest()
-    pg_username = 'u' + hashed_email
-
     con = get_db_connection()
     cur = con.cursor()
 
@@ -38,7 +35,7 @@ def register_user(first_name, last_name, email, first_password):
         if cur.fetchone() is not None:
             return None
         
-        user_uuid = str(uuid.uuid4())
+        user_uuid = 'u' + str(uuid.uuid4()).replace('-', '')
 
         cur.execute("""
             INSERT INTO "User"
@@ -46,7 +43,7 @@ def register_user(first_name, last_name, email, first_password):
             VALUES (%s, %s, %s, %s, %s)
         """, (user_uuid, first_name, last_name, email, hashed_password))
         
-        cur.execute(f"CREATE USER {pg_username} WITH PASSWORD %s", (first_password,))
+        cur.execute(f"CREATE USER {user_uuid} WITH PASSWORD %s", (first_password,))
 
         con.commit()
 
@@ -106,9 +103,7 @@ def change_password(uuid, old_password, new_password):
             cur.execute("""UPDATE "User" SET password = %s WHERE uuid = %s""", (new_hashed_password, uuid))
             con.commit()
 
-            hashed_email = hashlib.sha256(user[3].encode()).hexdigest()
-            pg_username = 'u' + hashed_email
-            cur.execute(f"ALTER USER {pg_username} WITH PASSWORD %s", (new_password,))
+            cur.execute(f"ALTER USER {uuid} WITH PASSWORD %s", (new_password,))
             con.commit()
             return True
         else: 
