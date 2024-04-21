@@ -1,4 +1,4 @@
-import { Component, HostListener, OnInit, ViewEncapsulation } from '@angular/core';
+import { AfterViewInit, Component, HostListener, OnInit, ViewEncapsulation } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { MenuItem } from 'primeng/api';
 import { AuthService } from '../../services/auth.service';
@@ -10,7 +10,7 @@ import { ApiService } from '../../services/api.service';
   styleUrl: './navbar.component.css',
   encapsulation: ViewEncapsulation.None
 })
-export class SidebarComponent implements OnInit {
+export class SidebarComponent implements OnInit, AfterViewInit {
   items: MenuItem[] | undefined;
   mobileMenuActive: boolean = false;
   userName!: string;
@@ -68,7 +68,6 @@ export class SidebarComponent implements OnInit {
   }
 
   async ngOnInit(): Promise<void> {
-    this.updateUser();
     this.items = [
       {label: 'Dashboard', icon: 'pi pi-home', routerLink: ['/app/dashboard'], styleClass : 'active'},
       {label: 'Email Hub', icon: 'pi pi-envelope', routerLink: ['/app/email-hub']},
@@ -81,5 +80,9 @@ export class SidebarComponent implements OnInit {
     this.updateActiveMenu();
 
     // set user's name
+  }
+
+  ngAfterViewInit() : void {
+    this.updateUser();
   }
 }

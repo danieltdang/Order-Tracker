@@ -111,8 +111,11 @@ export class ApiService {
   # STATS ENDPOINTS #
   ###################
   */
+  public async getAllUserStats() {
+    return await axios.get(`${this.ip}/api/users/${this.AuthService.getUUID()}/stats`);
+  }
+
   public async getUserStats(startDate: string, endDate: string) {
-    console.log(startDate, endDate)
     const payload = {
       startDate: startDate,
       endDate: endDate

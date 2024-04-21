@@ -12,6 +12,7 @@ import { ApiService } from '../../services/api.service';
   providers: [DatePipe]
 })
 export class DashboardComponent implements OnInit {
+  initialized = false;
   today = new Date();
 
   chartData: number[][] | undefined;
@@ -27,26 +28,11 @@ export class DashboardComponent implements OnInit {
   reportList: Filter[] | undefined;
   reportFilter: Filter | undefined;
   reportDates: Date[] | undefined;
-  reportStats: number[][] | undefined;
+
+  allStats!: number[];
+  reportRangeStats!: number[];
 
   constructor(private cdr: ChangeDetectorRef, private apiService: ApiService, private datePipe: DatePipe) { }
-
-  updateStats() {
-    if (!this.reportDates || this.reportDates.length < 2) {
-      // Ensure there are start and end dates provided
-      return;
-    }
-
-    const startDate = this.datePipe.transform(this.reportDates[0], 'yyyy-MM-dd') ?? '';
-    const endDate = this.datePipe.transform(this.reportDates[1], 'yyyy-MM-dd') ?? '';
-
-    this.apiService.getUserStats(startDate, endDate).then((result) => {
-      if (result.status === 200) {
-        console.log(result.data);
-      } else {
-      }
-    });
-  }
 
   formatDateToString(date: Date) {
     // Create a new Date object to avoid mutating the original date
@@ -147,98 +133,105 @@ export class DashboardComponent implements OnInit {
   }
 
   // Function to update the report stats based on date range
-  updateReportStats(): void {
-    this.reportStats = this.generate2DRandom(2, 6);
-    //console.log('Updated report stats:', this.reportStats);
-    
-    if (!this.reportStats) {
+  async updateReportStats(): Promise<void> {
+    if (!this.reportDates || this.reportDates.length < 2) {
       // Ensure there are start and end dates provided
-      //console.log('No stats provided')
       return;
     }
-  
-    //const startDate = this.reportDates[0];
-    //const endDate = this.reportDates[1];
-  
-    this.reportCards = [
-      {
-        title: 'Orders',
-        tooltip: 'Total orders placed',
-        count: this.reportStats[0][0],
-        icon: 'pi-shopping-cart',
-        color: 'blue',
-        change: this.reportStats[1][0],
-      },
-      {
-        title: 'Emails',
-        tooltip: 'Total emails',
-        count: this.reportStats[0][1],
-        icon: 'pi-envelope',
-        color: 'purple',
-        change: this.reportStats[1][1],
-      },
-      {
-        title: 'Pre-Transit',
-        tooltip: 'Orders being prepared in transit',
-        count: this.reportStats[0][2],
-        icon: 'pi-box',
-        color: 'orange',
-        change: this.reportStats[1][2],
-      },
-      {
-        title: 'In Transit',
-        tooltip: 'Orders that are in transit',
-        count: this.reportStats[0][3],
-        icon: 'pi-globe',
-        color: 'yellow',
-        change: this.reportStats[1][3],
-      },
-      {
-        title: 'Out for Delivery',
-        tooltip: 'Orders that are out for delivery',
-        count: this.reportStats[0][4],
-        icon: 'pi-map',
-        color: 'green',
-        change: this.reportStats[1][4],
-      },
-      {
-        title: 'Delivered',
-        tooltip: 'Orders that have been delivered',
-        count: this.reportStats[0][5],
-        icon: 'pi-home',
-        color: 'red',
-        change: this.reportStats[1][5],
-      },
-    ];
 
-    // This assignment creates a new reference for reportCards array which will trigger Angular's change detection
-    this.reportCards = [...this.reportCards];
-    this.cdr.detectChanges();
+    const startDate = this.datePipe.transform(this.reportDates[0], 'yyyy-MM-dd') ?? '';
+    const endDate = this.datePipe.transform(this.reportDates[1], 'yyyy-MM-dd') ?? '';
+
+    this.apiService.getUserStats(startDate, endDate).then((result) => {
+      if (result.status === 200) {
+        this.reportRangeStats = result.data;
+        
+        this.reportCards = [
+          {
+            title: 'Orders',
+            tooltip: 'Total orders placed',
+            count: this.allStats[4],
+            icon: 'pi-shopping-cart',
+            color: 'blue',
+            change: this.reportRangeStats[4],
+          },
+          {
+            title: 'Emails',
+            tooltip: 'Total emails',
+            count: this.allStats[5],
+            icon: 'pi-envelope',
+            color: 'purple',
+            change: this.reportRangeStats[5],
+          },
+          {
+            title: 'Pre-Transit',
+            tooltip: 'Orders being prepared in transit',
+            count: this.allStats[0],
+            icon: 'pi-box',
+            color: 'orange',
+            change: this.reportRangeStats[0],
+          },
+          {
+            title: 'In Transit',
+            tooltip: 'Orders that are in transit',
+            count: this.allStats[1],
+            icon: 'pi-globe',
+            color: 'yellow',
+            change: this.reportRangeStats[1],
+          },
+          {
+            title: 'Out for Delivery',
+            tooltip: 'Orders that are out for delivery',
+            count: this.allStats[2],
+            icon: 'pi-map',
+            color: 'green',
+            change: this.reportRangeStats[2],
+          },
+          {
+            title: 'Delivered',
+            tooltip: 'Orders that have been delivered',
+            count: this.allStats[3],
+            icon: 'pi-home',
+            color: 'red',
+            change: this.reportRangeStats[3],
+          },
+        ];
+
+        // This assignment creates a new reference for reportCards array which will trigger Angular's change detection
+        this.reportCards = [...this.reportCards];
+        this.cdr.detectChanges();
+      }
+    });
   }
 
   onChartFrequencyChange(newFrequency: string): void {
+    if (!this.initialized) return;
     this.chartFrequencySelected = newFrequency;
     this.updateChartLabels();
   }
 
   onChartFilterChange(newFilter: Filter | undefined): void {
+    if (!this.initialized) return;
     this.chartFilter = newFilter;
     this.updateChartLabels();
   }
 
   onChartDatesChange(newDates: Date[] | undefined): void {
+    if (!this.initialized) return;
     this.chartDates = newDates;
     this.updateChartLabels();
     this.cdr.detectChanges();
   }
 
   onReportFilterChange(newFilter: Filter | undefined): void {
+    if (!this.initialized) return;
     this.reportFilter = newFilter;
     this.updateReportStats();
     // Handle report filter change logic here
   }
 
   onReportDatesChange(newDates: Date[] | undefined): void {
+    if (!this.initialized) return;
     this.reportDates = newDates;
     this.updateReportStats();
     this.cdr.detectChanges();
@@ -277,50 +270,50 @@ export class DashboardComponent implements OnInit {
       {
         title: 'Orders',
         tooltip: 'Total orders placed',
-        count: this.reportStats?.[0]?.[0] ?? 0,
+        count: 0,
         icon: 'pi-shopping-cart',
         color: 'purple',
-        change: this.reportStats?.[1]?.[0] ?? 0,
+        change: 0,
       },
       {
         title: 'Emails',
         tooltip: 'Emails for orders placed',
-        count: this.reportStats?.[0]?.[1] ?? 0,
+        count: 0,
         icon: 'pi-envelope',
         color: 'orange',
-        change: this.reportStats?.[1]?.[1] ?? 0,
+        change: 0,
       },
       {
         title: 'Pre-Transit',
         tooltip: 'Orders being prepared for shipment',
-        count: this.reportStats?.[0]?.[2] ?? 0,
+        count: 0,
         icon: 'pi-box',
         color: 'orange',
-        change: this.reportStats?.[1]?.[2] ?? 0,
+        change: 0,
       },
       {
         title: 'In Transit',
         tooltip: 'Orders that have been shipped',
-        count: this.reportStats?.[0]?.[3] ?? 0,
+        count: 0,
         icon: 'pi-globe',
         color: 'yellow',
-        change: this.reportStats?.[1]?.[3] ?? 0,
+        change: 0,
       },
       {
         title: 'Out for Delivery',
         tooltip: 'Orders that have been delivered',
-        count: this.reportStats?.[0]?.[4] ?? 0,
+        count: 0,
         icon: 'pi-map',
         color: 'green',
-        change: this.reportStats?.[1]?.[4] ?? 0,
+        change: 0,
       },
       {
         title: 'Delivered',
         tooltip: 'Orders that have been returned',
-        count: this.reportStats?.[0]?.[5] ?? 0,
+        count: 0,
         icon: 'pi-home',
         color: 'red',
-        change: this.reportStats?.[1]?.[5] ?? 0,
+        change: 0,
       },
     ];
 
@@ -372,16 +365,19 @@ export class DashboardComponent implements OnInit {
     this.chartFrequency = ['Daily', 'Weekly', 'Monthly', 'Yearly'];
     this.chartFrequencySelected = this.chartFrequency[3];
 
-    this.updateReportStats();
-    this.updateChartLabels();
+    this.apiService.getAllUserStats().then((result) => {
+      if (result.status === 200) {
+        this.allStats = result.data;
+      }
+    });
 
-    this.updateStats();
+    this.initialized = true;
 
     //console.log(this.reportStats);
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['reportStats']) {
+    if ('reportDates' in changes || 'reportFilter' in changes) {
       this.updateReportStats();
     }
   }
