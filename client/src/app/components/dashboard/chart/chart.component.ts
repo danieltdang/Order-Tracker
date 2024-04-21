@@ -38,51 +38,53 @@ export class ChartComponent implements OnInit, OnChanges {
   constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
   
   updateChartData() {
-    console.log(this.chartData)
+    //console.log(this.chartData);
     const documentStyle = getComputedStyle(document.documentElement);
+  
+    const datasets = [
+      { label: 'Orders', borderColorVar: '--blue-500', backgroundColorVar: '--blue-500' },
+      { label: 'Emails', borderColorVar: '--purple-500', backgroundColorVar: '--purple-500' },
+      { label: 'Preparing', borderColorVar: '--orange-500', backgroundColorVar: '--orange-500' },
+      { label: 'Shipping', borderColorVar: '--yellow-500', backgroundColorVar: '--yellow-500' },
+      { label: 'Delivered', borderColorVar: '--green-500', backgroundColorVar: '--green-500' },
+      { label: 'Returned', borderColorVar: '--red-500', backgroundColorVar: '--red-500' },
+    ];
+  
+    // Prepare datasets with styles and data
+    let updatedDatasets = datasets.map((dataset, index) => ({
+      label: dataset.label,
+      data: this.chartData?.[index] ?? [],
+      borderColor: documentStyle.getPropertyValue(dataset.borderColorVar),
+      backgroundColor: documentStyle.getPropertyValue(dataset.backgroundColorVar),
+    }));
+
+    // Identify columns to keep (non-zero in any dataset)
+    const columnsToKeep = new Set();
+    updatedDatasets.forEach(dataset => {
+      dataset.data.forEach((value, index) => {
+        if (value !== 0) columnsToKeep.add(index);
+      });
+    });
+
+    // Filter datasets to keep only the necessary columns
+    updatedDatasets = updatedDatasets.map(dataset => ({
+      ...dataset,
+      data: dataset.data.filter((_, index) => columnsToKeep.has(index))
+    }));
+
+    // Update labels to keep only the necessary columns
+    const updatedLabels = this.chartLabels?.filter((_, index) => columnsToKeep.has(index));
 
     this.data = {
-      labels: this.chartLabels,
-      datasets: [
-        {
-          label: 'Orders',
-          data: this.chartData?.[0] ?? [],
-          borderColor: documentStyle.getPropertyValue('--blue-500'),
-          backgroundColor: documentStyle.getPropertyValue('--blue-500'),
-        },
-        {
-          label: 'Emails',
-          data: this.chartData?.[1] ?? [],
-          borderColor: documentStyle.getPropertyValue('--purple-500'),
-          backgroundColor: documentStyle.getPropertyValue('--purple-500'),
-        },
-        {
-          label: 'Preparing',
-          data: this.chartData?.[2] ?? [],
-          borderColor: documentStyle.getPropertyValue('--orange-500'),
-          backgroundColor: documentStyle.getPropertyValue('--orange-500'),
-        },
-        {
-          label: 'Shipping',
-          data: this.chartData?.[3] ?? [],
-          borderColor: documentStyle.getPropertyValue('--yellow-500'),
-          backgroundColor: documentStyle.getPropertyValue('--yellow-500'),
-        },
-        {
-          label: 'Delivered',
-          data: this.chartData?.[4] ?? [],
-          borderColor: documentStyle.getPropertyValue('--green-500'),
-          backgroundColor: documentStyle.getPropertyValue('--green-500'),
-        },
-        {
-          label: 'Returned',
-          data: this.chartData?.[5] ?? [],
-          borderColor: documentStyle.getPropertyValue('--red-500'),
-          backgroundColor: documentStyle.getPropertyValue('--red-500'),
-        },
-      ]
-  };
+      labels: updatedLabels,
+      datasets: updatedDatasets
+    };
+
+    //console.log(this.data);
   }
+  
+  
+  
 
   ngOnInit() {
     if (isPlatformBrowser(this.platformId)) {
