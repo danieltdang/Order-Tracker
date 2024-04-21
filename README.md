@@ -1,8 +1,6 @@
 # LogiTrak
 
-LogiTrak is a web-app used for tracking and managing packages from a variety of different services. Going from service to service to get information on your packages can be a real annoyance, but LogiTrak makes it extremely easy. By scraping the user's emails and extracting package information, LogiTrak creates an organized, chronological structure of orders and their related emails by looking at the emails themselves as well as the tracking numbers. Users also have the ability to add their own orders to keep track of manually; we still provide extra information by looking at the tracking number.
-
-Once registering for an account and logging in, you will be greeted by the dashboard, which provides information on recent packages at a glance. On the left side of the screen is the navigation bar, which will direct you to the different pages of the site. Finally, right of the navigation bar is the content of each page; here you will find discrete information on orders, order emails, etc.
+LogiTrak is a web-app used for tracking and managing packages from a variety of different services. Going from service to service to get information on your packages can be a real annoyance, but LogiTrak makes it extremely easy. By scraping the emails of the user, we can get relevant data regarding any orders and populate their feed with useful information. The user can also manually add orders to track at any time.
 
 ### Prerequisites
 - Ensure you have `Python` installed on your machine
