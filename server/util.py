@@ -1,7 +1,7 @@
 import psycopg2
 from psycopg2.extras import DictCursor
 import parser.utils.upsTracking as upsTracking
-import uuid
+from datetime import datetime
 
 def get_db_connection():
     con = psycopg2.connect(
@@ -542,20 +542,22 @@ def refreshOrder(user, order):
 
     events = getOrderEventsForOrder(order)
 
-    print(events)
-
     # If no events, add all events
     if len(events) == 0:
         for event in result["Events"]:
             addOrderEvent(order, event["status"], event["date"])
         return True
     
-    print(result)
-    # Check if all events retrieved in results are in the database
-    for event in result["Events"]:
-        for insertedEvents in events:
-            if event["status"] != insertedEvents["description"] and event["date"] != insertedEvents["date"]:
-                addOrderEvent(order, event["description"], event["date"])
+    for event in events:
+        for newEvent in result["Events"]:
+            found = False
+
+            if newEvent["status"] != event["description"] or newEvent["date"] != event["date"]:
+                found = False
+                break
+            
+            if not found:
+                addOrderEvent(order, newEvent["status"], newEvent["date"])
 
     # Update tracking details
     storedOrder = getOrderInfo(user, order)
@@ -568,7 +570,7 @@ def refreshOrder(user, order):
         updateOrder(
             order,
             storedOrder["productname"],
-            result["Status"],
+            storedOrder["status"],
             trackingCode,
             result["estimatedDelivery"],
             Carrier,
