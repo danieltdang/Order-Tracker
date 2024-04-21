@@ -468,14 +468,12 @@ def getOrderEventsForOrder(order_id):
 
     try:
         cur.execute("""
-            SELECT "OrderEvent".desc, "OrderEvent".date
+            SELECT description, date
             FROM "OrderEvent"
-            JOIN "Order" ON "OrderEvent"."order" = "Order".orderID
-            WHERE "Order".orderID = %s
-            ORDER BY "OrderEvent".date DESC
+            WHERE "order" = %s
+            ORDER BY date DESC
         """, (order_id,))
         events = cur.fetchall()
-
         return events
     except:
         raise Exception(f"Error occured when trying to retrieve orderEvents for order '{order_id}'.")
@@ -505,6 +503,8 @@ def retrieveTrackingData(user, order):
     con = get_db_connection()
     cur = con.cursor()
 
+    print(user, order)
+
     trackingCode, Carrier = None, None
 
     try:
@@ -523,6 +523,7 @@ def retrieveTrackingData(user, order):
 def refreshOrder(user, order):
     trackingCode, Carrier = retrieveTrackingData(user, order)
     if trackingCode == None:
+        print("Returning cause tracking code is None")
         return False
     
     if Carrier == "UPS":
@@ -530,11 +531,13 @@ def refreshOrder(user, order):
     elif Carrier == "FedEx":
         result = upsTracking.trackFedEx(trackingCode)
     else:
+        print("Carrier not supported")
         return False
     
     # Implement results from Fedex/UPS tracking to update order data
 
     if result == None:
+        print("Result is None")
         return False
     
     # Check if latest activity is different from the one in the database
@@ -557,6 +560,7 @@ def refreshOrder(user, order):
     storedOrder = getOrderInfo(user, order)
 
     if storedOrder == None:
+        print("Stored order is None")
         return False
 
     if storedOrder["status"] != result["Status"] or storedOrder["estimateddelivery"] != result["estimatedDelivery"]:
