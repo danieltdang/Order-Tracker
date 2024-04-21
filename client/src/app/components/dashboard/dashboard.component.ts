@@ -4,6 +4,7 @@ import { Report } from '../../interfaces/report';
 import { Filter } from '../../interfaces/filter';
 
 import { ApiService } from '../../services/api.service';
+import { start } from 'repl';
 
 @Component({
   selector: 'app-dashboard',
@@ -12,6 +13,9 @@ import { ApiService } from '../../services/api.service';
   providers: [DatePipe]
 })
 export class DashboardComponent implements OnInit {
+  private updateChartLabelsTimer: any = null;
+  private updateReportStatsTimer: any = null;
+  private debouncePeriod: number = 100;
   initialized = false;
   today = new Date();
 
@@ -79,8 +83,24 @@ export class DashboardComponent implements OnInit {
     }
   }
 
+  updateChartLabelsDebounced(): void {
+    if (this.updateChartLabelsTimer) clearTimeout(this.updateChartLabelsTimer);
+
+    this.updateChartLabelsTimer = setTimeout(() => {
+      this.updateChartLabels();
+    }, this.debouncePeriod);
+  }
+
+  updateReportStatsDebounced(): void {
+    if (this.updateReportStatsTimer) clearTimeout(this.updateReportStatsTimer);
+
+    this.updateReportStatsTimer = setTimeout(() => {
+      this.updateReportStats();
+    }, this.debouncePeriod);
+  }
+
   // Function to update the chart labels based on frequency and date range
-  updateChartLabels(): void {
+  async updateChartLabels(): Promise<void> {
     if (!this.chartDates || this.chartDates.length < 2) {
       // Ensure there are start and end dates provided
       return;
@@ -89,6 +109,8 @@ export class DashboardComponent implements OnInit {
     const startDate = this.chartDates[0];
     const endDate = this.chartDates[1];
     const newLabels: string[] = []; // Create a new array
+    const startDates: string[] = [];
+    const endDates: string[] = [];
   
     switch (this.chartFrequencySelected) {
       case 'Daily':
@@ -99,21 +121,29 @@ export class DashboardComponent implements OnInit {
         // Generate labels for each day between startDate and adjustedEndDate
         for (let date = new Date(startDate); date <= adjustedEndDate; date.setDate(date.getDate() + 1)) {
           newLabels.push(this.formatChartDate(new Date(date)));
+          startDates.push(this.datePipe.transform(date, 'yyyy-MM-dd') ?? '');
+          endDates.push(this.datePipe.transform(new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1), 'yyyy-MM-dd') ?? '');
         }
         break;
       case 'Weekly':
         for (let date = new Date(startDate); date <= endDate; date.setDate(date.getDate() + 7)) {
           newLabels.push(`Week of ${this.formatChartDate(new Date(date))}`);
+          startDates.push(this.datePipe.transform(date, 'yyyy-MM-dd') ?? '');
+          endDates.push(this.datePipe.transform(new Date(date.getFullYear(), date.getMonth(), date.getDate() + 7), 'yyyy-MM-dd') ?? '');
         }
         break;
       case 'Monthly':
         for (let date = new Date(startDate.getFullYear(), startDate.getMonth(), 1); date <= endDate; date.setMonth(date.getMonth() + 1)) {
           newLabels.push(`${date.toLocaleString('default', { month: 'long' })} ${date.getFullYear()}`);
+          startDates.push(this.datePipe.transform(date, 'yyyy-MM-dd') ?? '');
+          endDates.push(this.datePipe.transform(new Date(date.getFullYear(), date.getMonth() + 1, 0), 'yyyy-MM-dd') ?? '');
         }
         break;
       case 'Yearly':
         for (let year = startDate.getFullYear(); year <= endDate.getFullYear(); year++) {
           newLabels.push(`${year}`);
+          startDates.push(this.datePipe.transform(new Date(year, 0, 1), 'yyyy-MM-dd') ?? '');
+          endDates.push(this.datePipe.transform(new Date(year, 11, 31), 'yyyy-MM-dd') ?? '');
         }
         break;
       default:
@@ -121,10 +151,19 @@ export class DashboardComponent implements OnInit {
     }
   
     this.chartLabels = newLabels; // Assign the new array to chartLabels
-    this.chartData = this.generate2DRandom(6, this.chartLabels.length);
+
+    this.apiService.getUserChartStats(startDates, endDates).then((result) => {
+      if (result.status === 200) {
+        console.log(result.data);
+        this.chartData = result.data;
+        this.cdr.detectChanges();
+      }
+    });
+
+    //console.log(startDates, endDates)
     //console.log('Updated chart labels:', this.chartLabels);
     //console.log('Updated chart data:', this.chartData);
-    this.cdr.detectChanges();
+    
   }
 
   // Helper function to format dates as strings
@@ -150,50 +189,50 @@ export class DashboardComponent implements OnInit {
           {
             title: 'Orders',
             tooltip: 'Total orders placed',
-            count: this.allStats[4],
+            count: this.allStats[0],
             icon: 'pi-shopping-cart',
             color: 'blue',
-            change: this.reportRangeStats[4],
+            change: this.reportRangeStats[0],
           },
           {
             title: 'Emails',
             tooltip: 'Total emails',
-            count: this.allStats[5],
+            count: this.allStats[1],
             icon: 'pi-envelope',
             color: 'purple',
-            change: this.reportRangeStats[5],
+            change: this.reportRangeStats[1],
           },
           {
             title: 'Pre-Transit',
             tooltip: 'Orders being prepared in transit',
-            count: this.allStats[0],
+            count: this.allStats[2],
             icon: 'pi-box',
             color: 'orange',
-            change: this.reportRangeStats[0],
+            change: this.reportRangeStats[2],
           },
           {
             title: 'In Transit',
             tooltip: 'Orders that are in transit',
-            count: this.allStats[1],
+            count: this.allStats[3],
             icon: 'pi-globe',
             color: 'yellow',
-            change: this.reportRangeStats[1],
+            change: this.reportRangeStats[3],
           },
           {
             title: 'Out for Delivery',
             tooltip: 'Orders that are out for delivery',
-            count: this.allStats[2],
+            count: this.allStats[4],
             icon: 'pi-map',
             color: 'green',
-            change: this.reportRangeStats[2],
+            change: this.reportRangeStats[4],
           },
           {
             title: 'Delivered',
             tooltip: 'Orders that have been delivered',
-            count: this.allStats[3],
+            count: this.allStats[5],
             icon: 'pi-home',
             color: 'red',
-            change: this.reportRangeStats[3],
+            change: this.reportRangeStats[5],
           },
         ];
 
@@ -207,62 +246,35 @@ export class DashboardComponent implements OnInit {
   onChartFrequencyChange(newFrequency: string): void {
     if (!this.initialized) return;
     this.chartFrequencySelected = newFrequency;
-    this.updateChartLabels();
+    this.updateChartLabelsDebounced();
   }
 
   onChartFilterChange(newFilter: Filter | undefined): void {
     if (!this.initialized) return;
     this.chartFilter = newFilter;
-    this.updateChartLabels();
+    this.updateChartLabelsDebounced();
   }
 
   onChartDatesChange(newDates: Date[] | undefined): void {
     if (!this.initialized) return;
     this.chartDates = newDates;
-    this.updateChartLabels();
+    this.updateChartLabelsDebounced();
     this.cdr.detectChanges();
   }
 
   onReportFilterChange(newFilter: Filter | undefined): void {
     if (!this.initialized) return;
     this.reportFilter = newFilter;
-    this.updateReportStats();
+    this.updateReportStatsDebounced();
     // Handle report filter change logic here
   }
 
   onReportDatesChange(newDates: Date[] | undefined): void {
     if (!this.initialized) return;
     this.reportDates = newDates;
-    this.updateReportStats();
+    this.updateReportStatsDebounced();
     this.cdr.detectChanges();
     // Handle report date change logic here
-  }
-
-  generate1DRandom(arrayLength: number): number[] {
-    const arr: number[] = [];
-    for (let j = 0; j < arrayLength; j++) {
-      // Generate a random number between 0 and 40
-      const randomNumber = Math.floor(Math.random() * 41);
-      arr.push(randomNumber);
-    }
-  
-    return arr;
-  }
-
-  generate2DRandom(numArrays: number, arrayLength: number): number[][] {
-    const arrays: number[][] = [];
-  
-    for (let i = 0; i < numArrays; i++) {
-      const arr: number[] = [];
-      for (let j = 0; j < arrayLength; j++) {
-        // Generate a random number between 0 and 40
-        const randomNumber = Math.floor(Math.random() * 41);
-        arr.push(randomNumber);
-      }
-      arrays.push(arr);
-    }
-  
-    return arrays;
   }
 
   async ngOnInit(): Promise<void> {

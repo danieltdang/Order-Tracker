@@ -90,6 +90,20 @@ def order_counts(uuid):
 
         stats = util.getOrderStats(uuid, start, end)
         return jsonify(stats)
+    
+@app.route('/api/users/<uuid>/stats/chart', methods = ["GET"])
+def chart_counts(uuid):
+    if validate_request(uuid, request):
+        return jsonify({
+            "message": "Invalid authorization token",
+        }), 401
+    
+    if request.method == "GET":
+        start = request.args.getlist('startDate[]')
+        end = request.args.getlist('endDate[]')
+
+        stats = util.getOrderStatsList(uuid, start, end)
+        return jsonify(stats)
 
 
 ###########################

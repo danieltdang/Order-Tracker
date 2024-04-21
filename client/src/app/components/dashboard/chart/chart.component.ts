@@ -38,6 +38,7 @@ export class ChartComponent implements OnInit, OnChanges {
   constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
   
   updateChartData() {
+    console.log(this.chartData)
     const documentStyle = getComputedStyle(document.documentElement);
 
     this.data = {
