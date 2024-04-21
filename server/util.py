@@ -1,6 +1,7 @@
 import psycopg2
 from psycopg2.extras import DictCursor
 import parser.utils.upsTracking as upsTracking
+import uuid
 
 def get_db_connection():
     con = psycopg2.connect(
@@ -440,23 +441,20 @@ def addOrderEvent(order, desc, date):
     con = get_db_connection()
     cur = con.cursor()
 
+    print("Adding order: ", order, desc, date)
+
     try:
         cur.execute("""
-            INSERT OR IGNORE INTO "OrderEvent"
-            (
-                "order",
-                description,
-                date
-            )
-            VALUES (%s,%s,%s)
-        """, 
-            (
-                order,
-                desc,
-                date,
-            )
-        )
+            INSERT INTO "OrderEvent" ("order", description, date)
+            VALUES (%s, %s, %s)
+            ON CONFLICT DO NOTHING
+        """, (order, desc, date))                
         con.commit()
+    except psycopg2.DatabaseError as e:
+        # This catches PostgreSQL-specific errors
+        error_msg = f"Database error occurred: {e}"
+        print(error_msg)  # Optionally log to a file or logging system
+        raise Exception(error_msg)
     except Exception as e:
         raise e
     finally:
@@ -527,7 +525,7 @@ def refreshOrder(user, order):
         return False
     
     if Carrier == "UPS":
-        result = upsTracking.trackUPS(trackingCode)
+        result = upsTracking.handleUPS(trackingCode)
     elif Carrier == "FedEx":
         result = upsTracking.trackFedEx(trackingCode)
     else:
@@ -544,12 +542,15 @@ def refreshOrder(user, order):
 
     events = getOrderEventsForOrder(order)
 
+    print(events)
+
     # If no events, add all events
     if len(events) == 0:
         for event in result["Events"]:
-            addOrderEvent(order, event["description"], event["date"])
+            addOrderEvent(order, event["status"], event["date"])
         return True
     
+    print(result)
     # Check if all events retrieved in results are in the database
     for event in result["Events"]:
         for insertedEvents in events:

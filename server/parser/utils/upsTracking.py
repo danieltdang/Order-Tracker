@@ -2,7 +2,7 @@ from dotenv import load_dotenv
 import requests
 import os
 import uuid
-import datetime
+from datetime import datetime
 
 from requests.models import Response
 
@@ -114,8 +114,8 @@ def handleUPS(trackingNumber):
 
 def formatDate(date):
     try:
-        obj = datetime.strptime(obj, "%Y%m%d")
-        formatted_date = obj.strftime("%m/%d/%Y")
+        obj = datetime.strptime(date, "%Y%m%d")  # Parse the date string into a datetime object
+        formatted_date = obj.strftime("%m/%d/%Y")  # Format the datetime object as a string in MM/DD/YYYY format
         return formatted_date
     except ValueError:
         return "Invalid date format"
