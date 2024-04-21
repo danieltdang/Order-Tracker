@@ -5,6 +5,7 @@ import { Filter } from '../../interfaces/filter';
 
 import { ApiService } from '../../services/api.service';
 import { start } from 'repl';
+import { RoleService } from '../../services/role.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -13,9 +14,7 @@ import { start } from 'repl';
   providers: [DatePipe]
 })
 export class DashboardComponent implements OnInit {
-  private updateChartLabelsTimer: any = null;
-  private updateReportStatsTimer: any = null;
-  private debouncePeriod: number = 100;
+  isPremium: boolean = false;
   initialized = false;
   today = new Date();
 
@@ -36,7 +35,12 @@ export class DashboardComponent implements OnInit {
   allStats!: number[];
   reportRangeStats!: number[];
 
-  constructor(private cdr: ChangeDetectorRef, private apiService: ApiService, private datePipe: DatePipe) { }
+  constructor(private cdr: ChangeDetectorRef, private apiService: ApiService, private datePipe: DatePipe, private roleService: RoleService) { }
+
+  async verifyPremium() {
+    this.isPremium = this.roleService.getPremiumStatus();
+    console.log(this.isPremium);
+  }
 
   formatDateToString(date: Date) {
     // Create a new Date object to avoid mutating the original date
@@ -83,24 +87,10 @@ export class DashboardComponent implements OnInit {
     }
   }
 
-  updateChartLabelsDebounced(): void {
-    if (this.updateChartLabelsTimer) clearTimeout(this.updateChartLabelsTimer);
-
-    this.updateChartLabelsTimer = setTimeout(() => {
-      this.updateChartLabels();
-    }, this.debouncePeriod);
-  }
-
-  updateReportStatsDebounced(): void {
-    if (this.updateReportStatsTimer) clearTimeout(this.updateReportStatsTimer);
-
-    this.updateReportStatsTimer = setTimeout(() => {
-      this.updateReportStats();
-    }, this.debouncePeriod);
-  }
-
   // Function to update the chart labels based on frequency and date range
   async updateChartLabels(): Promise<void> {
+    if (!this.initialized || !this.isPremium) return;
+
     if (!this.chartDates || this.chartDates.length < 2) {
       // Ensure there are start and end dates provided
       return;
@@ -154,7 +144,7 @@ export class DashboardComponent implements OnInit {
 
     this.apiService.getUserChartStats(startDates, endDates).then((result) => {
       if (result.status === 200) {
-        console.log(result.data);
+        //console.log(result.data);
         this.chartData = result.data;
         this.cdr.detectChanges();
       }
@@ -244,40 +234,84 @@ export class DashboardComponent implements OnInit {
   }
 
   onChartFrequencyChange(newFrequency: string): void {
-    if (!this.initialized) return;
+    if (!this.initialized || !this.isPremium) return;
+
     this.chartFrequencySelected = newFrequency;
-    this.updateChartLabelsDebounced();
+    this.updateChartLabels();
   }
 
   onChartFilterChange(newFilter: Filter | undefined): void {
-    if (!this.initialized) return;
+    if (!this.initialized || !this.isPremium) return;
+
     this.chartFilter = newFilter;
-    this.updateChartLabelsDebounced();
+    this.updateChartLabels();
   }
 
   onChartDatesChange(newDates: Date[] | undefined): void {
-    if (!this.initialized) return;
+    if (!this.initialized || !this.isPremium) return;
+
     this.chartDates = newDates;
-    this.updateChartLabelsDebounced();
+    this.updateChartLabels();
     this.cdr.detectChanges();
   }
 
   onReportFilterChange(newFilter: Filter | undefined): void {
-    if (!this.initialized) return;
     this.reportFilter = newFilter;
-    this.updateReportStatsDebounced();
+    this.updateReportStats();
     // Handle report filter change logic here
   }
 
   onReportDatesChange(newDates: Date[] | undefined): void {
-    if (!this.initialized) return;
     this.reportDates = newDates;
-    this.updateReportStatsDebounced();
+    this.updateReportStats();
     this.cdr.detectChanges();
     // Handle report date change logic here
   }
 
   async ngOnInit(): Promise<void> {
+    this.verifyPremium();
+
+    this.reportList = [
+      {
+        name: 'Yesterday',
+        startDate: new Date(new Date().setDate(this.today.getDate() - 1)),
+        endDate: this.today,
+      },
+      {
+        name: 'This Week',
+        startDate: this.getStartDateOfTheWeek(this.today),
+        endDate: this.today,
+      },
+      {
+        name: 'This Month',
+        startDate: this.getFirstDayOfMonth(this.today),
+        endDate: this.today,
+      },
+      {
+        name: 'Past 3 Months',
+        startDate: this.getFirstDayOfMonth(new Date(new Date().setMonth(this.today.getMonth() - 3))),
+        endDate: this.today,
+      },
+      {
+        name: 'Past 6 Months',
+        startDate: this.getFirstDayOfMonth(new Date(new Date().setMonth(this.today.getMonth() - 6))),
+        endDate: this.today,
+      },
+      {
+        name: 'This Year',
+        startDate: this.getFirstDayOfTheYear(this.today),
+        endDate: this.today,
+      },
+      { 
+        name: 'All Time',
+        startDate: new Date(new Date(0).setFullYear(1999)), // SHOULD BE SET TO USER'S FIRST ORDER DATE
+        endDate: this.today,
+      },
+    ];
+
+    // Set the default selectedReport to 'All Time'
+    this.reportFilter = this.reportList.find(filter => filter.name === 'All Time');
+    this.reportDates = [this.reportFilter?.startDate ?? new Date(), this.reportFilter?.endDate ?? new Date()];
     this.reportCards = [
       {
         title: 'Orders',
@@ -329,53 +363,14 @@ export class DashboardComponent implements OnInit {
       },
     ];
 
-    this.reportList = [
-      {
-        name: 'Yesterday',
-        startDate: new Date(new Date().setDate(this.today.getDate() - 1)),
-        endDate: this.today,
-      },
-      {
-        name: 'This Week',
-        startDate: this.getStartDateOfTheWeek(this.today),
-        endDate: this.today,
-      },
-      {
-        name: 'This Month',
-        startDate: this.getFirstDayOfMonth(this.today),
-        endDate: this.today,
-      },
-      {
-        name: 'Past 3 Months',
-        startDate: this.getFirstDayOfMonth(new Date(new Date().setMonth(this.today.getMonth() - 3))),
-        endDate: this.today,
-      },
-      {
-        name: 'Past 6 Months',
-        startDate: this.getFirstDayOfMonth(new Date(new Date().setMonth(this.today.getMonth() - 6))),
-        endDate: this.today,
-      },
-      {
-        name: 'This Year',
-        startDate: this.getFirstDayOfTheYear(this.today),
-        endDate: this.today,
-      },
-      { 
-        name: 'All Time',
-        startDate: new Date(new Date(0).setFullYear(1999)), // SHOULD BE SET TO USER'S FIRST ORDER DATE
-        endDate: this.today,
-      },
-    ];
+    if (this.isPremium) {
+      // For now, chartList is exact same as Report List
+      this.chartList = this.reportList;
+      this.chartFilter = this.chartList.find(filter => filter.name === 'All Time');
 
-    // Set the default selectedReport to 'All Time'
-    this.reportFilter = this.reportList.find(filter => filter.name === 'All Time');
-
-    // For now, chartList is exact same as Report List
-    this.chartList = this.reportList;
-    this.chartFilter = this.chartList.find(filter => filter.name === 'All Time');
-
-    this.chartFrequency = ['Daily', 'Weekly', 'Monthly', 'Yearly'];
-    this.chartFrequencySelected = this.chartFrequency[3];
+      this.chartFrequency = ['Daily', 'Weekly', 'Monthly', 'Yearly'];
+      this.chartFrequencySelected = this.chartFrequency[3];
+    }
 
     this.apiService.getAllUserStats().then((result) => {
       if (result.status === 200) {

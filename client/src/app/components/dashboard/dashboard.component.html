@@ -1,5 +1,6 @@
 <div class="col-12 max-w-full">
-  <div class="surface-card col-12 mb-3 shadow-2 p-3 border-round">
+  <div class="surface-card relative col-12 mb-3 shadow-2 p-3 border-round">
+    <div *ngIf="!isPremium" class="locked-overlay">Access Denied - Premium Required</div>
     <div class="flex flex-column justify-content-between mb-2">
       <span class="block text-900 text-2xl font-semibold mb-2">Order Tracker</span>
       <app-chart [(chartLabels)]="chartLabels" [(chartData)]="chartData"/>
