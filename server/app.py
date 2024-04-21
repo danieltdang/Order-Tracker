@@ -85,8 +85,8 @@ def order_counts(uuid):
         }), 401
     
     if request.method == "GET":
-        start = request.args['startDate']
-        end = request.args['endDate']
+        start = request.args.get('startDate', '1970-01-01')  # Default to Unix epoch start if not provided
+        end = request.args.get('endDate', '9999-12-31')      # Default to a far future date if not provided
         print(start, end)
         stats = util.getOrderStats(uuid, start, end)
         return jsonify(stats)
