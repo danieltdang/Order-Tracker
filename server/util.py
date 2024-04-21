@@ -570,15 +570,16 @@ def refreshOrder(user, order):
     
     # Update status
     newStatus = storedOrder["status"]
+    resultStatus = result["Events"][0]["status"].strip(" ").lower()
     if Carrier == "UPS":
         print(result["Events"][0]["status"])
-        if result["Events"][0]["status"].strip(" ").lower() == "we have your package":
+        if resultStatus == "we have your package" or "shipper created a label, ups has not received the package yet.":
             newStatus = 0
-        elif result["Events"][0]["status"].strip(" ").lower() == "departed from facility" or result["Events"][0]["status"].strip(" ").lower() == "arrived from facility":
+        elif resultStatus == "departed from facility" or resultStatus == "arrived from facility":
             newStatus = 1
-        elif result["Events"][0]["status"].strip(" ").lower() == "loaded on delivery vehicle" or result["Events"][0]["status"].strip(" ").lower() == "out for delivery":
+        elif resultStatus == "loaded on delivery vehicle" or resultStatus == "out for delivery":
             newStatus = 2
-        elif result["Events"][0]["status"].strip(" ").lower() == "delivered":
+        elif resultStatus == "delivered":
             newStatus = 3
         
 
