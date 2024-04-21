@@ -3,10 +3,10 @@ from psycopg2.extras import DictCursor
 
 def get_db_connection():
     con = psycopg2.connect(
-        host="isilo.db.elephantsql.com",
-        database="qkhplpdv",
-        user="qkhplpdv",
-        password="MPRLThmEO3gFiPHKrX9ajpKo-hSKOLOa"
+        host="localhost",
+        database="database",
+        user="postgres",
+        password="password"
     )
     return con
 
