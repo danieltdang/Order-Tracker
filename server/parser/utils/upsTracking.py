@@ -90,7 +90,7 @@ def handleUPS(trackingNumber):
             date = activity["date"]
             time = activity["time"]
         else:
-            location = "Unknown"
+            location = ""
             status = activity["status"]["description"].title()
             date = activity["date"]
             time = activity["time"]

@@ -545,7 +545,10 @@ def refreshOrder(user, order):
     # If no events, add all events
     if len(events) == 0:
         for event in result["Events"]:
-            addOrderEvent(order, event["status"] + " | " + event["location"], event["date"])
+            if event["location"] == "":
+                addOrderEvent(order, event["status"], event["date"])
+            else:
+                addOrderEvent(order, event["status"] + " | " + event["location"], event["date"])
         return True
     
     for event in events:
@@ -557,7 +560,10 @@ def refreshOrder(user, order):
                 break
             
             if not found:
-                addOrderEvent(order, event["status"] + " | " + event["location"], newEvent["date"])
+                if event["location"] == "":
+                    addOrderEvent(order, event["status"], event["date"])
+                else:
+                    addOrderEvent(order, event["status"] + " | " + event["location"], newEvent["date"])
 
 
 
