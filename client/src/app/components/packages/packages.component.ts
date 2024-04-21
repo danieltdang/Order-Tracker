@@ -56,7 +56,7 @@ export class PackagesComponent {
     console.log("User has clicked on the refresh button for order: " + order.orderid);
 
     this.apiService.refreshUserOrder(order).then((result) => {
-      if (result.status === 200) {
+      if (result.status === 201) {
         this.updateOrders();
         this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Order Refreshed', life: 3000 });
       } else {
