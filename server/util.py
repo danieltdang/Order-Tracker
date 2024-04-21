@@ -545,7 +545,7 @@ def refreshOrder(user, order):
     # If no events, add all events
     if len(events) == 0:
         for event in result["Events"]:
-            addOrderEvent(order, event["status"], event["date"])
+            addOrderEvent(order, event["status"] + " | " + event["location"], event["date"])
         return True
     
     for event in events:
@@ -557,7 +557,7 @@ def refreshOrder(user, order):
                 break
             
             if not found:
-                addOrderEvent(order, newEvent["status"], newEvent["date"])
+                addOrderEvent(order, event["status"] + " | " + event["location"], newEvent["date"])
 
 
 
@@ -571,15 +571,15 @@ def refreshOrder(user, order):
     # Update status
     newStatus = storedOrder["status"]
     resultStatus = result["Events"][0]["status"].strip(" ").lower()
+    print(resultStatus)
     if Carrier == "UPS":
-        print(result["Events"][0]["status"])
         if resultStatus == "we have your package" or "shipper created a label, ups has not received the package yet.":
             newStatus = 0
-        elif resultStatus == "departed from facility" or resultStatus == "arrived from facility":
+        if resultStatus == "departed from facility" or resultStatus == "arrived from facility":
             newStatus = 1
-        elif resultStatus == "loaded on delivery vehicle" or resultStatus == "out for delivery":
+        if resultStatus == "loaded on delivery vehicle" or resultStatus == "out for delivery":
             newStatus = 2
-        elif resultStatus == "delivered":
+        if resultStatus == "delivered":
             newStatus = 3
         
 

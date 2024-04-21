@@ -71,8 +71,8 @@ def handleUPS(trackingNumber):
     Status = package[0]["activity"][0]["status"]["description"]
     trackingCode = package[0]["trackingNumber"]
     Source = "UPS"
-    senderLocation = package[0]["packageAddress"][0]["address"]["city"] + ", " + package[0]["packageAddress"][0]["address"]["stateProvince"]
-    receiverLocation = package[0]["packageAddress"][1]["address"]["city"] + ", " + package[0]["packageAddress"][1]["address"]["stateProvince"]
+    senderLocation = package[0]["packageAddress"][0]["address"]["city"].title() + ", " + package[0]["packageAddress"][0]["address"]["stateProvince"]
+    receiverLocation = package[0]["packageAddress"][1]["address"]["city"].title() + ", " + package[0]["packageAddress"][1]["address"]["stateProvince"]
     dateAdded = ""
     estimatedDelivery = formatDate(package[0]["deliveryDate"][0]["date"])
 
@@ -85,13 +85,13 @@ def handleUPS(trackingNumber):
         time = ""
 
         if activity["status"]["type"] != "M":
-            location = activity["location"]["address"]["city"] + ", " + activity["location"]["address"]["stateProvince"]
-            status = activity["status"]["description"]
+            location = activity["location"]["address"]["city"].title() + ", " + activity["location"]["address"]["stateProvince"]
+            status = activity["status"]["description"].title()
             date = activity["date"]
             time = activity["time"]
         else:
             location = "Unknown"
-            status = activity["status"]["description"]
+            status = activity["status"]["description"].title()
             date = activity["date"]
             time = activity["time"]
 
