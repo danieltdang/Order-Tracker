@@ -43,7 +43,7 @@ npm run ng serve
 <details>
 <summary>Libraries used</summary>
 <h3>Server-side (Python/Flask)</h3>
-```
+<pre><code>
 bcrypt==4.1.2
 blinker==1.7.0
 cffi==1.16.0
@@ -63,33 +63,31 @@ pytz==2024.1
 setuptools==69.1.0
 Werkzeug==3.0.1
 zope.interface==6.2
-```
+</pre></code>
 <h3>Client-side (JavaScript/Angular)</h3>
-<pre>
-<code>
+<pre><code>
 "@angular/animations": "^17.2.0",
-    "@angular/cdk": "^17.2.1",
-    "@angular/common": "^17.2.0",
-    "@angular/compiler": "^17.2.0",
-    "@angular/core": "^17.2.0",
-    "@angular/forms": "^17.2.0",
-    "@angular/google-maps": "^17.3.4",
-    "@angular/platform-browser": "^17.2.0",
-    "@angular/platform-browser-dynamic": "^17.2.0",
-    "@angular/platform-server": "^17.2.0",
-    "@angular/router": "^17.2.0",
-    "@angular/ssr": "^17.2.0",
-    "@ngx-pwa/local-storage": "^17.0.0",
-    "axios": "^1.6.8",
-    "chart.js": "^4.4.2",
-    "date-fns": "^3.3.1",
-    "express": "^4.19.2",
-    "primeflex": "^3.3.1",
-    "primeicons": "^6.0.1",
-    "primeng": "^17.7.0",
-    "rxjs": "~7.8.0",
-    "tslib": "^2.6.2",
-    "zone.js": "~0.14.3"
-</code>
-</pre>
+"@angular/cdk": "^17.2.1",
+"@angular/common": "^17.2.0",
+"@angular/compiler": "^17.2.0",
+"@angular/core": "^17.2.0",
+"@angular/forms": "^17.2.0",
+"@angular/google-maps": "^17.3.4",
+"@angular/platform-browser": "^17.2.0",
+"@angular/platform-browser-dynamic": "^17.2.0",
+"@angular/platform-server": "^17.2.0",
+"@angular/router": "^17.2.0",
+"@angular/ssr": "^17.2.0",
+"@ngx-pwa/local-storage": "^17.0.0",
+"axios": "^1.6.8",
+"chart.js": "^4.4.2",
+"date-fns": "^3.3.1",
+"express": "^4.19.2",
+"primeflex": "^3.3.1",
+"primeicons": "^6.0.1",
+"primeng": "^17.7.0",
+"rxjs": "~7.8.0",
+"tslib": "^2.6.2",
+"zone.js": "~0.14.3"
+</code></pre>
 </details>
