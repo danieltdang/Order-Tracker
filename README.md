@@ -43,8 +43,7 @@ npm run ng serve
 <details>
 <summary>Libraries used</summary>
 <h3>Server-side (Python/Flask)</h3>
-<pre><code>
-bcrypt==4.1.2
+<pre><code>bcrypt==4.1.2
 blinker==1.7.0
 cffi==1.16.0
 click==8.1.7
@@ -65,8 +64,7 @@ Werkzeug==3.0.1
 zope.interface==6.2
 </pre></code>
 <h3>Client-side (JavaScript/Angular)</h3>
-<pre><code>
-"@angular/animations": "^17.2.0",
+<pre><code>"@angular/animations": "^17.2.0",
 "@angular/cdk": "^17.2.1",
 "@angular/common": "^17.2.0",
 "@angular/compiler": "^17.2.0",
