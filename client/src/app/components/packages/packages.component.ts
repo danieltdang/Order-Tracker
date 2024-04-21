@@ -96,13 +96,13 @@ export class PackagesComponent {
     // Create a new Date object to avoid mutating the original date
     const utcDate = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate() + 1));
 
-    console.log(utcDate.toUTCString())
+    //console.log(utcDate.toUTCString())
     return utcDate.toUTCString();
   }
 
   async saveOrder() {
     this.submitted = true;
-    console.log(this.order)
+    //console.log(this.order)
     if (this.order.productname !== "" && this.order.status !== "" && this.order.trackingcode !== "" && this.order.carrier !== "" && this.order.source !== "" && this.dateAdded && this.estimatedDelivery) {
       this.order.dateadded = this.formatDateToString(this.dateAdded);
       this.order.estimateddelivery = this.formatDateToString(this.estimatedDelivery);
