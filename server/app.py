@@ -8,7 +8,7 @@ import auth.auth as auth
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://mattechenique:password@localhost/database'
 db = SQLAlchemy(app)
-CORS(app, supports_credentials=True, expose_headers=["Authorization"])
+CORS(app, supports_credentials=True, expose_headers=["Authorization"], allow_headers=["Content-Type"])
 
 def validate_request(uuid, request):
     return uuid and auth.is_req_valid(uuid, request)
@@ -79,11 +79,12 @@ def nameEmail(uuid):
 @app.route('/api/users/<uuid>/role', methods=["GET"])
 def user_role(uuid):
     user_role = util.get_user_role(uuid)
+    user_permissions = util.view_email_table(uuid)
     if user_role is None:
         return jsonify({
             "message": "User role not found",
         }), 404
-    return jsonify(user_role)
+    return jsonify(user_role, user_permissions)
 
 ###################
 # STATS ENDPOINTS #

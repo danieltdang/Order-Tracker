@@ -107,13 +107,13 @@ def get_user_role(uuid):
     
     try:
         cur.execute("SELECT has_role(%s, %s)", (uuid, 'base_user'))
-        is_base_user = bool(cur.fetchone()[0])  # Convert the result to boolean
+        is_base_user = bool(cur.fetchone()[0])
         
         if is_base_user:
             return {'role': 'base_user'}
         else:
             cur.execute("SELECT has_role(%s, %s)", (uuid, 'premium_user'))
-            is_premium_user = bool(cur.fetchone()[0])  # Convert the result to boolean
+            is_premium_user = bool(cur.fetchone()[0])
             if is_premium_user:
                 return {'role': 'premium_user'}
             else:
@@ -121,6 +121,27 @@ def get_user_role(uuid):
     finally:
         con.close()
 
+def view_email_table(uuid):
+    try:
+        con = get_db_connection()
+        cur = con.cursor()
+        
+        query = """
+            SELECT has_table_privilege(%s, 'public."Email"', 'SELECT');
+        """
+        print("Executing query:", query)
+        cur.execute(query, (uuid,))
+        result = cur.fetchone()[0]
+        print("Query result:", result)
+        
+        cur.close()
+        con.close()
+        
+        return result
+    except Exception as e:
+        print("Error:", e)
+        raise Exception(f"Error occurred when trying to retrieve email hub permission for {uuid}")
+    
 def addOrder(
     user, 
     prodName,

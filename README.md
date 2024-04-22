@@ -47,7 +47,7 @@ npm run ng serve
 
 ### SQL Commands
 
-- For creating the function that chekcs the user role
+- For creating the function that checks the user role
   CREATE OR REPLACE FUNCTION has_role(user_id VARCHAR, role_name VARCHAR)
   RETURNS BOOLEAN AS $$
 DECLARE
