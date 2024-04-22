@@ -57,7 +57,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 ```
-=======
+
 ## Information on the Project
 
 <details>
@@ -109,3 +109,9 @@ zope.interface==6.2
 "zone.js": "~0.14.3"
 </code></pre>
 </details>
+
+## Separation of Work
+* `Daniel Dang` - Angular, Flask, Routes, Database
+* `Matthew Echenique` - Database, Flask, Role-based Access Control
+* `Zachary De Aguiar` - Order Scraper, Flask, Authentication
+* `Samuel Anderson` - Flask, Routes, Database
