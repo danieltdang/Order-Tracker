@@ -20,6 +20,7 @@ export class PackagesComponent {
   dateAdded!: Date;
   estimatedDelivery!: Date;
   statuses!: any[];
+  providers!: any[];
   submitted: boolean = false;
   orderDialog: boolean = false;
 
@@ -59,8 +60,6 @@ export class PackagesComponent {
       if (result.status === 201) {
         this.updateOrders();
         this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Order Refreshed', life: 3000 });
-      } else {
-        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Order Not Refreshed', life: 3000 });
       }
     });
   }
@@ -200,6 +199,11 @@ export class PackagesComponent {
       { label: 'In Transit', value: 1 },
       { label: 'Out for Delivery', value: 2 },
       { label: 'Delivered', value: 3 }
+    ];
+
+    this.providers = [
+      {label: 'UPS', value: 'UPS'},
+      {label: 'FedEx', value: 'FedEx'},
     ];
   }
 }

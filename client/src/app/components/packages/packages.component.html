@@ -86,7 +86,14 @@
 
         <div class="field">
             <label for="name">Carrier</label>
-            <input class="p-inputtext" type="text" pInputText id="carrier" [(ngModel)]="order.carrier" required autofocus />
+            <p-dropdown [(ngModel)]="order.carrier" inputId="orderStatus" [options]="providers">
+                <ng-template pTemplate="selectedOrder">
+                    <span>{{order.carrier}}</span>
+                </ng-template>
+                <ng-template let-option pTemplate="order">
+                    <span>{{option.label}}</span>
+                </ng-template>
+            </p-dropdown>            
             <small class="p-error" *ngIf="submitted && !order.carrier">Carrier is required.</small>
         </div>
 
