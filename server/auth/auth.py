@@ -6,14 +6,15 @@ from datetime import datetime, timedelta
 from dotenv import load_dotenv
 from flask import Request
 import psycopg2
+import hashlib
 import binascii
 
 def get_db_connection():
     con = psycopg2.connect(
-        host="isilo.db.elephantsql.com",
-        database="qkhplpdv",
-        user="qkhplpdv",
-        password="MPRLThmEO3gFiPHKrX9ajpKo-hSKOLOa"
+        host="localhost",
+        database="database",
+        user="postgres",
+        password="password"
     )
     return con
 
@@ -34,7 +35,7 @@ def register_user(first_name, last_name, email, first_password):
         if cur.fetchone() is not None:
             return None
         
-        user_uuid = str(uuid.uuid4())
+        user_uuid = 'u' + str(uuid.uuid4()).replace('-', '')
 
         cur.execute("""
             INSERT INTO "User"
@@ -42,6 +43,8 @@ def register_user(first_name, last_name, email, first_password):
             VALUES (%s, %s, %s, %s, %s)
         """, (user_uuid, first_name, last_name, email, hashed_password))
         
+        cur.execute(f"CREATE USER {user_uuid} WITH PASSWORD %s", (first_password,))
+
         con.commit()
 
         return {
@@ -98,6 +101,9 @@ def change_password(uuid, old_password, new_password):
             # Hash the new password
             new_hashed_password = bcrypt.hashpw(new_password.encode('utf-8'), bcrypt.gensalt())
             cur.execute("""UPDATE "User" SET password = %s WHERE uuid = %s""", (new_hashed_password, uuid))
+            con.commit()
+
+            cur.execute(f"ALTER USER {uuid} WITH PASSWORD %s", (new_password,))
             con.commit()
             return True
         else: 

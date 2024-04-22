@@ -1,11 +1,14 @@
 from flask import Flask, jsonify, request
+from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 import psycopg2
 import util
 import auth.auth as auth
 
 app = Flask(__name__)
-CORS(app, supports_credentials=True, expose_headers=["Authorization"])
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://mattechenique:password@localhost/database'
+db = SQLAlchemy(app)
+CORS(app, supports_credentials=True, expose_headers=["Authorization"], allow_headers=["Content-Type"])
 
 def validate_request(uuid, request):
     return uuid and auth.is_req_valid(uuid, request)
@@ -72,7 +75,17 @@ def nameEmail(uuid):
                 "message": "User not found",
             }), 404
         return jsonify(dict(user))
-        
+    
+@app.route('/api/users/<uuid>/role', methods=["GET"])
+def user_role(uuid):
+    user_role = util.get_user_role(uuid)
+    user_permissions = util.view_email_table(uuid)
+    if user_role is None:
+        return jsonify({
+            "message": "User role not found",
+        }), 404
+    return jsonify(user_role, user_permissions)
+
 ###################
 # STATS ENDPOINTS #
 ###################
@@ -348,7 +361,7 @@ def login_user():
         return jsonify({
             "uuid": res['uuid'],
             "userToken": res['token'],
-        }), 200;
+        }), 200
 
     return jsonify({
         "message": "Invalid credentials",

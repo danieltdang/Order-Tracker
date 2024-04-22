@@ -17,6 +17,8 @@ export class ApiService {
   private name!: string;
   private firstLetter!: string;
   private email!: string;
+  private role!: string;
+  private permissions!: boolean;
 
   private async initialize(): Promise<void> {
     const result = await axios.get(`${this.ip}/api/users/${this.AuthService.getUUID()}/name-email`);
@@ -24,6 +26,13 @@ export class ApiService {
     this.name = result.data.firstname + " " + result.data.lastname;
     this.firstLetter = this.name.charAt(0);
     this.email = result.data.email;
+    const response = await axios.get(`${this.ip}/api/users/${this.AuthService.getUUID()}/role`);
+    this.role = response.data[0].role;
+    this.permissions = response.data[1];
+    this.AuthService.setRole(this.role);
+    this.AuthService.setPermission(this.permissions);
+    console.log("User Role:", this.role);
+    console.log("User Email Permission:", this.permissions);
   }
 
   constructor(private AuthService: AuthService) {
@@ -104,6 +113,14 @@ export class ApiService {
 
   public async getEmail() {
     return this.email;
+  }
+
+  public async getRole() {
+    return this.role;
+  }
+
+  public async getPermission() {
+    return this.permissions;
   }
 
   /*
