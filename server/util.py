@@ -297,42 +297,87 @@ def updateOrder(
     finally:
         con.close()
 
-def getOrderStats(uuid):
+def getOrderStats(uuid, startDate, endDate):
     con = get_db_connection()
     cur = con.cursor()
 
     statuses = []
     try:
-        # Using an explicit list of status integers to ensure it matches expected stats
-        for status in range(4):
-            cur.execute("""
-                SELECT COUNT(*) FROM "Order"
-                WHERE "Order"."user" = %s AND "Order"."status" = %s
-            """, (uuid, status))
-            statuses.append(cur.fetchone()[0])
-        
         # Query for the total count of orders by the user
         cur.execute("""
             SELECT COUNT(*) FROM "Order"
-            WHERE "Order"."user" = %s
-        """, (uuid,))
+            WHERE "Order"."user" = %s AND
+            date("Order".dateAdded) BETWEEN date(%s) AND date(%s)
+        """, (uuid, startDate, endDate))
         statuses.append(cur.fetchone()[0])
 
         # Query for the count of emails related to user's orders
         cur.execute("""
             SELECT COUNT(*) FROM "Email"
             JOIN "Order" ON "Email"."order" = "Order".orderid
-            WHERE "Order"."user" = %s
-        """, (uuid,))
+            WHERE "Order"."user" = %s AND
+            date("Order".dateAdded) BETWEEN date(%s) AND date(%s)
+        """, (uuid, startDate, endDate))
         statuses.append(cur.fetchone()[0])
 
+        # Using an explicit list of status integers to ensure it matches expected stats
+        for status in range(4):
+            cur.execute("""
+                SELECT COUNT(*) FROM "Order"
+                WHERE "Order"."user" = %s AND "Order"."status" = %s AND
+                date("Order".dateAdded) BETWEEN date(%s) AND date(%s)
+            """, (uuid, status, startDate, endDate))
+            statuses.append(cur.fetchone()[0])
+            
         return statuses
     except:
         raise Exception(f"Error occured when trying to retrieve stats for user '{uuid}'.")
     finally:
         con.close()
 
+def getOrderStatsList(uuid, startDates, endDates):
+    con = get_db_connection()
+    cur = con.cursor()
 
+    # Initialize lists for each status count and other counts
+    total_orders = []
+    total_emails = []
+    status_counts = [[] for _ in range(4)]  # list of lists for each status
+    
+    try:
+        for startDate, endDate in zip(startDates, endDates):
+            statuses = []
+        
+            # Query for the total count of orders by the user
+            cur.execute("""
+                SELECT COUNT(*) FROM "Order"
+                WHERE "Order"."user" = %s AND
+                date("Order".dateAdded) BETWEEN date(%s) AND date(%s)
+            """, (uuid, startDate, endDate))
+            total_orders.append(cur.fetchone()[0])
+
+            # Query for the count of emails related to user's orders
+            cur.execute("""
+                SELECT COUNT(*) FROM "Email"
+                JOIN "Order" ON "Email"."order" = "Order".orderid
+                WHERE "Order"."user" = %s AND
+                date("Order".dateAdded) BETWEEN date(%s) AND date(%s)
+            """, (uuid, startDate, endDate))
+            total_emails.append(cur.fetchone()[0])
+            
+            for status in range(4):
+                cur.execute("""
+                    SELECT COUNT(*) FROM "Order"
+                    WHERE "Order"."user" = %s AND "Order"."status" = %s AND
+                    date("Order".dateAdded) BETWEEN date(%s) AND date(%s)
+                """, (uuid, status, startDate, endDate))
+                status_counts[status].append(cur.fetchone()[0])
+
+        return [total_orders, total_emails] + status_counts
+    except:
+        raise Exception(f"Error occured when trying to retrieve stats for user '{uuid}'.")
+    finally:
+        con.close()
 
 
 

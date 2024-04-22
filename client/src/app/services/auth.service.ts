@@ -1,4 +1,6 @@
-import { Injectable } from '@angular/core';
+import { Injectable, afterRender } from '@angular/core';
+import { StorageMap } from '@ngx-pwa/local-storage';
+import { Observable, map, of } from 'rxjs';
 
 @Injectable({
     providedIn: 'root'
@@ -10,33 +12,47 @@ export class AuthService {
     private role: string | null = null;
     private permissions: boolean | null = null;
 
-    constructor () {}
+    constructor (private storage: StorageMap) {
+        this.storage.get('userToken').subscribe((userToken) => {
+            this.userToken = userToken as string;
+        });
+
+        this.storage.get('uuid').subscribe((uuid) => {
+            this.uuid = uuid as string;
+        });
+    }
 
     // Set User Token
     public setToken(token: string): void {
         this.userToken = token;
-        localStorage.setItem('userToken', token);
+        this.storage.set('userToken', token).subscribe(() => {});
     }
 
     // Get User Token
     public getToken(): string | null {
-        if (!this.userToken && typeof window !== 'undefined' && window.localStorage) {
-            this.userToken = localStorage.getItem('userToken');
+        if (this.userToken === null) {
+            this.storage.get('userToken').subscribe((userToken) => {
+                this.userToken = userToken as string;
+            });
         }
+
         return this.userToken;
     }
 
     // Set UUID
     public setUUID(uuid: string): void {
         this.uuid = uuid;
-        localStorage.setItem('uuid', uuid);
+        this.storage.set('uuid', uuid).subscribe(() => {});
     }
 
     // Get UUID
     public getUUID(): string | null {
-        if (!this.uuid) {
-            this.uuid = localStorage.getItem('uuid');
+        if (this.uuid === null) {
+            this.storage.get('uuid').subscribe((uuid) => {
+                this.uuid = uuid as string;
+            });
         }
+
         return this.uuid;
     }
 
@@ -72,15 +88,24 @@ export class AuthService {
     }
 
     // Check if user is authed
-    public isAuthenticated(): boolean {
-        return this.getToken() !== null;
+    public isAuthenticated(): Observable<boolean> {
+        if (this.userToken !== null) {
+            return of(true);
+        } else {
+            return this.storage.get('userToken').pipe(
+                map(token => {
+                    this.userToken = token as string;
+                    return !!this.userToken;
+                })
+            );
+        }
     }
 
     // Clear data
     public logout(): void {
         this.userToken = null;
         this.uuid = null;
-        localStorage.removeItem('userToken');
-        localStorage.removeItem('uuid');
+        this.storage.delete('userToken').subscribe(() => {});
+        this.storage.delete('uuid').subscribe(() => {});
     }
 }

@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import axios from 'axios';
 import { AuthService } from './auth.service';
-import { HttpClient } from '@angular/common/http';
 
 import { Order } from '../interfaces/order';
 import { Email } from '../interfaces/email';
@@ -36,7 +35,7 @@ export class ApiService {
     console.log("User Email Permission:", this.permissions);
   }
 
-  constructor(private AuthService: AuthService, private https: HttpClient) {
+  constructor(private AuthService: AuthService) {
   }
 
   public getData() {
@@ -129,8 +128,27 @@ export class ApiService {
   # STATS ENDPOINTS #
   ###################
   */
-  public async getUserStats() {
+  public async getAllUserStats() {
+
     return await axios.get(`${this.ip}/api/users/${this.AuthService.getUUID()}/stats`);
+  }
+
+  public async getUserStats(startDate: string, endDate: string) {
+    const payload = {
+      startDate: startDate,
+      endDate: endDate
+    }
+
+    return await axios.get(`${this.ip}/api/users/${this.AuthService.getUUID()}/stats`, { params: payload });
+  }
+
+  public async getUserChartStats(startDate: string[], endDate: string[]) {
+    const payload = {
+      startDate: startDate,
+      endDate: endDate
+    }
+
+    return await axios.get(`${this.ip}/api/users/${this.AuthService.getUUID()}/stats/chart`, { params: payload });
   }
 
   /*

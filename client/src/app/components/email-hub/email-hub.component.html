@@ -1,4 +1,5 @@
-<div class="surface-card col-12 mb-3 shadow-2 p-3 pb-0 border-round">
+<div class="surface-card relative col-12 mb-3 shadow-2 p-3 pb-0 border-round">
+    <div *ngIf="!isPremium" class="locked-overlay">Access Denied - Premium Required</div>
     <p-table
         #dt1
         [value]="emails"
@@ -105,7 +106,7 @@
         </div>
 
         <div class="field">
-            <label for="name">Content</label>
+            <label for="name">HTML Content</label>
             <textarea rows="5" class="p-inputtext" type="text" pInputText id="carrier" [(ngModel)]="email.content" required></textarea>
             <small class="p-error" *ngIf="submitted && !email.content">Content is required.</small>
         </div>

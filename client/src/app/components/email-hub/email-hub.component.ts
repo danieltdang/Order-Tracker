@@ -6,6 +6,7 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 
 import { Email } from '../../interfaces/email';
 import { PackageStatusService } from '../../services/package-status.service';
+import { RoleService } from '../../services/role.service';
 
 @Component({
   selector: 'app-email-hub',
@@ -14,6 +15,8 @@ import { PackageStatusService } from '../../services/package-status.service';
   providers: [MessageService, ConfirmationService]
 })
 export class EmailHubComponent {
+  isPremium: boolean = false;
+
   email : Email = {
     subject: '',
     status: '',
@@ -33,8 +36,12 @@ export class EmailHubComponent {
   emailViewer: boolean = false;
 
   constructor(private apiService: ApiService, private router: Router, private statusService: PackageStatusService,
-              private confirmationService: ConfirmationService, private messageService: MessageService
+              private confirmationService: ConfirmationService, private messageService: MessageService, private roleService: RoleService
   ) {}
+
+  verifyPremium() {
+    this.isPremium = this.roleService.getPremiumStatus();
+  }
 
   updateEmails() {
     this.apiService.getUserEmails().then((result) => {
@@ -52,6 +59,12 @@ export class EmailHubComponent {
   }
 
   async ngOnInit(): Promise<void> {
+    this.verifyPremium();
+
+    if (!this.isPremium) {
+      return;
+    }
+
     this.updateEmails();
     
     this.statuses = [

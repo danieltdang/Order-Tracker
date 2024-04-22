@@ -6,6 +6,7 @@ import { AuthService } from '../../services/auth.service'
 import { ApiService } from '../../services/api.service';
 
 import { ConfirmationService, MessageService, ConfirmEventType } from 'primeng/api';
+import { RoleService } from '../../services/role.service';
 
 @Component({
   selector: 'app-settings',
@@ -23,19 +24,24 @@ export class SettingsComponent {
   incorrectPass: boolean = false;
   submitted: boolean = false;
 
-  tempPremium: boolean = false;
+  isPremium: boolean = false;
 
   userName!: string;
   userEmail!: string;
 
   constructor(private themeService: ThemeService, private confirmationService: ConfirmationService, private messageService: MessageService,
-              private router: Router, private authService: AuthService, private apiService: ApiService) { }
+              private router: Router, private authService: AuthService, private apiService: ApiService, private roleService: RoleService) { }
 
   changeTheme() {
     if (this.selectedTheme) {
       this.themeService.switchTheme(this.selectedTheme.name);
       this.themeService.setTheme(this.selectedTheme);
     }    
+  }
+
+  updatePremium() {
+    this.roleService.updatePremiumStatus();
+    this.isPremium = this.roleService.getPremiumStatus();
   }
 
   async passwordConfirm(event: Event) {
@@ -108,6 +114,7 @@ export class SettingsComponent {
   }
 
   async ngOnInit(): Promise<void> {
+    this.isPremium = this.roleService.getPremiumStatus();
     this.updateUser();
 
     this.themes = this.themeService.getThemes();

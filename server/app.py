@@ -98,7 +98,24 @@ def order_counts(uuid):
         }), 401
     
     if request.method == "GET":
-        stats = util.getOrderStats(uuid)
+        start = request.args.get('startDate', '1970-01-01')  # Default to Unix epoch start if not provided
+        end = request.args.get('endDate', '9999-12-31')      # Default to a far future date if not provided
+
+        stats = util.getOrderStats(uuid, start, end)
+        return jsonify(stats)
+    
+@app.route('/api/users/<uuid>/stats/chart', methods = ["GET"])
+def chart_counts(uuid):
+    if validate_request(uuid, request):
+        return jsonify({
+            "message": "Invalid authorization token",
+        }), 401
+    
+    if request.method == "GET":
+        start = request.args.getlist('startDate[]')
+        end = request.args.getlist('endDate[]')
+
+        stats = util.getOrderStatsList(uuid, start, end)
         return jsonify(stats)
 
 
