@@ -209,6 +209,33 @@ def user_order(uuid, order_id):
         return jsonify({
             "message": f"Successfully updated order {order_id}",
         }), 201
+    
+@app.route('/api/users/<uuid>/orders/<order_id>/refresh', methods = ["POST"])
+def refresh_order(uuid, order_id):
+    # authenticate
+    #if validate_request(uuid, request):
+        #return jsonify({
+            #"message": "Invalid authorization token",
+        #}), 401
+    
+    if request.method == "POST":
+        request.body = request.get_json()
+
+        try:
+            res = util.refreshOrder(uuid, order_id)
+
+            if res:
+                return jsonify({
+                    "message": f"Successfully refreshed order {order_id}",
+                }), 201
+            else:
+                return jsonify({
+                    "message": f"Internal Server Error",
+                }), 500
+        except psycopg2.DatabaseError:
+            return jsonify({
+                "message": "Error occured when refreshing order.",
+            }), 400
 
 
 

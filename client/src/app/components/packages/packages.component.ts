@@ -20,6 +20,7 @@ export class PackagesComponent {
   dateAdded!: Date;
   estimatedDelivery!: Date;
   statuses!: any[];
+  providers!: any[];
   submitted: boolean = false;
   orderDialog: boolean = false;
 
@@ -50,6 +51,17 @@ export class PackagesComponent {
     }
 
     return index;
+  }
+
+  refreshOrder(order: Order) {
+    console.log("User has clicked on the refresh button for order: " + order.orderid);
+
+    this.apiService.refreshUserOrder(order).then((result) => {
+      if (result.status === 201) {
+        this.updateOrders();
+        this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Order Refreshed', life: 3000 });
+      }
+    });
   }
 
   editOrder(order: Order) {
@@ -187,6 +199,11 @@ export class PackagesComponent {
       { label: 'In Transit', value: 1 },
       { label: 'Out for Delivery', value: 2 },
       { label: 'Delivered', value: 3 }
+    ];
+
+    this.providers = [
+      {label: 'UPS', value: 'UPS'},
+      {label: 'FedEx', value: 'FedEx'},
     ];
   }
 }

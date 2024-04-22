@@ -13,6 +13,7 @@ export class PackageDetailComponent implements OnInit {
   packageID: string | undefined;
   order : any;
   details!: any[];
+  orderEvents: any[] = [];
   isLoading = true;
 
   constructor(private route: ActivatedRoute, private apiService: ApiService, private statusService: PackageStatusService,
@@ -26,10 +27,26 @@ export class PackageDetailComponent implements OnInit {
     return this.statusService.formatDate(date);
   }
 
+  
+  fetchOrderEvents() {
+    this.isLoading = true;
+    if (!this.packageID) {
+      return;
+    }
+    this.apiService.getOrderEvents(this.packageID).then(response => {
+      console.log('Order events:', response.data)
+      this.orderEvents = response.data;
+      this.isLoading = false;
+    }).catch(error => {
+      console.error('Error fetching order events:', error);
+      this.isLoading = false;
+    });
+  }
+
   async ngOnInit(): Promise<void> {
     this.route.params.subscribe(async params => {
       this.packageID = params['id'];
-      
+      this.fetchOrderEvents();
       const result = await this.apiService.getOrderByID(params['id'])
       if (result.status === 200) {
         this.order = result.data;

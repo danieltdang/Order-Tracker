@@ -1,5 +1,7 @@
 import psycopg2
 from psycopg2.extras import DictCursor
+import parser.utils.upsTracking as upsTracking
+from datetime import datetime
 
 def get_db_connection():
     con = psycopg2.connect(
@@ -556,23 +558,20 @@ def addOrderEvent(order, desc, date):
     con = get_db_connection()
     cur = con.cursor()
 
+    print("Adding order: ", order, desc, date)
+
     try:
         cur.execute("""
-            INSERT OR IGNORE INTO "OrderEvent"
-            (
-                "order",
-                description,
-                date
-            )
-            VALUES (%s,%s,%s)
-        """, 
-            (
-                order,
-                desc,
-                date,
-            )
-        )
+            INSERT INTO "OrderEvent" ("order", description, date)
+            VALUES (%s, %s, %s)
+            ON CONFLICT DO NOTHING
+        """, (order, desc, date))                
         con.commit()
+    except psycopg2.DatabaseError as e:
+        # This catches PostgreSQL-specific errors
+        error_msg = f"Database error occurred: {e}"
+        print(error_msg)  # Optionally log to a file or logging system
+        raise Exception(error_msg)
     except Exception as e:
         raise e
     finally:
@@ -584,14 +583,13 @@ def getOrderEventsForOrder(order_id):
 
     try:
         cur.execute("""
-            SELECT "OrderEvent".desc, "OrderEvent".date
+            SELECT description, date
             FROM "OrderEvent"
-            JOIN "Order" ON "OrderEvent"."order" = "Order".orderID
-            WHERE "Order".orderID = %s
+            WHERE "order" = %s
+            ORDER BY date DESC
         """, (order_id,))
-        emails = cur.fetchall()
-
-        return emails
+        events = cur.fetchall()
+        return events
     except:
         raise Exception(f"Error occured when trying to retrieve orderEvents for order '{order_id}'.")
     finally:
@@ -614,3 +612,102 @@ def removeOrderEventsForOrder(order):
     finally:
         con.close()
         return True
+    
+# Retrieve tracking code from order
+def retrieveTrackingData(user, order):
+    con = get_db_connection()
+    cur = con.cursor()
+
+    print(user, order)
+
+    trackingCode, Carrier = None, None
+
+    try:
+        cur.execute("""
+            SELECT trackingcode, carrier FROM "Order"
+            WHERE "Order".user = %s AND "Order".orderID = %s
+        """, (user, order))
+        trackingCode, Carrier = cur.fetchone()
+    except:
+        raise Exception(f"Error occured when trying to retrieve tracking data for order '{order}' from user '{user}'.")
+    finally:
+        con.close()
+        return trackingCode, Carrier
+
+
+def refreshOrder(user, order):
+    trackingCode, Carrier = retrieveTrackingData(user, order)
+    if trackingCode == None:
+        print("Returning cause tracking code is None")
+        return False
+    
+    if Carrier == "UPS":
+        result = upsTracking.handleUPS(trackingCode)
+    elif Carrier == "FedEx":
+        result = upsTracking.trackFedEx(trackingCode)
+    else:
+        print("Carrier not supported")
+        return False
+    
+    # Implement results from Fedex/UPS tracking to update order data
+
+    if result == None:
+        print("Result is None")
+        return False
+    
+    # Check if latest activity is different from the one in the database
+
+    events = getOrderEventsForOrder(order)
+
+    # If no events, add all events
+    if len(events) == 0:
+        for event in result["Events"]:
+            if event["location"] == "":
+                addOrderEvent(order, event["status"], event["date"])
+            else:
+                addOrderEvent(order, event["status"] + " | " + event["location"], event["date"])
+    else:
+        for event in events:
+            for newEvent in result["Events"]:
+                found = False
+
+                if newEvent["status"] != event["description"] or newEvent["date"] != event["date"]:
+                    found = False
+                    break
+                
+                if not found:
+                    if event["location"] == "":
+                        addOrderEvent(order, event["status"], event["date"])
+                    else:
+                        addOrderEvent(order, event["status"] + " | " + event["location"], newEvent["date"])
+
+    storedOrder = getOrderInfo(user, order)
+
+    resultStatus = result["Events"][0]["status"].strip(" ").lower()
+    if Carrier == "UPS":
+        if resultStatus == "we have your package" or "shipper created a label, ups has not received the package yet.":
+            newStatus = 0
+        if resultStatus == "departed from facility" or resultStatus == "arrived from facility":
+            newStatus = 1
+        if resultStatus == "loaded on delivery vehicle" or resultStatus == "out for delivery":
+            newStatus = 2
+        if resultStatus == "delivered":
+            newStatus = 3
+
+    if storedOrder["status"] != result["Status"] or storedOrder["estimateddelivery"] != result["estimatedDelivery"] or storedOrder["senderlocation"] != result["senderLocation"] or storedOrder["receiverlocation"] != result["receiverLocation"]:
+        updateOrder(
+            order,
+            storedOrder["productname"],
+            newStatus,
+            trackingCode,
+            result["estimatedDelivery"],
+            Carrier,
+            storedOrder["source"],
+            storedOrder["dateadded"],
+            result["senderLocation"],
+            result["receiverLocation"]
+        )
+
+    return True
+
+
