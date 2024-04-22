@@ -1,6 +1,6 @@
 import psycopg2
 from psycopg2.extras import DictCursor
-import parser.utils.upsTracking as upsTracking
+import tracking.tracking as Tracking
 from datetime import datetime
 
 def get_db_connection():
@@ -642,9 +642,9 @@ def refreshOrder(user, order):
         return False
     
     if Carrier == "UPS":
-        result = upsTracking.handleUPS(trackingCode)
+        result = Tracking.handleUPS(trackingCode)
     elif Carrier == "FedEx":
-        result = upsTracking.trackFedEx(trackingCode)
+        result = Tracking.trackFedEx(trackingCode)
     else:
         print("Carrier not supported")
         return False
