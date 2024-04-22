@@ -549,35 +549,24 @@ def refreshOrder(user, order):
                 addOrderEvent(order, event["status"], event["date"])
             else:
                 addOrderEvent(order, event["status"] + " | " + event["location"], event["date"])
-        return True
-    
-    for event in events:
-        for newEvent in result["Events"]:
-            found = False
-
-            if newEvent["status"] != event["description"] or newEvent["date"] != event["date"]:
+    else:
+        for event in events:
+            for newEvent in result["Events"]:
                 found = False
-                break
-            
-            if not found:
-                if event["location"] == "":
-                    addOrderEvent(order, event["status"], event["date"])
-                else:
-                    addOrderEvent(order, event["status"] + " | " + event["location"], newEvent["date"])
 
+                if newEvent["status"] != event["description"] or newEvent["date"] != event["date"]:
+                    found = False
+                    break
+                
+                if not found:
+                    if event["location"] == "":
+                        addOrderEvent(order, event["status"], event["date"])
+                    else:
+                        addOrderEvent(order, event["status"] + " | " + event["location"], newEvent["date"])
 
-
-    # Update tracking details
     storedOrder = getOrderInfo(user, order)
 
-    if storedOrder == None:
-        print("Stored order is None")
-        return False
-    
-    # Update status
-    newStatus = storedOrder["status"]
     resultStatus = result["Events"][0]["status"].strip(" ").lower()
-    print(resultStatus)
     if Carrier == "UPS":
         if resultStatus == "we have your package" or "shipper created a label, ups has not received the package yet.":
             newStatus = 0
@@ -587,10 +576,8 @@ def refreshOrder(user, order):
             newStatus = 2
         if resultStatus == "delivered":
             newStatus = 3
-        
 
-
-    if storedOrder["status"] != result["Status"] or storedOrder["estimateddelivery"] != result["estimatedDelivery"]:
+    if storedOrder["status"] != result["Status"] or storedOrder["estimateddelivery"] != result["estimatedDelivery"] or storedOrder["senderlocation"] != result["senderLocation"] or storedOrder["receiverlocation"] != result["receiverLocation"]:
         updateOrder(
             order,
             storedOrder["productname"],
