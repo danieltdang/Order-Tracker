@@ -63,7 +63,7 @@ setuptools ~= 69.1.0
 Werkzeug ~= 3.0.1
 zope.interface ~= 6.2
 ```
-### Client-side (JavaScript/Angular)
+### Client-side (TypeScript/Angular)
 ```js
 "@angular/animations": ^17.2.0,
 "@angular/cdk": ^17.2.1,
