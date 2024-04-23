@@ -47,7 +47,14 @@ def user_id(uuid):
     # Delete a specific user
     elif request.method == "DELETE":
 
-        print(f"Removing user {uuid}")
+        # Remove all orders and emails associated with user
+        orders = util.getOrdersForUser(uuid)
+
+        for order in orders:
+            order_id = order[1]
+            util.removeOrderEventsForOrder(order_id)
+            util.removeEmailsForOrder(order_id)
+            util.removeOrder(order_id)
 
         if util.removeUser(uuid):
             return jsonify({
