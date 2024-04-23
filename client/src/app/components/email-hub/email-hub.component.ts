@@ -39,13 +39,6 @@ export class EmailHubComponent {
               private confirmationService: ConfirmationService, private messageService: MessageService, private roleService: RoleService
   ) {}
 
-  async verifyPremium() {
-    const result = await this.apiService.getPremium();
-    if (result.status === 200) {
-      this.isPremium = result.data;
-    }
-  }
-
   updateEmails() {
     this.apiService.getUserEmails().then((result) => {
       if (result.status === 200) {
@@ -62,7 +55,10 @@ export class EmailHubComponent {
   }
 
   async ngOnInit(): Promise<void> {
-    this.verifyPremium();
+    const result = await this.apiService.getPremium();
+    if (result.status === 200) {
+      this.isPremium = result.data;
+    }
 
     if (!this.isPremium) {
       return;
