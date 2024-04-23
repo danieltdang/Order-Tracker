@@ -10,6 +10,8 @@ load_dotenv()
 
 UPS_CLIENT_ID = os.getenv("UPS_CLIENT_ID")
 UPS_CLIENT_SECRET = os.getenv("UPS_CLIENT_SECRET")
+FEDEX_CLIENT_ID = os.getenv("FEDEX_CLIENT_ID")
+FEDEX_CLIENT_SECRET = os.getenv("FEDEX_CLIENT_SECRET")
 
 # Returns a UPS API access token
 def getUPSToken():
@@ -36,8 +38,26 @@ def getUPSToken():
     except:
         return None
 
-def refreshToken():
-    pass
+def getFedexToken():
+    url = "https://apis.fedex.com/oauth/token"
+
+    payload = {
+        "client_id": FEDEX_CLIENT_ID,
+        "client_secret": FEDEX_CLIENT_SECRET,
+        "grant_type": "client_credentials",
+    }
+
+    headers = {
+        "Content-Type": "application/x-www-form-urlencoded"
+    }
+
+    response = requests.post(url, headers=headers, data=payload)
+    print(response.json())
+
+    try:
+        return response.json()["access_token"]
+    except:
+        return None
 
 # Returns a JSON object with tracking information
 def trackUPS(trackingNumber):
@@ -58,6 +78,37 @@ def trackUPS(trackingNumber):
 
     return response.json()
 
+def trackFedex(trackingNumber):
+    ACCESS_TOKEN = getFedexToken()
+
+    if ACCESS_TOKEN == None:
+        return
+
+    url = "https://apis.fedex.com/track/v1/trackingnumbers"
+
+    payload = {
+        "includeDetailedScans": True,
+        "trackingInfo": [
+        {
+            "trackingNumberInfo": {
+                "trackingNumber": trackingNumber,
+            },
+        },
+    ],
+  };
+
+    headers = {
+        'Content-Type': 'application/json',
+        'X-locale': 'en_US',
+        'Authorization': 'Bearer ' + ACCESS_TOKEN
+    }
+
+    response = requests.post(url, headers=headers, json=payload)
+
+    print(response.json())
+
+    return response.json()
+
 def handleUPS(trackingNumber):
     result = trackUPS(trackingNumber)
 
@@ -75,7 +126,7 @@ def handleUPS(trackingNumber):
     senderLocation = package[0]["packageAddress"][0]["address"]["city"].title() + ", " + package[0]["packageAddress"][0]["address"]["stateProvince"]
     receiverLocation = package[0]["packageAddress"][1]["address"]["city"].title() + ", " + package[0]["packageAddress"][1]["address"]["stateProvince"]
     dateAdded = ""
-    estimatedDelivery = formatDate(package[0]["deliveryDate"][0]["date"])
+    estimatedDelivery = formatUPSDate(package[0]["deliveryDate"][0]["date"])
 
     latestActivity = []
     for activity in package[0]["activity"]:
@@ -99,7 +150,7 @@ def handleUPS(trackingNumber):
         data = {
             "location": location,
             "status":   status,
-            "date":    formatDate(date),
+            "date":    formatUPSDate(date),
             "time":   time
         }
 
@@ -116,10 +167,74 @@ def handleUPS(trackingNumber):
         "Events": latestActivity
     }
 
-def formatDate(date):
+
+def trackFedex(trackingNumber):
+    result = trackFedex(trackingNumber)
+
+    if result == None:
+        return None
+
+    # If output not there, return cause error
+    if result.get("output") == None:
+        return None
+    
+    package = result["output"]["completeTrackResults"][0]["trackResults"][0]
+
+    Status = package["latestStatusDetail"]["statusByLocale"]
+    trackingCode = package["trackingNumberInfo"]["trackingNumber"]
+    Source = "Fedex"
+    senderLocation = package["shipperInformation"]["address"]["city"].title() + ", " + package["shipperInformation"]["address"]["stateOrProvinceCode"]
+    receiverLocation = package["recipientInformation"]["address"]["city"].title() + ", " + package["recipientInformation"]["address"]["stateOrProvinceCode"]
+    dateAdded = ""
+    estimatedDelivery = formatFedexDate(package["dateAndTimes"][0]["dateTime"])
+
+    latestActivity = []
+    for activity in package["scanEvents"]:
+        
+        location = ""
+        status = ""
+        date = ""
+        time = ""
+
+        if activity["eventType"] != "OC":
+            location = activity["scanLocation"]["city"].title() + ", " + activity["scanLocation"]["stateOrProvinceCode"]
+            dStatus = activity["derivedStatus"]
+            status = activity["eventDescription"]
+            date = activity["date"]
+            time = ""
+        else:
+            location = ""
+            dStatus = activity["derivedStatus"]
+            status = activity["eventDescription"]
+            date = activity["date"]
+            time = ""
+
+        latestActivity.append({
+            "location": location,
+            "dStatus": dStatus,
+            "status": status,
+            "date": formatFedexDate(date),
+            "time": time
+        })
+
+    return {
+        "Status": Status,
+        "trackingCode": trackingCode,
+        "Source": Source,
+        "senderLocation": senderLocation,
+        "receiverLocation": receiverLocation,
+        "dateAdded": dateAdded,
+        "estimatedDelivery": estimatedDelivery,
+        "latestActivity": latestActivity
+    }
+
+def formatFedexDate(date):
+    return date[5:7] + "/" + date[8:10] + "/" + date[0:4]
+
+def formatUPSDate(date):
     try:
-        obj = datetime.strptime(date, "%Y%m%d")  # Parse the date string into a datetime object
-        formatted_date = obj.strftime("%m/%d/%Y")  # Format the datetime object as a string in MM/DD/YYYY format
+        obj = datetime.strptime(date, "%Y%m%d")
+        formatted_date = obj.strftime("%m/%d/%Y")
         return formatted_date
     except ValueError:
         return "Invalid date format"
