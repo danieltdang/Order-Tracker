@@ -400,6 +400,8 @@ def getOrderStatsList(uuid, startDates, endDates):
 def addEmail(subject, status, order, content, source, dateReceived):
     con = get_db_connection()
     cur = con.cursor()
+    
+    #print("Adding email: ", subject, status, order, content, source, dateReceived)
 
     try:
         cur.execute("""
@@ -408,7 +410,6 @@ def addEmail(subject, status, order, content, source, dateReceived):
                 subject,
                 status,
                 "order",
-                subject,
                 content,
                 source,
                 datereceived
@@ -419,7 +420,6 @@ def addEmail(subject, status, order, content, source, dateReceived):
                 subject,
                 status,
                 order,
-                subject,
                 content,
                 source,
                 dateReceived,

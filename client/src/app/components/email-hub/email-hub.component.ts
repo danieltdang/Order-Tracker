@@ -188,7 +188,8 @@ export class EmailHubComponent {
       } else {
 
         const result = await this.apiService.createOrderEmail(this.email);
-        if (result.status === 200) {
+        console.log(result)
+        if (result.status === 201) {
           this.updateEmails();
           this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Email Created', life: 3000 });
         } else if (result.status === 400) {

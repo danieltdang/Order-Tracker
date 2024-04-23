@@ -324,6 +324,8 @@ def order_emails(uuid, order_id):
                 source,
                 dateReceived
             )
+            
+            #print("Successfully created email.")
 
             return jsonify({
                 "message": f"Successfully created email.",
