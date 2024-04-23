@@ -372,7 +372,7 @@ export class DashboardComponent implements OnInit {
       // For now, chartList is exact same as Report List
       this.chartList = this.reportList;
       this.chartFilter = this.chartList.find(filter => filter.name === 'All Time');
-
+      this.chartDates = [this.chartFilter?.startDate ?? new Date(), this.chartFilter?.endDate ?? new Date()];
       this.chartFrequency = ['Daily', 'Weekly', 'Monthly', 'Yearly'];
       this.chartFrequencySelected = this.chartFrequency[3];
     }
