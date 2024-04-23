@@ -9,7 +9,7 @@ CLIENT_SECRET = os.getenv("FEDEX_CLIENT_SECRET")
 
 # Returns a FedEx API access token
 def getToken():
-    url = "https://apis-sandbox.fedex.com/oauth/token"
+    url = "https://apis.fedex.com/oauth/token"
 
     payload = {
         "client_id": CLIENT_ID,
@@ -22,6 +22,7 @@ def getToken():
     }
 
     response = requests.post(url, headers=headers, data=payload)
+    print(response.json())
 
     try:
         return response.json()["access_token"]
@@ -36,14 +37,18 @@ def fedexTracking(trackingNumber):
     if ACCESS_TOKEN == None:
         return
 
-    url = "https://apis-sandbox.fedex.com/track/v1/trackingnumbers"
+    url = "https://apis.fedex.com/track/v1/trackingnumbers"
 
     payload = {
-        "trackingInfo": {
-            "trackingNumber": trackingNumber,
+        "includeDetailedScans": True,
+        "trackingInfo": [
+        {
+            "trackingNumberInfo": {
+                "trackingNumber": trackingNumber,
+            },
         },
-        "includeDetailedScans": True
-    }
+    ],
+  };
 
     headers = {
         'Content-Type': 'application/json',
@@ -56,3 +61,70 @@ def fedexTracking(trackingNumber):
     print(response.json())
 
     return response.json()
+
+def handleFedex(trackingNumber):
+    result = fedexTracking(trackingNumber)
+
+    if result == None:
+        return None
+
+    # If output not there, return cause error
+    if result.get("output") == None:
+        return None
+    
+    package = result["output"]["completeTrackResults"][0]["trackResults"][0]
+
+    Status = package["latestStatusDetail"]["statusByLocale"]
+    trackingCode = package["trackingNumberInfo"]["trackingNumber"]
+    Source = "Fedex"
+    senderLocation = package["shipperInformation"]["address"]["city"].title() + ", " + package["shipperInformation"]["address"]["stateOrProvinceCode"]
+    receiverLocation = package["recipientInformation"]["address"]["city"].title() + ", " + package["recipientInformation"]["address"]["stateOrProvinceCode"]
+    dateAdded = ""
+    estimatedDelivery = formatDate(package["dateAndTimes"][0]["dateTime"])
+
+    latestActivity = []
+    for activity in package["scanEvents"]:
+        
+        location = ""
+        status = ""
+        date = ""
+        time = ""
+
+        if activity["eventType"] != "OC":
+            location = activity["scanLocation"]["city"].title() + ", " + activity["scanLocation"]["stateOrProvinceCode"]
+            dStatus = activity["derivedStatus"]
+            status = activity["eventDescription"]
+            date = formatDate(activity["date"])
+            time = ""
+        else:
+            location = ""
+            dStatus = activity["derivedStatus"]
+            status = activity["eventDescription"]
+            date = formatDate(activity["date"])
+            time = ""
+
+        latestActivity.append({
+            "location": location,
+            "dStatus": dStatus,
+            "status": status,
+            "date": date,
+            "time": time
+        })
+
+    return {
+        "Status": Status,
+        "trackingCode": trackingCode,
+        "Source": Source,
+        "senderLocation": senderLocation,
+        "receiverLocation": receiverLocation,
+        "dateAdded": dateAdded,
+        "estimatedDelivery": estimatedDelivery,
+        "latestActivity": latestActivity
+    }
+
+def formatDate(date):
+    return date[5:7] + "/" + date[8:10] + "/" + date[0:4]
+
+print(handleFedex("272399537363"))
+
+

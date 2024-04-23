@@ -253,6 +253,9 @@ def refresh_order(uuid, order_id):
         try:
             res = util.refreshOrder(uuid, order_id)
 
+            if not res:
+                print("FAILED TO REFRESH ORDER")
+
             if res:
                 return jsonify({
                     "message": f"Successfully refreshed order {order_id}",

@@ -657,7 +657,7 @@ def refreshOrder(user, order):
     if Carrier == "UPS":
         result = Tracking.handleUPS(trackingCode)
     elif Carrier == "FedEx":
-        result = Tracking.trackFedEx(trackingCode)
+        result = Tracking.handleFedex(trackingCode)
     else:
         print("Carrier not supported")
         return False
@@ -673,6 +673,7 @@ def refreshOrder(user, order):
     events = getOrderEventsForOrder(order)
 
     # If no events, add all events
+    print("Events: ", result)
     if len(events) == 0:
         for event in result["Events"]:
             if event["location"] == "":
@@ -696,8 +697,8 @@ def refreshOrder(user, order):
 
     storedOrder = getOrderInfo(user, order)
 
-    resultStatus = result["Events"][0]["status"].strip(" ").lower()
     if Carrier == "UPS":
+        resultStatus = result["Events"][0]["status"].strip(" ").lower()
         if resultStatus == "we have your package" or "shipper created a label, ups has not received the package yet.":
             newStatus = 0
         if resultStatus == "departed from facility" or resultStatus == "arrived from facility":
@@ -706,6 +707,17 @@ def refreshOrder(user, order):
             newStatus = 2
         if resultStatus == "delivered":
             newStatus = 3
+    elif Carrier == "FedEx":
+        resultStatus = result["Events"][0]["dStatus"].strip(" ").lower()
+        if resultStatus == "label created" or resultStatus == "picked up":
+            newStatus = 0
+        if resultStatus == "in transit":
+            newStatus = 1
+        if result["Events"][0]["status"].strip(" ").lower() == "on fedex vehicle for delivery":
+            newStatus = 2
+        if resultStatus == "delivered":
+            newStatus = 3
+        
 
     if storedOrder["status"] != result["Status"] or storedOrder["estimateddelivery"] != result["estimatedDelivery"] or storedOrder["senderlocation"] != result["senderLocation"] or storedOrder["receiverlocation"] != result["receiverLocation"]:
         updateOrder(
