@@ -80,7 +80,7 @@ def handleFedex(trackingNumber):
     senderLocation = package["shipperInformation"]["address"]["city"].title() + ", " + package["shipperInformation"]["address"]["stateOrProvinceCode"]
     receiverLocation = package["recipientInformation"]["address"]["city"].title() + ", " + package["recipientInformation"]["address"]["stateOrProvinceCode"]
     dateAdded = ""
-    estimatedDelivery = "" # Not sure how to get this
+    estimatedDelivery = formatDate(package["dateAndTimes"][0]["dateTime"])
 
     latestActivity = []
     for activity in package["scanEvents"]:
