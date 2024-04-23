@@ -1,16 +1,16 @@
 import psycopg2
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 con = psycopg2.connect(
-    host="isilo.db.elephantsql.com",
-    database="qkhplpdv",
-    user="qkhplpdv",
-    password="MPRLThmEO3gFiPHKrX9ajpKo-hSKOLOa"
-    )
-print("Connected to at isilo.db.elephantsql.com")
+    host="localhost",
+    database=os.getenv('POSTGRES_DB'),
+    user=os.getenv('POSTGRES_USER'),
+    password=os.getenv('POSTGRES_PASSWORD')
+)
 cur = con.cursor()
-
-# Enable foreign key support
-#cur.execute('PRAGMA foreign_keys = ON')
 
 cur.execute("""
 CREATE TABLE IF NOT EXISTS "User" (
