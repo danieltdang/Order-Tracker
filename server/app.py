@@ -78,7 +78,7 @@ def nameEmail(uuid):
     
 @app.route('/api/users/<uuid>/email_permission', methods=["GET"])
 def user_email_permission(uuid):
-    user_permissions = util.view_email_table(uuid)
+    user_permissions = util.view_email_permission(uuid)
     if user_permissions is None:
         return jsonify({
             "message": "User email permission not found",
