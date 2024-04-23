@@ -44,6 +44,7 @@ def register_user(first_name, last_name, email, first_password):
         """, (user_uuid, first_name, last_name, email, hashed_password))
         
         cur.execute(f"CREATE USER {user_uuid} WITH PASSWORD %s", (first_password,))
+        cur.execute(f"GRANT base_user TO {user_uuid}")
 
         con.commit()
 

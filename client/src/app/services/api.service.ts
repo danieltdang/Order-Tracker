@@ -25,6 +25,7 @@ export class ApiService {
     this.name = result.data.firstname + " " + result.data.lastname;
     this.firstLetter = this.name.charAt(0);
     this.email = result.data.email;
+    
     const response = await axios.get(`${this.ip}/api/users/${this.AuthService.getUUID()}/email_permission`);
     this.permissions = response.data.permissions;
     this.AuthService.setPermission(this.permissions);
@@ -113,6 +114,18 @@ export class ApiService {
 
   public async getPermission() {
     return this.permissions;
+  }
+
+  public async getPremium() {
+    return await axios.get(`${this.ip}/api/users/${this.AuthService.getUUID()}/email_permission`);
+  }
+
+  public async updatePremium(isPremium: boolean) {
+    const params = {
+      premium: isPremium
+    }
+    
+    return await axios.get(`${this.ip}/api/users/${this.AuthService.getUUID()}/update_premium`, { params: params });
   }
 
   /*
@@ -313,6 +326,6 @@ export class ApiService {
       "Authorization": this.AuthService.getToken()
     }
 
-    return await axios.delete(this.getBaseUrl(), { headers: headers });
+    return await axios.delete(`${this.ip}/api/users/${this.AuthService.getUUID()}`);
   }
 }

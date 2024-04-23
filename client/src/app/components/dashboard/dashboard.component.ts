@@ -38,7 +38,11 @@ export class DashboardComponent implements OnInit {
   constructor(private cdr: ChangeDetectorRef, private apiService: ApiService, private datePipe: DatePipe, private roleService: RoleService) { }
 
   async verifyPremium() {
-    this.isPremium = this.roleService.getPremiumStatus();
+    const result = await this.apiService.getPremium();
+    if (result.status === 200) {
+      this.isPremium = result.data;
+    }
+    
     console.log(this.isPremium);
   }
 

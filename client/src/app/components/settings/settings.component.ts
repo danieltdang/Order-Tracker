@@ -39,9 +39,12 @@ export class SettingsComponent {
     }    
   }
 
-  updatePremium() {
+  async updatePremium() {
     this.roleService.updatePremiumStatus();
-    this.isPremium = this.roleService.getPremiumStatus();
+    const result = await this.apiService.getPremium();
+    if (result.status === 200) {
+      this.isPremium = result.data;
+    }
   }
 
   async passwordConfirm(event: Event) {
@@ -89,18 +92,18 @@ export class SettingsComponent {
        
         try {
           const result = await this.apiService.deleteUser();
+          console.log(result);
 
           if (result.status == 200) {
             this.authService.logout();
             this.router.navigate(['/']);
             this.messageService.add({ severity: 'info', summary: 'Confirmed', detail: 'Account deleted' });
           } else {
-            alert('Account deletion failed');
+            this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Account deletion failed', life: 3000 });
           }
         }
         catch (err) {
-          console.error('Error during account deletion:', err);
-          alert('Account deletion failed');
+          this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Account deletion failed', life: 3000 });
         }        },
         reject: () => {
           //this.messageService.add({ severity: 'error', summary: 'Rejected', detail: 'You have rejected' });
@@ -114,7 +117,10 @@ export class SettingsComponent {
   }
 
   async ngOnInit(): Promise<void> {
-    this.isPremium = this.roleService.getPremiumStatus();
+    const result = await this.apiService.getPremium();
+    if (result.status === 200) {
+      this.isPremium = result.data;
+    }
     this.updateUser();
 
     this.themes = this.themeService.getThemes();

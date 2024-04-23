@@ -1,22 +1,43 @@
 import { Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
+import { ApiService } from './api.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class RoleService {
-  isPremium: boolean = false;
+  private isPremiumSubject = new BehaviorSubject<boolean>(false);
 
-  constructor() { }
-
-  updatePremiumStatus(): void {
-    this.isPremium = !this.isPremium;   
+  constructor(private apiService: ApiService) {
+    this.initializePremium();
   }
 
-  verifyPremium(): void {
-    
+  private async initializePremium() {
+    const result = await this.apiService.getPremium();
+    if (result.status === 200) {
+      this.isPremiumSubject.next(result.data);
+      console.log("initPrem:", result.data);
+    }
   }
 
-  getPremiumStatus(): boolean {
-    return this.isPremium;
+  get isPremium() {
+    return this.isPremiumSubject.asObservable();
+  }
+
+  async updatePremiumStatus(): Promise<void> {
+    const currentStatus = this.isPremiumSubject.value;
+    const response = await this.apiService.updatePremium(!currentStatus);
+    if (response.status === 200) {
+      this.isPremiumSubject.next(response.data);
+      console.log("updatedPrem:", response.data);
+    }
+  }
+
+  async getPremiumStatus(): Promise<void> {
+    const response = await this.apiService.getPremium();
+    if (response.status === 200) {
+      this.isPremiumSubject.next(response.data);
+    }
+    return response.data;
   }
 }

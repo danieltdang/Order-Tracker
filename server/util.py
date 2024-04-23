@@ -48,6 +48,8 @@ def removeUser(uuid):
             DELETE FROM "User"
             WHERE "User".uuid = %s
         """, (uuid,))
+
+        cur.execute(f"DROP ROLE {uuid}")
         
         # Get inserted user and commit insert
         con.commit()
@@ -127,6 +129,31 @@ def view_email_permission(uuid):
     except Exception as e:
         print("Error:", e)
         raise Exception(f"Error occurred when trying to retrieve email hub permission for {uuid}")
+    
+def set_premium(uuid):
+        con = get_db_connection()
+        cur = con.cursor()
+
+        cur.execute(f"REVOKE base_user FROM {uuid}")
+        cur.execute(f"GRANT premium_user TO {uuid}")
+
+        cur.close()
+        con.close()
+
+        return True
+
+def set_base(uuid):
+        con = get_db_connection()
+        cur = con.cursor()
+
+        cur.execute(f"REVOKE premium_user FROM {uuid}")
+        cur.execute(f"GRANT base_user TO {uuid}")
+
+        cur.close()
+        con.close()
+        
+        return False
+    
     
 def addOrder(
     user, 

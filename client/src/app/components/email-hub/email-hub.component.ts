@@ -39,8 +39,11 @@ export class EmailHubComponent {
               private confirmationService: ConfirmationService, private messageService: MessageService, private roleService: RoleService
   ) {}
 
-  verifyPremium() {
-    this.isPremium = this.roleService.getPremiumStatus();
+  async verifyPremium() {
+    const result = await this.apiService.getPremium();
+    if (result.status === 200) {
+      this.isPremium = result.data;
+    }
   }
 
   updateEmails() {

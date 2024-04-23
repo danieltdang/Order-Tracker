@@ -59,7 +59,7 @@ def user_id(uuid):
                 "message": "User not found",
             }), 404
 
-@app.route('/api/users/<uuid>/name-email', methods = ["GET"])       
+@app.route('/api/users/<uuid>/name-email', methods = ["GET"])
 def nameEmail(uuid):
     # authenticate
     if validate_request(uuid, request):
@@ -78,12 +78,42 @@ def nameEmail(uuid):
     
 @app.route('/api/users/<uuid>/email_permission', methods=["GET"])
 def user_email_permission(uuid):
+    if validate_request(uuid, request):
+        return jsonify({
+            "message": "Invalid authorization token",
+        }), 401
+        
     user_permissions = util.view_email_permission(uuid)
     if user_permissions is None:
         return jsonify({
             "message": "User email permission not found",
         }), 404
     return jsonify(user_permissions)
+
+@app.route('/api/users/<uuid>/update_premium', methods=["GET"])
+def update_premium(uuid):
+    if validate_request(uuid, request):
+        return jsonify({
+            "message": "Invalid authorization token",
+        }), 401
+    
+    user_role = None
+    isPremium = request.args.get('premium')
+    print("type", type(isPremium))
+    print("prem", isPremium)
+    
+    if isPremium == 'false':
+        print("setting premium")
+        user_role = util.set_premium(uuid)
+    else:
+        print("setting base")
+        user_role = util.set_base(uuid)
+   
+    if user_role is None:
+        return jsonify({
+            "message": "User role not found"
+        }), 404
+    return jsonify(user_role)
 
 ###################
 # STATS ENDPOINTS #
