@@ -9,7 +9,6 @@ import { Observable, map, of } from 'rxjs';
 export class AuthService {
     private userToken: string | null = null;
     private uuid: string | null = null;
-    private role: string | null = null;
     private permissions: boolean | null = null;
 
     constructor (private storage: StorageMap) {
@@ -54,20 +53,6 @@ export class AuthService {
         }
 
         return this.uuid;
-    }
-
-    // Set User Role
-    public setRole(role: string): void {
-        this.role = role;
-        localStorage.setItem('userRole', role);
-    }
-
-    // Get User Role
-     public getRole(): string | null {
-        if (!this.role) {
-        this.role = localStorage.getItem('userRole');
-        }
-        return this.role;
     }
 
     //Set User Email Permission
