@@ -48,7 +48,7 @@ CREATE TABLE IF NOT EXISTS "Order" (
 # one associated order
 
 cur.execute("""
-CREATE TABLE IF NOT EXISTS Email (
+CREATE TABLE IF NOT EXISTS "Email" (
     subject TEXT,
     STATUS INTEGER,
     "order" INTEGER,
