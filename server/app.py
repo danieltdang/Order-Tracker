@@ -254,10 +254,10 @@ def user_order(uuid, order_id):
 @app.route('/api/users/<uuid>/orders/<order_id>/refresh', methods = ["POST"])
 def refresh_order(uuid, order_id):
     # authenticate
-    #if validate_request(uuid, request):
-        #return jsonify({
-            #"message": "Invalid authorization token",
-        #}), 401
+    if validate_request(uuid, request):
+        return jsonify({
+            "message": "Invalid authorization token",
+        }), 401
     
     if request.method == "POST":
         request.body = request.get_json()
@@ -490,10 +490,10 @@ def valid_order_event_ids(uuid):
 @app.route('/api/users/<uuid>/orders/<order_id>/events', methods = ["GET", "POST", "DELETE"])
 def order_events(uuid, order_id):
     # authenticate
-   # if validate_request(uuid, request):
-        #return jsonify({
-        #    "message": "Invalid authorization token",
-        #}), 401
+    if validate_request(uuid, request):
+        return jsonify({
+           "message": "Invalid authorization token",
+        }), 401
     
     if request.method == "GET":
         orderEvents = [dict(orderEvent) for orderEvent in util.getOrderEventsForOrder(order_id)]
