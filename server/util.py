@@ -628,7 +628,7 @@ def refreshOrder(user, order):
     if Carrier == "UPS":
         result = Tracking.handleUPS(trackingCode)
     elif Carrier == "FedEx":
-        result = Tracking.trackFedEx(trackingCode)
+        result = Tracking.handleFedex(trackingCode)
     else:
         print("Carrier not supported")
         return False
@@ -644,6 +644,7 @@ def refreshOrder(user, order):
     events = getOrderEventsForOrder(order)
 
     # If no events, add all events
+    print("Events: ", result)
     if len(events) == 0:
         for event in result["Events"]:
             if event["location"] == "":

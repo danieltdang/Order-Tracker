@@ -225,7 +225,7 @@ def handleFedex(trackingNumber):
         "receiverLocation": receiverLocation,
         "dateAdded": dateAdded,
         "estimatedDelivery": estimatedDelivery,
-        "latestActivity": latestActivity
+        "Events": latestActivity
     }
 
 def formatFedexDate(date):
