@@ -52,7 +52,6 @@ def getFedexToken():
     }
 
     response = requests.post(url, headers=headers, data=payload)
-    print(response.json())
 
     try:
         return response.json()["access_token"]
@@ -104,8 +103,6 @@ def trackFedex(trackingNumber):
     }
 
     response = requests.post(url, headers=headers, json=payload)
-
-    print(response.json())
 
     return response.json()
 

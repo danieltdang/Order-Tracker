@@ -252,7 +252,7 @@ def removeOrder(order):
     try:
         cur.execute("""
             DELETE FROM "Order"
-            WHERE "Order".orderID = %s
+            WHERE "Order".orderid = %s
         """, 
             (order,)
         )
@@ -544,9 +544,24 @@ def removeEmailByID(email_id):
     finally:
         con.close()
         return True
+    
+def removeEmailsForOrder(order):
+    con = get_db_connection()
+    cur = con.cursor()
 
-
-
+    try:
+        cur.execute("""
+            DELETE FROM "Email"
+            WHERE "Email"."order" = %s
+        """, 
+            (order,)
+        )
+        con.commit()
+    except Exception as e:
+        raise e
+    finally:
+        con.close()
+        return True
 
 def getValidOrderIDsForUser(uuid):
     con = get_db_connection()
@@ -649,6 +664,7 @@ def retrieveTrackingData(user, order):
 
 
 def refreshOrder(user, order):
+    print("here")
     trackingCode, Carrier = retrieveTrackingData(user, order)
     if trackingCode == None:
         print("Returning cause tracking code is None")
@@ -673,7 +689,6 @@ def refreshOrder(user, order):
     events = getOrderEventsForOrder(order)
 
     # If no events, add all events
-    print("Events: ", result)
     if len(events) == 0:
         for event in result["Events"]:
             if event["location"] == "":

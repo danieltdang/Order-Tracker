@@ -144,7 +144,7 @@ export = {
 def is_req_valid(uuid, req: Request):
     authorization = req.headers.get('Authorization')
 
-    if not authorization or verifyToken(uuid, authorization):
+    if not authorization or not verifyToken(uuid, authorization):
         return False
     else:
         return True

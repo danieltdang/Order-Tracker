@@ -206,6 +206,11 @@ def user_order(uuid, order_id):
             }), 404
         return jsonify(dict(order))
     elif request.method == "DELETE":
+
+        util.removeOrderEventsForOrder(order_id)
+
+        util.removeEmailsForOrder(order_id)
+
         if util.removeOrder(order_id):
             return jsonify({
                 "message": f"Order #{order_id} successfully removed",
@@ -476,10 +481,10 @@ def valid_order_event_ids(uuid):
 @app.route('/api/users/<uuid>/orders/<order_id>/events', methods = ["GET", "POST", "DELETE"])
 def order_events(uuid, order_id):
     # authenticate
-    if validate_request(uuid, request):
-        return jsonify({
-            "message": "Invalid authorization token",
-        }), 401
+   # if validate_request(uuid, request):
+        #return jsonify({
+        #    "message": "Invalid authorization token",
+        #}), 401
     
     if request.method == "GET":
         orderEvents = [dict(orderEvent) for orderEvent in util.getOrderEventsForOrder(order_id)]
