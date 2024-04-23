@@ -42,8 +42,6 @@ export class DashboardComponent implements OnInit {
     if (result.status === 200) {
       this.isPremium = result.data;
     }
-    
-    console.log(this.isPremium);
   }
 
   formatDateToString(date: Date) {
@@ -273,7 +271,10 @@ export class DashboardComponent implements OnInit {
   }
 
   async ngOnInit(): Promise<void> {
-    this.verifyPremium();
+    const result = await this.apiService.getPremium();
+    if (result.status === 200) {
+      this.isPremium = result.data;
+    }
 
     this.reportList = [
       {

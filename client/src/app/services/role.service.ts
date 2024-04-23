@@ -16,7 +16,7 @@ export class RoleService {
     const result = await this.apiService.getPremium();
     if (result.status === 200) {
       this.isPremiumSubject.next(result.data);
-      console.log("initPrem:", result.data);
+      //console.log("initPrem:", result.data);
     }
   }
 
@@ -29,7 +29,7 @@ export class RoleService {
     const response = await this.apiService.updatePremium(newStatus);
     if (response.status === 200) {
       this.isPremiumSubject.next(response.data);
-      console.log("updatedPrem:", response.data);
+      //console.log("updatedPrem:", response.data);
     }
   }
 
