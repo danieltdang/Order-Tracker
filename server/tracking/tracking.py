@@ -168,7 +168,7 @@ def handleUPS(trackingNumber):
     }
 
 
-def trackFedex(trackingNumber):
+def handleFedex(trackingNumber):
     result = trackFedex(trackingNumber)
 
     if result == None:
