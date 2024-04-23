@@ -124,7 +124,7 @@ export class ApiService {
     const params = {
       premium: isPremium
     }
-    
+
     return await axios.get(`${this.ip}/api/users/${this.AuthService.getUUID()}/update_premium`, { params: params });
   }
 
@@ -277,7 +277,7 @@ export class ApiService {
   }
 
   public async refreshUserOrder(order: Order) {
-    return await this.post(`orders/${order.orderid}/refresh`, {});
+    return await axios.post(`${this.ip}/api/users/${this.AuthService.getUUID()}/orders/${order.orderid}/refresh`, {});
   }
 
   /*
