@@ -2,13 +2,17 @@ import psycopg2
 from psycopg2.extras import DictCursor
 import tracking.tracking as Tracking
 from datetime import datetime
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 def get_db_connection():
     con = psycopg2.connect(
         host="localhost",
-        database="database",
-        user="postgres",
-        password="password",
+        database=os.getenv('POSTGRES_DB'),
+        user=os.getenv('POSTGRES_USER'),
+        password=os.getenv('POSTGRES_PASSWORD')
     )
     return con
 

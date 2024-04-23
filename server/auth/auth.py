@@ -9,16 +9,16 @@ import psycopg2
 import hashlib
 import binascii
 
+load_dotenv()
+
 def get_db_connection():
     con = psycopg2.connect(
         host="localhost",
-        database="database",
-        user="postgres",
-        password="password"
+        database=os.getenv('POSTGRES_DB'),
+        user=os.getenv('POSTGRES_USER'),
+        password=os.getenv('POSTGRES_PASSWORD')
     )
     return con
-
-load_dotenv()
 
 def register_user(first_name, last_name, email, first_password):
 
