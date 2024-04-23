@@ -76,15 +76,14 @@ def nameEmail(uuid):
             }), 404
         return jsonify(dict(user))
     
-@app.route('/api/users/<uuid>/role', methods=["GET"])
-def user_role(uuid):
-    user_role = util.get_user_role(uuid)
+@app.route('/api/users/<uuid>/email_permission', methods=["GET"])
+def user_email_permission(uuid):
     user_permissions = util.view_email_table(uuid)
-    if user_role is None:
+    if user_permissions is None:
         return jsonify({
-            "message": "User role not found",
+            "message": "User email permission not found",
         }), 404
-    return jsonify(user_role, user_permissions)
+    return jsonify(user_permissions)
 
 ###################
 # STATS ENDPOINTS #
