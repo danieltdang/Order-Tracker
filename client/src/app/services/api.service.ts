@@ -81,11 +81,12 @@ export class ApiService {
     );
   }
 
-  public async delete(endpoint: string) {
+  public async delete(endpoint: string, config?: AxiosRequestConfig) {
     return await axios.delete(
       `${this.getBaseUrl()}/${endpoint}`,
       <AxiosRequestConfig>{
-        headers: this.headers
+        headers: this.headers,
+        ...config
       }
     );
   }
@@ -120,15 +121,17 @@ export class ApiService {
   }
 
   public async getPremium() {
-    return await axios.get(`${this.ip}/api/users/${this.AuthService.getUUID()}/email_permission`);
+    return await this.get('email_permission');
   }
 
   public async updatePremium(isPremium: boolean) {
-    const params = {
-      premium: isPremium
+    const config: AxiosRequestConfig = {
+      params: {
+        premium: isPremium
+      }
     }
 
-    return await axios.get(`${this.ip}/api/users/${this.AuthService.getUUID()}/update_premium`, { params: params });
+    return await this.get('update_premium', config);
   }
 
   /*
@@ -137,26 +140,29 @@ export class ApiService {
   ###################
   */
   public async getAllUserStats() {
-
-    return await axios.get(`${this.ip}/api/users/${this.AuthService.getUUID()}/stats`);
+    return await this.get('stats');
   }
 
   public async getUserStats(startDate: string, endDate: string) {
-    const payload = {
-      startDate: startDate,
-      endDate: endDate
+    const config: AxiosRequestConfig = {
+      params: {
+        startDate: startDate,
+        endDate: endDate
+      }
     }
 
-    return await axios.get(`${this.ip}/api/users/${this.AuthService.getUUID()}/stats`, { params: payload });
+    return await this.get('stats', config);
   }
 
   public async getUserChartStats(startDate: string[], endDate: string[]) {
-    const payload = {
-      startDate: startDate,
-      endDate: endDate
+    const config: AxiosRequestConfig = {
+      params: {
+        startDate: startDate,
+        endDate: endDate
+      }
     }
 
-    return await axios.get(`${this.ip}/api/users/${this.AuthService.getUUID()}/stats/chart`, { params: payload });
+    return await this.get('stats/chart', config);
   }
 
   /*
@@ -165,7 +171,7 @@ export class ApiService {
   ###########################
   */
   public async getAllUserOrders() {
-    return await axios.get(`${this.ip}/api/users/${this.AuthService.getUUID()}/orders`);
+    return await this.get('orders');
   }
 
   public async createUserOrder(order: Order) {
@@ -181,7 +187,7 @@ export class ApiService {
       dateAdded: order.dateadded,
     }
 
-    return await axios.post(`${this.ip}/api/users/${this.AuthService.getUUID()}/orders`, payload)
+    return await this.post('orders', payload)
   }
 
   public async updateUserOrder(order: Order) {
@@ -197,15 +203,15 @@ export class ApiService {
       dateAdded: order.dateadded
     }
 
-    return await axios.put(`${this.ip}/api/users/${this.AuthService.getUUID()}/orders/${order.orderid}`, payload)
+    return await this.put(`orders/${order.orderid}`, payload)
   }
 
   public async getOrderByID(order_id: string) {
-    return await axios.get(`${this.ip}/api/users/${this.AuthService.getUUID()}/orders/${order_id}`)
+    return await this.get(`orders/${order_id}`)
   }
 
   public async deleteUserOrder(order_id: string) {
-    return await axios.delete(`${this.ip}/api/users/${this.AuthService.getUUID()}/orders/${order_id}`)
+    return await this.delete(`orders/${order_id}`)
   }
 
   /*
@@ -215,11 +221,11 @@ export class ApiService {
   */
 
   public async getUserEmails() {
-    return await axios.get(`${this.ip}/api/users/${this.AuthService.getUUID()}/emails`)
+    return await this.get('emails')
   }
 
   public async getOrderEmails(order_id: string) {
-    return await axios.get(`orders/${order_id}/emails`)
+    return await this.get(`orders/${order_id}/emails`)
   }
 
   public async createOrderEmail(email: Email) {
@@ -232,11 +238,11 @@ export class ApiService {
       dateReceived: email.datereceived
     }
 
-    return await axios.post(`${this.ip}/api/users/${this.AuthService.getUUID()}/orders/${email.order}/emails`, payload)
+    return await this.post(`orders/${email.order}/emails`, payload)
   }
 
   public async deleteOrderEmail(email_id: string) {
-    return await axios.delete(`${this.ip}/api/users/${this.AuthService.getUUID()}/emails/${email_id}`);
+    return await this.delete(`emails/${email_id}`);
   }
 
   public async updateOrderEmail(email: Email) {
@@ -249,7 +255,7 @@ export class ApiService {
       dateReceived: email.datereceived
     }
 
-    return await axios.put(`${this.ip}/api/users/${this.AuthService.getUUID()}/emails/${email.emailID}`, payload);
+    return await this.put(`emails/${email.emailID}`, payload);
   }
 
   /*
@@ -259,11 +265,11 @@ export class ApiService {
   */
 
   public async getOrderIDs() {
-    return await axios.get(`${this.ip}/api/users/${this.AuthService.getUUID()}/orders/ids`);
+    return await this.get(`orders/ids`);
   }
 
   public async getOrderEvents(orderId: string) {
-    return await axios.get(`${this.ip}/api/users/${this.AuthService.getUUID()}/orders/${orderId}/events`);
+    return await this.get(`orders/${orderId}/events`);
   }
 
   public async createOrderEvent(event: OrderEvent) {
@@ -272,15 +278,15 @@ export class ApiService {
       date: event.date
     }
 
-    return await axios.post(`${this.ip}/api/users/${this.AuthService.getUUID()}/orders/${event.orderID}/events`, payload);
+    return await this.post(`orders/${event.orderID}/events`, payload);
   }
 
   public async deleteOrderEvents(order_id: string) {
-    return await axios.delete(`${this.ip}/api/users/${this.AuthService.getUUID()}/orders/${order_id}/events`);
+    return await this.delete(`orders/${order_id}/events`);
   }
 
   public async refreshUserOrder(order: Order) {
-    return await axios.post(`${this.ip}/api/users/${this.AuthService.getUUID()}/orders/${order.orderid}/refresh`, {});
+    return await this.post(`orders/${order.orderid}/refresh`, {});
   }
 
   /*
@@ -290,15 +296,14 @@ export class ApiService {
   */
 
   public async registerUser(firstName: string, lastName: string, email: string, password: string) {
-   
-    const Payload = {
+    const payload = {
       firstName: firstName,
       lastName: lastName,
       email: email,
       password: password
     }
 
-    return await axios.post(`${this.ip}/auth/register`, Payload);
+    return await axios.post(`${this.ip}/auth/register`, payload);
   }
 
   public async loginUser(email: string, password: string) {
@@ -321,7 +326,7 @@ export class ApiService {
       "Authorization": this.AuthService.getToken()
     }
 
-    return await axios.post(`${this.ip}/auth/change-password`, payload, { headers: headers });
+    return await axios.post(`${this.ip}/auth/change-password`, payload, { headers });
   }
 
   public async deleteUser() {
@@ -329,6 +334,7 @@ export class ApiService {
       "Authorization": this.AuthService.getToken()
     }
 
-    return await axios.delete(`${this.ip}/api/users/${this.AuthService.getUUID()}`);
+    // since base url leads to user, we can use the function by itself as the URL
+    return await axios.delete(this.getBaseUrl(), { headers });
   }
 }
