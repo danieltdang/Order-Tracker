@@ -94,13 +94,13 @@ def handleFedex(trackingNumber):
             location = activity["scanLocation"]["city"].title() + ", " + activity["scanLocation"]["stateOrProvinceCode"]
             dStatus = activity["derivedStatus"]
             status = activity["eventDescription"]
-            date = activity["date"]
+            date = formatDate(activity["date"])
             time = ""
         else:
             location = ""
             dStatus = activity["derivedStatus"]
             status = activity["eventDescription"]
-            date = activity["date"]
+            date = formatDate(activity["date"])
             time = ""
 
         latestActivity.append({
@@ -121,6 +121,9 @@ def handleFedex(trackingNumber):
         "estimatedDelivery": estimatedDelivery,
         "latestActivity": latestActivity
     }
+
+def formatDate(date):
+    return date[5:7] + "/" + date[8:10] + "/" + date[0:4]
 
 print(handleFedex("272399537363"))
 
