@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import axios from 'axios';
+import axios, { AxiosRequestConfig } from 'axios';
 import { AuthService } from './auth.service';
 
 import { Order } from '../interfaces/order';
@@ -49,31 +49,34 @@ export class ApiService {
   /*
   these funcs avoid the boilerplate of adding the baseurl and auth headers
   */
-  public async post(endpoint: string, payload: Object) {
+  public async post(endpoint: string, payload: Object, config?: AxiosRequestConfig) {
     return await axios.post(
       `${this.getBaseUrl()}/${endpoint}`,
       payload,
-      {
-        headers: this.headers
+      <AxiosRequestConfig>{
+        headers: this.headers,
+        ...config,
       }
     );
   }
 
-  public async get(endpoint: string) {
+  public async get(endpoint: string, config?: AxiosRequestConfig) {
     return await axios.get(
       `${this.getBaseUrl()}/${endpoint}`,
-      {
-        headers: this.headers
+      <AxiosRequestConfig>{
+        headers: this.headers,
+        ...config,
       }
     );
   }
 
-  public async put(endpoint: string, payload: Object) {
+  public async put(endpoint: string, payload: Object, config?: AxiosRequestConfig) {
     return await axios.put(
       `${this.getBaseUrl()}/${endpoint}`,
-      payload,
-      {
-        headers: this.headers
+      payload, 
+      <AxiosRequestConfig>{
+        headers: this.headers,
+        ...config,
       }
     );
   }
@@ -81,7 +84,7 @@ export class ApiService {
   public async delete(endpoint: string) {
     return await axios.delete(
       `${this.getBaseUrl()}/${endpoint}`,
-      {
+      <AxiosRequestConfig>{
         headers: this.headers
       }
     );
