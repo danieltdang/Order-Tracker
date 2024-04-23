@@ -25,8 +25,8 @@ export class RoleService {
   }
 
   async updatePremiumStatus(): Promise<void> {
-    const currentStatus = this.isPremiumSubject.value;
-    const response = await this.apiService.updatePremium(!currentStatus);
+    const newStatus = this.isPremiumSubject.value;
+    const response = await this.apiService.updatePremium(newStatus);
     if (response.status === 200) {
       this.isPremiumSubject.next(response.data);
       console.log("updatedPrem:", response.data);

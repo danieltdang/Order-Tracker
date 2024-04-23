@@ -136,6 +136,7 @@ def set_premium(uuid):
 
         cur.execute(f"REVOKE base_user FROM {uuid}")
         cur.execute(f"GRANT premium_user TO {uuid}")
+        con.commit()
 
         cur.close()
         con.close()
@@ -148,6 +149,7 @@ def set_base(uuid):
 
         cur.execute(f"REVOKE premium_user FROM {uuid}")
         cur.execute(f"GRANT base_user TO {uuid}")
+        con.commit()
 
         cur.close()
         con.close()

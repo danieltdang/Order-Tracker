@@ -42,6 +42,7 @@ export class SettingsComponent {
   async updatePremium() {
     this.roleService.updatePremiumStatus();
     const result = await this.apiService.getPremium();
+    console.log("res", result)
     if (result.status === 200) {
       this.isPremium = result.data;
     }
