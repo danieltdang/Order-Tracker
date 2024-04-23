@@ -260,7 +260,7 @@ export class ApiService {
   }
 
   public async getOrderEvents(orderId: string) {
-    return await this.get(`orders/${orderId}/events`);
+    return await axios.get(`${this.ip}/api/users/${this.AuthService.getUUID()}/orders/${orderId}/events`);
   }
 
   public async createOrderEvent(event: OrderEvent) {
@@ -269,11 +269,11 @@ export class ApiService {
       date: event.date
     }
 
-    return await this.post(`orders/${event.orderID}/events`, payload);
+    return await axios.post(`${this.ip}/api/users/${this.AuthService.getUUID()}/orders/${event.orderID}/events`, payload);
   }
 
   public async deleteOrderEvents(order_id: string) {
-    return await this.delete(`orders/${order_id}/events`);
+    return await axios.delete(`${this.ip}/api/users/${this.AuthService.getUUID()}/orders/${order_id}/events`);
   }
 
   public async refreshUserOrder(order: Order) {
