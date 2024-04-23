@@ -39,10 +39,15 @@ export class SettingsComponent {
     }    
   }
 
+  localUpdatePremium() {
+    this.isPremium = !this.isPremium;
+    this.roleService.updatePremiumStatus();
+  }
+
   async updatePremium() {
     this.roleService.updatePremiumStatus();
     const result = await this.apiService.getPremium();
-    console.log("res", result)
+    //console.log("res", result)
     if (result.status === 200) {
       this.isPremium = result.data;
     }
