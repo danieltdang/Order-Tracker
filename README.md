@@ -4,17 +4,20 @@ Order-Tracker is a web-app used for tracking and managing packages from a variet
 
 ## Setup
 
-The setup of this project involves two components: client-side and server-side.
+The setup of this project involves two components: client-side, server-side.
 
 ### Server-side (Flask)
 
 #### Prerequisites
-- Ensure you have `Python` installed on your machine
-- Download dependencies for the project by going into the `server` folder using `pip` to install
-
+- Ensure you have `Python`, `PostgreSQL`, and `pgAdmin` installed on your machine.
+- Download dependencies for the project by going into the `server` folder using `pip` to install.
+- Update the POSTGRES_DB, POSTGRES_USER, and POSTGRES_PASSWORD fields in `.env` to match your database.
+- Setup the initial Postgres database by executing the `setup.py` script.
 ```bash
 cd server
 pip install -r requirements.txt
+vim .env
+py3 setup.py
 ```
 
 #### Running the server
@@ -43,25 +46,27 @@ npm run ng serve
 
 ### Server-side (Python/Flask) 
 ```py
-bcrypt ~= 4.1.2
-blinker ~= 1.7.0
-cffi ~= 1.16.0
-click ~= 8.1.7
-cryptography ~= 42.0.5
-DateTime ~= 5.4
-Flask ~= 3.0.2
-Flask-Cors ~= 4.0.0
-itsdangerous ~= 2.1.2
-Jinja2 ~= 3.1.3
-pyJWT ~= 2.8.0
-MarkupSafe ~= 2.1.5
-psycopg2 ~= 2.9.9
-pycparser ~= 2.22
-python-dotenv ~= 1.0.1
-pytz ~= 2024.1
-setuptools ~= 69.1.0
-Werkzeug ~= 3.0.1
-zope.interface ~= 6.2
+bcrypt~=4.1.2
+blinker~=1.7.0
+cffi~=1.16.0
+click~=8.1.7
+cryptography~=42.0.5
+DateTime~=5.4
+Flask~=3.0.2
+Flask-Cors~=4.0.0
+flask_sqlalchemy~=3.1.1
+itsdangerous~=2.1.2
+Jinja2~=3.1.3
+pyJWT~=2.8.0
+MarkupSafe~=2.1.5
+psycopg2~=2.9.9
+pycparser~=2.22
+python-dotenv~=1.0.1
+pytz~=2024.1
+requests~=2.31.0
+setuptools~=69.1.0
+Werkzeug~=3.0.1
+zope.interface~=6.2
 ```
 ### Client-side (TypeScript/Angular)
 ```js
