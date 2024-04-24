@@ -17,7 +17,7 @@ The setup of this project involves two components: client-side, server-side.
 cd server
 pip install -r requirements.txt
 vim .env
-py3 setup.py
+python setup.py
 ```
 
 #### Running the server
